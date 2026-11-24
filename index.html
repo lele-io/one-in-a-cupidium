@@ -3317,6 +3317,8 @@ THEMES.marius=Object.assign({},THEMES.sky,{name:"MARIUS",hint:"▲ the stranger 
     {id:"bbeans",name:"CAN OF BEANS",line:"Rocket fuel. You know why."},
     {id:"bjeans",name:"FLYING JEANS",line:"Just the pants. Nobody knows where the rest went."},
     {id:"bbaby",name:"DIAPER BABY",line:"Gurgles, giggles, accelerates."}]});
+// SMILEY: a yellow ball with a big smile, available in every theme
+for(const k in THEMES)if(THEMES[k].skins&&!THEMES[k].skins.some(x=>x.id==="smiley"))THEMES[k].skins.push({id:"smiley",name:"SMILEY",line:"A yellow ball with a big smile. Nothing gets it down."});
 const isDream=()=>THEME==="sky"||THEME==="marius";
 // swap the word everywhere on screen while the Marius theme is on (and put it back afterwards)
 const MAR_ORIG=new Map();
@@ -4157,6 +4159,14 @@ function drawVehicleRaw(id,cx,cy,t,moving,pv){
     P(cx-1,by-22,2,2,"#fde047");P(cx-6,by-8,4,1,"#93c5fd");P(cx+2,by-8,4,1,"#93c5fd");}
   else if(id==="bbaby"){const k=Math.round(Math.sin(t*.012));disc(cx,by-25,6,OUT);disc(cx,by-25,5,"#fcd5b5");P(cx-2,by-26,1,1,OUT);P(cx+1,by-26,1,1,OUT);P(cx-1,by-23,2,1,"#e57373");P(cx-1,by-31,2,2,"#7c5a3a");
     shape([["r",cx-5,by-19,10,6,"#fcd5b5"],["r",cx-6,by-13,12,6,"#ffffff"]]);P(cx-6,by-13,12,1,"#bae6fd");P(cx-7,by-18+k,2,4,"#fcd5b5");P(cx+5,by-18-k,2,4,"#fcd5b5");P(cx-4,by-7,3,3,"#fcd5b5");P(cx+1,by-7,3,3,"#fcd5b5");}
+  else if(id==="smiley"){const sy=TH.up?by-16:cy,bob=Math.round(Math.sin(t*.006)),y0=sy+bob;
+    if(THEME==="space"&&L)flame(cx,y0+11,5,L*.8,1);
+    shape([["d",cx,y0,11,"#facc15"]]);disc(cx-2,y0-2,8,"#fde047");ddisc(cx+3,y0+3,9,"rgba(202,138,4,.55)",.5);
+    const blink=((t/2600)|0)!==(((t+140)/2600)|0);
+    if(blink){P(cx-5,y0-4,3,1,OUT);P(cx+3,y0-4,3,1,OUT);}else{P(cx-5,y0-6,3,4,OUT);P(cx+3,y0-6,3,4,OUT);P(cx-5,y0-6,1,1,"#ffffff");P(cx+3,y0-6,1,1,"#ffffff");}
+    for(let x=-7;x<=7;x++){const d=Math.round(Math.sqrt(Math.max(0,49-x*x))*.62);P(cx+x,y0+1,1,d+1,OUT);if(Math.abs(x)<7&&d>1)P(cx+x,y0+2,1,d-1,"#9f1239");}
+    P(cx-5,y0+2,11,1,"#ffffff");disc(cx,y0+5,2.2,"#fb7185");
+    P(cx-9,y0+1,2,1,"#fb923c");P(cx+8,y0+1,2,1,"#fb923c");P(cx-6,y0-8,2,1,"#fef9c3");}
   else if(id==="puffer"){const f=((t/150)|0)%2;
     for(let a=0;a<6.283;a+=.45)P(cx+Math.cos(a)*10,cy+Math.sin(a)*10,1,1,"#a16207");
     shape([["d",cx,cy,8,"#facc15"],["r",cx-14,cy-3,4,6,"#fbbf24"]]);
