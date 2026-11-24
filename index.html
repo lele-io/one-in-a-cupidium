@@ -1136,6 +1136,36 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 .glass.card:has(.devpr){width:min(760px,100%);align-self:center}
 /* leaderboards: boards stack in columns (see lbMasonry) */
 .lbgrid.masonry{display:flex;gap:8px;align-items:flex-start}.lbcol{flex:1 1 0;display:flex;flex-direction:column;gap:8px;min-width:0}
+/* Nov 24: ONE IN A CUPIDIUM celebration (cupBlast) */
+#cupx{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden;display:grid;place-items:center}
+#cupx::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,#2a0a3acc,#0b0418ee);animation:cxDim 3s ease forwards}#cupx.lite::before{animation-duration:1.6s}
+@keyframes cxDim{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
+#cupx .big .ln{white-space:nowrap}
+#cupx .flash{position:absolute;inset:0;background:radial-gradient(circle,#fff 0%,#ffd6f5 35%,#ff5fd2 70%,transparent 100%);animation:cxFlash .7s ease-out forwards}
+@keyframes cxFlash{0%{opacity:1}100%{opacity:0}}
+#cupx .rays{position:absolute;left:50%;top:50%;width:260vmax;height:260vmax;margin:-130vmax 0 0 -130vmax;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,#ff5fd255 0deg 7deg,transparent 7deg 18deg,#fde04744 18deg 25deg,transparent 25deg 36deg);
+  animation:cxRays 2.8s linear forwards;mix-blend-mode:screen}
+@keyframes cxRays{0%{transform:scale(.2) rotate(0);opacity:0}15%{opacity:1}80%{opacity:.85}100%{transform:scale(1) rotate(160deg);opacity:0}}
+#cupx .ring{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:6px solid #fde047;box-shadow:0 0 30px #ff5fd2,inset 0 0 30px #ff5fd2;animation:cxRing 1s ease-out forwards}
+@keyframes cxRing{to{transform:scale(40);opacity:0;border-width:1px}}
+#cupx .big{position:relative;font-family:var(--head);font-size:clamp(30px,9vw,96px);line-height:1;text-align:center;letter-spacing:.06em;color:#fff;
+  text-shadow:0 0 10px #ff5fd2,0 0 30px #ff5fd2,0 0 60px #fde047,0 6px 0 #7c1d6f;animation:cxSlam 2.8s cubic-bezier(.2,1.6,.3,1) forwards,cupHue 1s linear infinite}
+#cupx .big span{display:inline-block;animation:cxWave .5s ease-in-out infinite alternate}
+#cupx .big .l2{display:block;font-size:.45em;margin-top:.3em;letter-spacing:.35em;color:#fde047}
+@keyframes cxSlam{0%{transform:scale(6) rotate(-14deg);opacity:0}12%{transform:scale(.85) rotate(3deg);opacity:1}20%{transform:scale(1.12) rotate(-2deg)}28%{transform:scale(1)}82%{transform:scale(1.05);opacity:1}100%{transform:scale(1.6);opacity:0}}
+@keyframes cxWave{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
+#cupx .cf{position:absolute;top:50%;left:50%;font-size:22px;animation:cxFly var(--d) cubic-bezier(.1,.7,.3,1) forwards}
+@keyframes cxFly{0%{transform:translate(-50%,-50%) scale(.3) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.2) rotate(var(--r));opacity:0}}
+#cupx .rain{position:absolute;top:-30px;font-size:18px;animation:cxRain var(--d) linear forwards}
+@keyframes cxRain{to{transform:translateY(115vh) rotate(var(--r))}}
+#cupx.lite .big{font-size:clamp(22px,6vw,56px);animation:cxSlam 1.5s cubic-bezier(.2,1.6,.3,1) forwards,cupHue 1s linear infinite}
+#cupx.lite .rays{animation-duration:1.5s}
+.cxShake{animation:cxShake .6s cubic-bezier(.36,.07,.19,.97)}
+@keyframes cxShake{10%,90%{transform:translate(-3px,2px)}20%,80%{transform:translate(6px,-4px) rotate(.4deg)}30%,50%,70%{transform:translate(-10px,6px) rotate(-.6deg)}40%,60%{transform:translate(10px,-6px) rotate(.6deg)}}
+.ansbig.cupwin{animation:cxWin 1s ease-in-out infinite}
+@keyframes cxWin{50%{transform:scale(1.08);filter:drop-shadow(0 0 18px #ff5fd2) drop-shadow(0 0 30px #fde047)}}
+@media (prefers-reduced-motion:reduce){.cxShake{animation:none}#cupx .rays{display:none}}
 </style>
 
 <canvas id="scene"></canvas>
@@ -3146,7 +3176,7 @@ const GAME="OFF THE CHARTS";
 const THEMES={
   space:{name:"SPACE",up:true,meter:"ALT",go:"LAUNCH ▲",ign:"IGNITION IN",abort:"QUIT",
     tag:"THE RARE ANSWER GAME",hint:"▲ the stranger the answer, the higher you fly ▲",
-    tiers:["LAUNCHPAD","STRATOSPHERE","ORBITAL","MOON SHOT","DEEP SPACE","ONE IN A CUPIDIUM!!!!"],
+    tiers:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"],
     modes:{daily:"DAILY LAUNCH",endless:"ENDLESS",blitz:"RAPID FIRE",rendless:"RAPID ENDLESS",party:"PARTY",practice:"PRACTICE"},
     final:"FINAL ALTITUDE",out:"OUT OF FUEL",furthest:"FURTHEST OUT",entering:"ENTERING",
     zones:[
@@ -3169,7 +3199,7 @@ const THEMES={
       {id:"cupid",name:"CUPIDIUM CORE",line:"The rarest element, in rocket form."}]},
   sky:{name:"DREAM",up:true,meter:"HEIGHT",go:"FLOAT ▲",ign:"LIFTOFF IN",abort:"QUIT",
     tag:"THE RARE ANSWER GAME",hint:"▲ the stranger the answer, the higher you float ▲",
-    tiers:["MEADOW","KITE HILL","CLOUD BANK","RAINBOW","DREAM MOON","ONE IN A CUPIDIUM!!!!"],
+    tiers:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"],
     modes:{daily:"DAILY DREAM",endless:"ENDLESS",blitz:"RAPID FIRE",rendless:"RAPID ENDLESS",party:"PARTY",practice:"PRACTICE"},
     final:"FINAL HEIGHT",out:"OUT OF DREAMS",furthest:"HIGHEST DREAMER",entering:"FLOATING INTO",
     zones:[{n:"THE MEADOW",a:0,d:0},{n:"KITE HILL",a:200,d:60},{n:"CLOUD BANK",a:500,d:900},{n:"RAINBOW ROAD",a:900,d:2500},{n:"FLOATING ISLES",a:1350,d:6000},
@@ -3183,7 +3213,7 @@ const THEMES={
       {id:"sheep",name:"CLOUD SHEEP",line:"Was a cloud. Became a sheep. Still floats."}]},
   ocean:{name:"OCEAN",up:false,meter:"DEPTH",go:"DIVE ▼",ign:"DESCENT IN",abort:"SURFACE",
     tag:"THE RARE ANSWER GAME",hint:"▼ the stranger the answer, the deeper you go ▼",
-    tiers:["SPLASH","SNORKEL","REEF DIVE","DEEP DIVE","ABYSS","ONE IN A CUPIDIUM!!!!"],
+    tiers:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"],
     modes:{daily:"DAILY DIVE",endless:"ENDLESS",blitz:"RAPID FIRE",rendless:"RAPID ENDLESS",party:"PARTY",practice:"PRACTICE"},
     final:"FINAL DEPTH",out:"OUT OF AIR",furthest:"DEEPEST DIVER",entering:"NOW IN",
     zones:[
@@ -3297,8 +3327,8 @@ for(const k in THEMES){const tt=THEMES[k].tiers;if(tt&&tt.length>5)tt[4]=tt[tt.l
 let THEME=store.get("oddball.theme","space");if(!THEMES[THEME])THEME="space";
 let TH=THEMES[THEME];
 const TIERS=TIER_BASE.map((t,i)=>({...t,get name(){return TH.tiers[i>=4?TH.tiers.length-1:i];}}));
-const tchip=(t,label)=>t<0?`<span class="tchip" style="--c:#64748b">${label||"MISS · 0"}</span>`:`<span class="tchip${t===5?" cup":""}" style="--c:${TIERS[t].c}">${label||TIERS[t].name+" · "+TIERS[t].pts}</span>`;
-const glow=(t,txt)=>`<span class="glow${t===5?" cup":""}" style="--c:${t<0?"#64748b":TIERS[t].c}">${txt}</span>`;
+const tchip=(t,label)=>t<0?`<span class="tchip" style="--c:#64748b">${label||"MISS · 0"}</span>`:`<span class="tchip${t>=4?" cup":""}" style="--c:${TIERS[t].c}">${label||TIERS[t].name+" · "+TIERS[t].pts}</span>`;
+const glow=(t,txt)=>`<span class="glow${t>=4?" cup":""}" style="--c:${t<0?"#64748b":TIERS[t].c}">${txt}</span>`;
 const scaleBar=t=>`<div class="scale">COMMON ${TIERS.slice(0,5).map((x,i)=>`<i class="${i===t?"on":""}" style="background:${x.c};color:${x.c}"></i>`).join("")} RARE</div>`;
 const av=(name,i,xl)=>{const c=AV[(i<0?0:i)%AV.length];return `<span class="av${xl?" xl":""}" style="--a:${c[0]};--b:${c[1]}">${esc((String(name).trim()[0]||"?").toUpperCase())}</span>`;};
 const progHTML=(label,n,i,marks,extra)=>`${n?`<div class="pips">${Array.from({length:n},(_,k)=>{const m=marks&&marks[k];
@@ -4495,7 +4525,7 @@ function showCard(html,o={}){MENU=false;clearTimers();tok++;closeModal();$("pane
 function tierFx(e,pts){
   $("card").hidden=true;const fx=$("fx");fx.hidden=false;fx.className="";const t=e?e.tier:-1;
   fx.innerHTML=`<div class="burstbox">${glow(t,t<0?"TIME'S UP":TIERS[t].name)}<div class="sub">${t<0?"NO ANSWER":`${esc(e.display.toUpperCase())} · +${pts}`}</div>${t>=0?scaleBar(t):""}</div>`;
-  const dur=Math.max(1400,FL.dur+300);if(t>=0){sfx.ok(t);if(t>=2)sfx.whoosh(t);if(t===5){setTimeout(()=>burst(160),200);setTimeout(()=>burst(120),dur*.5);}else if(t===4)setTimeout(()=>burst(80),dur*.6);else if(t>=3)burst(30);}else sfx.miss();
+  const dur=Math.max(1400,FL.dur+300);if(t>=0){sfx.ok(t);if(t>=2)sfx.whoosh(t);if(t>=4){cupBlast();burst(200);setTimeout(()=>burst(160),350);setTimeout(()=>burst(160),dur*.5);setTimeout(()=>burst(120),dur*.8);}else if(t>=3)burst(30);}else sfx.miss();
   return new Promise(res=>{fxTimer=setTimeout(()=>{fx.className="out";setTimeout(()=>{fx.hidden=true;res();},380);},dur);});
 }
 
@@ -4578,7 +4608,7 @@ function resultCard(p,pi,entry,pts,label,nextLabel,onNext,extra){
   const t=entry?entry.tier:-1;
   showCard(`<div class="result">
     <div class="lbl">${label}</div><div class="cq" style="font-size:clamp(17px,3.6vw,22px)">${esc(p.q)}</div>
-    <div class="ansbig">${glow(t,t<0?"MISSED":TIERS[t].name)}</div>
+    <div class="ansbig${t>=4?" cupwin":""}">${glow(t,t<0?"MISSED":TIERS[t].name)}</div>
     <div class="ansname">${entry?esc(entry.display)+(entry.ai?`<span class="aitag">AI</span>`:""):"no answer"} <span class="hint">· +${pts}</span></div>
     ${extra||""}
     <div class="examples">Rarest picks: <b>${examples(pi).map(esc).join(", ")}</b></div>
@@ -5260,7 +5290,7 @@ function soloEnd(){
   if(S.mode==="daily"&&S.geo){store.set("oddball.dailyGeo."+(S.day||today())+dsSfx(),{score:S.score,log:S.log,geo:1});lbSubmit("dailyGeo",S.score);return soloResults({score:S.score,log:S.log,geo:1},"daily");}
   if(S.mode==="daily"){const d=S.day||today();store.set("oddball.daily."+d+dsSfx(),{score:S.score,log:S.log});
     if(!DSM()){const s=store.get("oddball.stats",{played:0,best:0,streak:0,last:null});const yk=etKey(Date.parse(d+"T12:00:00Z")-864e5);
-    s.streak=s.last===yk?s.streak+1:1;s.last=d;s.played++;s.best=Math.max(s.best,S.score);store.set("oddball.stats",s);}}
+    if(s.last!==d){s.streak=s.last===yk?s.streak+1:1;s.last=d;s.played++;}s.best=Math.max(s.best,S.score);store.set("oddball.stats",s);}}
   if(S.mode==="daily")lbSubmit("daily",S.score);soloResults({score:S.score,log:S.log,geo:S.geo?1:0},S.mode);
 }
 function soloResults(data,mode){
@@ -5403,7 +5433,7 @@ function blitzRound(){
     e=rarifyCached(p,e);const v=Math.round(tierPts(e.tier,true)*(RE?dD().sc*stkHit(e.tier):1));try{if(e.tier>=4)bookAdd(p.q,e.display);if(e.tier>=3)achBump("rare",1);}catch(x){}
     got.push({display:e.display,tier:e.tier,ai:!!e.ai,v});S.score+=v;setScore(S.score,Math.min(e.tier,2));if(RE)saveRun();
     const span=document.createElement("span");span.className="pop";span.innerHTML=tchip(e.tier,`${esc(e.display.toUpperCase())} +${v}`);fnd.appendChild(span);fnd.scrollTop=fnd.scrollHeight;
-    fb.innerHTML=`${glow(e.tier,TIERS[e.tier].name)}`;sfx.ok(Math.min(e.tier,5));if(e.tier>=4)burst(140);
+    fb.innerHTML=`${glow(e.tier,TIERS[e.tier].name)}`;sfx.ok(Math.min(e.tier,5));if(e.tier>=4){burst(140);cupBlast(true);}
     $("bsc").textContent=`${got.length} FOUND · +${pts()} PTS`;$("prog").innerHTML=blitzProg();
   };
   const judgeIt=async txt=>{
@@ -5485,7 +5515,7 @@ function rapidRound(p,o){
     if(got.some(x=>x.display===e.display)){fb.innerHTML=`<span class="err">ALREADY GOT ${esc(e.display.toUpperCase())}</span>`;sfx.dup();return;}
     got.push({display:e.display,tier:e.tier,ai:!!e.ai});const v=tierPts(e.tier,true);o.onAdd&&o.onAdd(pts(),e.tier);
     const span=document.createElement("span");span.className="pop";span.innerHTML=tchip(e.tier,`${esc(e.display.toUpperCase())} +${v}`);fnd.appendChild(span);fnd.scrollTop=fnd.scrollHeight;
-    fb.innerHTML=glow(e.tier,TIERS[e.tier].name);sfx.ok(Math.min(e.tier,5));if(e.tier>=4)burst(120);
+    fb.innerHTML=glow(e.tier,TIERS[e.tier].name);sfx.ok(Math.min(e.tier,5));if(e.tier>=4){burst(120);cupBlast(true);}
     $("bsc").textContent=`${got.length} FOUND · +${pts()} PTS`;
   };
   const judgeIt=async txt=>{
@@ -8070,7 +8100,9 @@ const modRemoved=(id,key,t)=>!!(MOD&&(MOD.s.rm&&MOD.s.rm.some(r=>r[0]===id&&(r[1
 // the highest score each board can really have (a daily is 7 rounds, 250 max each); anything above is thrown out
 function lbCap(key){const k=String(key).split(":")[0];return k==="xc"?36000-7560:k==="daily"||k==="dailyGeo"||k==="dsDaily"||k==="dsDailyGeo"?ROUNDS*250+100:/^cp[A-Z]/.test(k)?1e5:/^cas/.test(k)?1e10:1e8;}
 // XC best 5Ks from before the realistic-pace update (Nov 19) are dropped; each player's game re-posts its converted time
-function lbBad(r,key){return r.s>lbCap(key)||key==="xc"&&(r.t||0)<1795147200000||modBanned(r.i,r.n)||modRemoved(r.i,key,r.t);}
+// developer resets: every score on that board posted before the time is dropped (Nov 24: today's main daily, same prompts)
+const LB_RESETS={"daily:2026-11-24":1795527279000};
+function lbBad(r,key){return r.s>lbCap(key)||(LB_RESETS[key]&&(r.t||0)<=LB_RESETS[key])||key==="xc"&&(r.t||0)<1795147200000||modBanned(r.i,r.n)||modRemoved(r.i,key,r.t);}
 function modApply(){let ch=false;for(const k in LB.b){const n=LB.b[k].length;LB.b[k]=LB.b[k].filter(r=>!lbBad(r,k));if(LB.b[k].length!==n)ch=true;}if(ch){store.set("otc.lb",LB.b);if($("lbBox"))lbRender();}return ch;}
 async function modIn(m){if(!m||m.k!=="dev"||typeof m.p!=="string"||typeof m.sig!=="string")return;if(!await devVerify(m.p,m.sig))return;let q;try{q=JSON.parse(m.p);}catch(e){return;}
   if(q.t==="mod"){if(MOD&&MOD.s.at>=q.at)return;const was=modBanned(LB.id);MOD={p:m.p,sig:m.sig,s:q};store.set("otc.mod",{p:m.p,sig:m.sig});modApply();lbRevive();
@@ -8099,6 +8131,8 @@ async function modChange(f){const cur=MOD?MOD.s:{bans:[],rm:[]};const nx={t:"mod
   nx.bans=nx.bans.slice(-80);nx.rm=nx.rm.slice(-60);nx.gone=[...new Set(nx.gone)].slice(-220);let msg;try{msg=await devSign(nx);}catch(e){toast("Add your developer key first (🛠 developer page → MODERATION)");return false;}
   await modIn(msg);modPost(msg);return true;}
 setTimeout(()=>{modApply();lbRevive();},0);
+try{const done=store.get("otc.lbResetsDone",[]);for(const key in LB_RESETS){if(done.includes(key))continue;done.push(key);const[k,d]=key.split(":");
+  if(k==="daily"){const r=store.get("oddball.daily."+d,null);if(r)store.set("oddball.daily."+d,null);}}store.set("otc.lbResetsDone",done.slice(-50));}catch(e){}
 // a device the developer removed as an "old account" but that is still playing (e.g. sahil): every board kept throwing its
 // scores away and the dev page hid it from PLAYERS and GIVE PROGRESS, while VISITS still listed it. It now starts a fresh
 // player id (progress on this device stays), reclaims its name and re-posts its bests, so it shows up everywhere again.
@@ -11062,6 +11096,29 @@ function twOfferReal(p,txt){if(!aiReady())return;const k="otc.twap."+today(),use
     $("twApGo").onclick=run;ci.onkeydown=e=>{e.stopPropagation();if(e.key==="Enter"){e.preventDefault();run();}};};}
 Object.assign(ACT,{tower:()=>tower(),twAdd:()=>twAdd(),twYes:()=>{const e=TWV.ask;TWV.ask=null;if(e)twPut(e);const i=$("twIn");if(i)i.focus();},twNo:()=>{const e=TWV.ask,txt=TWV.askTxt;TWV.ask=null;TWV.askTxt=null;const i=$("twIn");if(i)i.focus();const p=PROMPTS[twPrompt()];
     if(!e||!txt||!p)return twFb(`<span class="hint">OK, not stacked.</span>`);twCheck(p,txt,e.display);}});
+
+// ===== Nov 24: ONE IN A CUPIDIUM celebration — full-screen flash, shockwave, spinning rays, slam-in title, confetti burst + rain,
+// screen shake, a fanfare with a bass drop and a phone buzz. lite=true is the shorter version for Rapid modes (play keeps going).
+function cupBlast(lite){try{
+  const old=document.getElementById("cupx");if(old)old.remove();
+  const o=document.createElement("div");o.id="cupx";if(lite)o.className="lite";
+  const E=["💖","✨","⭐","💎","💗","🌟","🎉","💫"],W=innerWidth,H=innerHeight;let h=`<div class="flash"></div><div class="rays"></div><div class="ring"></div>`;
+  if(!lite)h+=`<div class="ring" style="animation-delay:.25s"></div>`;
+  const n=lite?40:110;for(let i=0;i<n;i++){const a=Math.random()*6.283,r=(.35+Math.random()*.8)*Math.max(W,H)*.7;
+    h+=`<span class="cf" style="--x:${Math.cos(a)*r|0}px;--y:${Math.sin(a)*r|0}px;--r:${(Math.random()*1080-540)|0}deg;--d:${(1+Math.random()*1.4).toFixed(2)}s;font-size:${14+Math.random()*26|0}px">${E[i%E.length]}</span>`;}
+  if(!lite)for(let i=0;i<60;i++)h+=`<span class="rain" style="left:${Math.random()*100}%;--d:${(1.6+Math.random()*1.8).toFixed(2)}s;--r:${(Math.random()*720)|0}deg;animation-delay:${(.3+Math.random()*1.2).toFixed(2)}s">${E[i%E.length]}</span>`;
+  let li=0;const word=["ONE IN A","CUPIDIUM!!!!"].map(w=>`<div class="ln">${w.split("").map(c=>c===" "?" ":`<span style="animation-delay:${(li++*.05).toFixed(2)}s">${c}</span>`).join("")}</div>`).join("");
+  h+=`<div class="big">${word}${lite?"":`<span class="l2">LEGENDARY DEEP CUT</span>`}</div>`;
+  o.innerHTML=h;document.body.appendChild(o);
+  ["scene","card","panel","fx"].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.classList.remove("cxShake");void el.offsetWidth;el.classList.add("cxShake");setTimeout(()=>el.classList.remove("cxShake"),650);});
+  try{SC.shake=Math.max(SC.shake||0,lite?300:700);}catch(x){}
+  try{navigator.vibrate&&navigator.vibrate(lite?[60,40,90]:[90,50,90,50,250]);}catch(x){}
+  // fanfare: bass drop, rising arpeggio, then a sparkly chord
+  try{tone(55,.5,"sawtooth",.07);tone(82,.45,"square",.05,.02);
+    [523,659,784,1047,1319,1568,2093,2637].forEach((f,i)=>tone(f,.12,"square",.035,.05+i*.055));
+    if(!lite){[1047,1319,1568,2093].forEach(f=>tone(f,.9,"triangle",.03,.55));[2637,3136,3520,4186].forEach((f,i)=>tone(f,.07,"sine",.025,.7+i*.09));tone(110,.6,"sawtooth",.05,.55);}}catch(x){}
+  setTimeout(()=>o.remove(),lite?1600:3000);
+}catch(e){}}
 </script>
 
 </body>
