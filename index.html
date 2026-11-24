@@ -1166,7 +1166,7 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 .ansbig.cupwin{animation:cxWin 1s ease-in-out infinite}
 @keyframes cxWin{50%{transform:scale(1.08);filter:drop-shadow(0 0 18px #ff5fd2) drop-shadow(0 0 30px #fde047)}}
 @media (prefers-reduced-motion:reduce){.cxShake{animation:none}#cupx .rays{display:none}}
-.rpoll{margin-top:12px}.rpoll .pollopts{grid-template-columns:1fr}
+.rpoll{margin:0 0 12px}.rpoll .pollopts{grid-template-columns:1fr}
 </style>
 
 <canvas id="scene"></canvas>
@@ -11146,7 +11146,7 @@ function rpHTML(){const vs=Object.values(RPOLL.votes),tot=vs.length,cnt={};for(c
     ${socOn()?"":`<p class="hint" style="margin-top:6px">Live votes work on the GitHub version.</p>`}</div>`;}
 function rpRender(){const box=$("rpBox");if(box)box.outerHTML=rpHTML();}
 Object.assign(ACT,{rpVote:b=>rpVote(b.dataset.o)});
-{const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{const inner=$("panel").querySelector(".inner");if(inner&&!$("rpBox")){inner.insertAdjacentHTML("beforeend",rpHTML());rpStart();}}catch(e){}return r;};}
+{const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{const inner=$("panel").querySelector(".inner");if(inner&&!$("rpBox")){inner.insertAdjacentHTML("afterbegin",rpHTML());rpStart();}}catch(e){}return r;};}
 </script>
 
 </body>
