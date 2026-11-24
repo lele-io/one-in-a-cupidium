@@ -1166,6 +1166,7 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 .ansbig.cupwin{animation:cxWin 1s ease-in-out infinite}
 @keyframes cxWin{50%{transform:scale(1.08);filter:drop-shadow(0 0 18px #ff5fd2) drop-shadow(0 0 30px #fde047)}}
 @media (prefers-reduced-motion:reduce){.cxShake{animation:none}#cupx .rays{display:none}}
+.rpoll{margin-top:12px}.rpoll .pollopts{grid-template-columns:1fr}
 </style>
 
 <canvas id="scene"></canvas>
@@ -3173,10 +3174,13 @@ const ROUNDS=7,SECONDS=25,MAX=ROUNDS*100,MAX_PLAYERS=10,BLITZ_PROMPTS=5,BLITZ_SE
 const AV=[["#fde047","#f97316"],["#67e8f9","#3b82f6"],["#f472b6","#8b5cf6"],["#6ee7b7","#14b8a6"],["#bef264","#22c55e"],["#fda4af","#e11d48"]];
 const MODELS=[["claude-haiku-5-5","Claude Haiku 5.5 (fast, cheapest)"],["claude-sonnet-5-5","Claude Sonnet 5.5 (smarter)"]];
 const GAME="OFF THE CHARTS";
+// Saved rarity-name sets (not in use; the rarity-names poll on the main screen decides). Explorer = one set for every theme
+// except Marius. To use it, put it in place of each theme's tiers below (index 4 is never shown; the last name is the rarest).
+const RARITY_NAME_SETS={explorer:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"]};
 const THEMES={
   space:{name:"SPACE",up:true,meter:"ALT",go:"LAUNCH ▲",ign:"IGNITION IN",abort:"QUIT",
     tag:"THE RARE ANSWER GAME",hint:"▲ the stranger the answer, the higher you fly ▲",
-    tiers:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"],
+    tiers:["LAUNCHPAD","STRATOSPHERE","ORBITAL","MOON SHOT","DEEP SPACE","ONE IN A CUPIDIUM!!!!"],
     modes:{daily:"DAILY LAUNCH",endless:"ENDLESS",blitz:"RAPID FIRE",rendless:"RAPID ENDLESS",party:"PARTY",practice:"PRACTICE"},
     final:"FINAL ALTITUDE",out:"OUT OF FUEL",furthest:"FURTHEST OUT",entering:"ENTERING",
     zones:[
@@ -3199,7 +3203,7 @@ const THEMES={
       {id:"cupid",name:"CUPIDIUM CORE",line:"The rarest element, in rocket form."}]},
   sky:{name:"DREAM",up:true,meter:"HEIGHT",go:"FLOAT ▲",ign:"LIFTOFF IN",abort:"QUIT",
     tag:"THE RARE ANSWER GAME",hint:"▲ the stranger the answer, the higher you float ▲",
-    tiers:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"],
+    tiers:["MEADOW","KITE HILL","CLOUD BANK","RAINBOW","DREAM MOON","ONE IN A CUPIDIUM!!!!"],
     modes:{daily:"DAILY DREAM",endless:"ENDLESS",blitz:"RAPID FIRE",rendless:"RAPID ENDLESS",party:"PARTY",practice:"PRACTICE"},
     final:"FINAL HEIGHT",out:"OUT OF DREAMS",furthest:"HIGHEST DREAMER",entering:"FLOATING INTO",
     zones:[{n:"THE MEADOW",a:0,d:0},{n:"KITE HILL",a:200,d:60},{n:"CLOUD BANK",a:500,d:900},{n:"RAINBOW ROAD",a:900,d:2500},{n:"FLOATING ISLES",a:1350,d:6000},
@@ -3213,7 +3217,7 @@ const THEMES={
       {id:"sheep",name:"CLOUD SHEEP",line:"Was a cloud. Became a sheep. Still floats."}]},
   ocean:{name:"OCEAN",up:false,meter:"DEPTH",go:"DIVE ▼",ign:"DESCENT IN",abort:"SURFACE",
     tag:"THE RARE ANSWER GAME",hint:"▼ the stranger the answer, the deeper you go ▼",
-    tiers:["SHALLOWS","HORIZON","BEYOND","THE EDGE","THE EDGE","ONE IN A CUPIDIUM!!!!"],
+    tiers:["SPLASH","SNORKEL","REEF DIVE","DEEP DIVE","ABYSS","ONE IN A CUPIDIUM!!!!"],
     modes:{daily:"DAILY DIVE",endless:"ENDLESS",blitz:"RAPID FIRE",rendless:"RAPID ENDLESS",party:"PARTY",practice:"PRACTICE"},
     final:"FINAL DEPTH",out:"OUT OF AIR",furthest:"DEEPEST DIVER",entering:"NOW IN",
     zones:[
@@ -11119,6 +11123,30 @@ function cupBlast(lite){try{
     if(!lite){[1047,1319,1568,2093].forEach(f=>tone(f,.9,"triangle",.03,.55));[2637,3136,3520,4186].forEach((f,i)=>tone(f,.07,"sine",.025,.7+i*.09));tone(110,.6,"sawtooth",.05,.55);}}catch(x){}
   setTimeout(()=>o.remove(),lite?1600:3000);
 }catch(e){}}
+
+// ===== Nov 24: rarity-names poll on the main screen (same live relay setup as the old title poll: votes + snapshots re-shared)
+const RPOLL_TOPIC="oneinacupidium-raritypoll-v1",RPOLL_OPTS=["Keep same themed rarity names","Make rarity names like Krillion","Make rarity names same across all themes but different name than Krillion"];
+const RPOLL={votes:store.get("otc.rpoll",{}),es:null};
+function rpMerge(vs){let ch=false;for(const id in vs){const v=vs[id];if(!v||!RPOLL_OPTS.includes(v.c))continue;const cur=RPOLL.votes[id];
+  if(!cur||(+v.ts||0)>cur.ts){RPOLL.votes[id]={n:String(v.n||"someone").slice(0,16),c:v.c,ts:+v.ts||0};ch=true;}}
+  if(ch){store.set("otc.rpoll",RPOLL.votes);rpRender();}return ch;}
+function rpShare(){if(Object.keys(RPOLL.votes).length)socPost(RPOLL_TOPIC,{k:"snap",votes:RPOLL.votes});}
+function rpStart(){if(!socOn()||RPOLL.es)return;try{const es=sseOpen(`${SOC_RELAY}${RPOLL_TOPIC}/sse?since=12h`);RPOLL.es=es;
+  es.onmessage=ev=>{try{const j=JSON.parse(ev.data);if(j.event&&j.event!=="message")return;const m=JSON.parse(j.message);
+    if(m.k==="vote")rpMerge({[m.id]:m});else if(m.k==="snap")rpMerge(m.votes||{});}catch(e){}};
+  setTimeout(rpShare,5000);setInterval(rpShare,3*3600e3);}catch(e){}}
+function rpVote(c){let n=pollName();if(!n){const el=$("rpName");n=el?el.value.trim().slice(0,16):"";if(!n){if(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake");el.focus();}return;}store.set("oddball.name",n);}
+  const v={n,c,ts:Date.now()};RPOLL.votes[POLL.me]=v;store.set("otc.rpoll",RPOLL.votes);socPost(RPOLL_TOPIC,{k:"vote",id:POLL.me,...v});sfx.ok(2);rpRender();}
+function rpHTML(){const vs=Object.values(RPOLL.votes),tot=vs.length,cnt={};for(const v of vs)(cnt[v.c]=cnt[v.c]||[]).push(v.n);
+  const mine=RPOLL.votes[POLL.me]&&RPOLL.votes[POLL.me].c,max=Math.max(1,...Object.values(cnt).map(a=>a.length));
+  return`<div class="glass card poll rpoll" id="rpBox"><div class="row" style="justify-content:space-between"><h3 class="pollh">🗳 POLL: WHAT SHOULD THE RARITY NAMES BE?</h3><span class="hint">${socOn()?`<i class="sdot"></i> live · `:""}${tot} vote${tot===1?"":"s"}</span></div>
+    ${pollName()?"":`<input id="rpName" maxlength="16" placeholder="your name (so friends see your vote)" style="margin:6px 0">`}
+    <div class="pollopts">${RPOLL_OPTS.map(o=>{const who=cnt[o]||[];return`<button class="popt ${mine===o?"mine":""}" data-act="rpVote" data-o="${esc(o)}"><i style="width:${who.length/max*100}%"></i>
+      <b>${esc(o)}${mine===o?" ✓":""}</b><em>${who.length} · ${tot?Math.round(who.length/tot*100):0}%</em>${who.length?`<small>${who.slice(0,8).map(esc).join(", ")}${who.length>8?` +${who.length-8}`:""}</small>`:""}</button>`;}).join("")}</div>
+    ${socOn()?"":`<p class="hint" style="margin-top:6px">Live votes work on the GitHub version.</p>`}</div>`;}
+function rpRender(){const box=$("rpBox");if(box)box.outerHTML=rpHTML();}
+Object.assign(ACT,{rpVote:b=>rpVote(b.dataset.o)});
+{const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{const inner=$("panel").querySelector(".inner");if(inner&&!$("rpBox")){inner.insertAdjacentHTML("beforeend",rpHTML());rpStart();}}catch(e){}return r;};}
 </script>
 
 </body>
