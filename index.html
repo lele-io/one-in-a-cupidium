@@ -2231,6 +2231,9 @@ const BLURBS=OIC_DATA.BLURBS;
  ADD("Name a movie",3,"nausicaa of the valley of the wind/nausicaa|perfect blue|ghost in the shell|the girl who leapt through time|wolf children|belle|the first slam dunk|one piece film red|one piece film gold|dragon ball super super hero|my hero academia two heroes|paprika|millennium actress|tokyo godfathers|porco rosso|the wind rises|arrietty/the secret world of arrietty|when marnie was there|from up on poppy hill|whisper of the heart|the cat returns|pom poko|only yesterday|my neighbors the yamadas|the tale of the princess kaguya|ocean waves|redline|promare|josee the tiger and the fish|i want to eat your pancreas|her blue sky|a whisker away|mirai|summer wars|the garden of words|5 centimeters per second|children who chase lost voices|the castle of cagliostro|ninja scroll|metropolis|steamboy|end of evangelion|evangelion 3.0+1.0|demon slayer infinity castle/infinity castle|chainsaw man reze arc/reze arc|the end of evangelion|digimon the movie|yu-gi-oh the movie|naruto the last/the last naruto the movie|boruto naruto the movie");
 }
 if(typeof BLURBS!=="undefined")Object.assign(BLURBS,{
+ "ib":"A 2012 indie horror game made in RPG Maker by kouri: 9-year-old Ib gets trapped inside the paintings of an art gallery and has to protect a rose that holds her life. A cult favorite with several endings.",
+ "buckminsterfullerene":"The C60 \"buckyball\", a football-shaped molecule of 60 carbon atoms found in 1985 by Kroto, Curl and Smalley (Nobel Prize 1996). Named after the geodesic-dome architect Buckminster Fuller.",
+ "look around you":"A 2002-2005 BBC comedy that perfectly parodies 1970s-80s school science films, deadpan narrator and all. Made by Peter Serafinowicz and Robert Popper.",
  "mawaru penguindrum":"Kunihiko Ikuhara's 2011 cult anime (the Revolutionary Girl Utena director): two brothers, a dying sister and a penguin hat that orders them to find the Penguindrum. Famously strange.",
  "love through a prism":"Developer's pick. A 2026 Netflix anime from Wit Studio, written by Boys Over Flowers creator Yoko Kamio: a period romance set at an art school in Victorian London.",
  "pandaman":"A panda-headed wrestler Oda sneaks into tiny background cameos all over One Piece. Spotting him is a fan sport.",
@@ -2609,6 +2612,13 @@ if(typeof BLURBS!=="undefined")Object.assign(BLURBS,{
  put("Name a city famous for a tower",2,"djibouti city/djibouti");
  put("Name a city famous for a tower",3,"bologna");
  {const p=P("Name a city famous for a tower");if(p){const t=T(p);t[3]=t[3].concat(t[4]);t[4]=[];save(p,t);put("Name a city famous for a tower",4,"san gimignano");}}
+ // Nov 24: an answer listed in two tiers only ever counts as the lower one, so drop the rarer copy (teflon sat in tiers 3 AND 4,
+ // which left "Name a famous scientist's discovery" with no real ONE IN A CUPIDIUM). The fill below then repairs any emptied tier.
+ for(const p of PROMPTS){if(!p.t)continue;const t=T(p),seen=new Set();let ch=false;
+   for(let i=0;i<5;i++){t[i]=t[i].filter(x=>{const k=ks(x);if(k.some(y=>seen.has(y))){ch=true;return false;}return true;});t[i].forEach(x=>ks(x).forEach(y=>seen.add(y)));}
+   if(ch)save(p,t);}
+ put("Name a famous scientist's discovery",4,"buckminsterfullerene/buckyballs/buckyball/fullerenes/fullerene");
+ {const p=P("Name a TV show");if(p){const t=T(p);t[3]=t[3].concat(t[4]);t[4]=[];save(p,t);put("Name a TV show",4,"look around you");}}
  // every prompt with 5+ answers has at least one answer in every rarity. An empty tier is filled by sliding the tier boundaries:
  // the nearest tier with 2+ answers gives up its edge answer and each tier in between passes one along, so the order (common → rare)
  // is kept. When both sides could give, the rarer side gives (making a rare answer a bit more common is safer than the reverse).
