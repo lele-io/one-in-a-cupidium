@@ -1139,21 +1139,21 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 /* Nov 24: ONE IN A CUPIDIUM celebration (cupBlast) */
 #cupx{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden;display:grid;place-items:center}
 #cupx::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,#2a0a3acc,#0b0418ee);animation:cxDim 3s ease forwards}#cupx.lite::before{animation-duration:1.6s}
-@keyframes cxDim{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
+@keyframes cxDim{0%{opacity:0}20%,80%{opacity:.85}100%{opacity:0}}
 #cupx .big .ln{white-space:nowrap}
-#cupx .flash{position:absolute;inset:0;background:radial-gradient(circle,#fff 0%,#ffd6f5 35%,#ff5fd2 70%,transparent 100%);animation:cxFlash .7s ease-out forwards}
-@keyframes cxFlash{0%{opacity:1}100%{opacity:0}}
+#cupx .flash{position:absolute;inset:0;background:radial-gradient(circle,#ff5fd255 0%,#ff5fd222 50%,transparent 80%);animation:cxFlash 1.2s ease-out forwards}
+@keyframes cxFlash{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
 #cupx .rays{position:absolute;left:50%;top:50%;width:260vmax;height:260vmax;margin:-130vmax 0 0 -130vmax;border-radius:50%;
   background:repeating-conic-gradient(from 0deg,#ff5fd255 0deg 7deg,transparent 7deg 18deg,#fde04744 18deg 25deg,transparent 25deg 36deg);
   animation:cxRays 2.8s linear forwards;mix-blend-mode:screen}
-@keyframes cxRays{0%{transform:scale(.2) rotate(0);opacity:0}15%{opacity:1}80%{opacity:.85}100%{transform:scale(1) rotate(160deg);opacity:0}}
-#cupx .ring{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:6px solid #fde047;box-shadow:0 0 30px #ff5fd2,inset 0 0 30px #ff5fd2;animation:cxRing 1s ease-out forwards}
+@keyframes cxRays{0%{transform:scale(.5) rotate(0);opacity:0}30%{opacity:.8}80%{opacity:.7}100%{transform:scale(1) rotate(160deg);opacity:0}}
+#cupx .ring{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:6px solid #fde047;box-shadow:0 0 20px #ff5fd2,inset 0 0 20px #ff5fd2;opacity:.7;animation:cxRing 1.3s ease-out forwards}
 @keyframes cxRing{to{transform:scale(40);opacity:0;border-width:1px}}
 #cupx .big{position:relative;font-family:var(--head);font-size:clamp(30px,9vw,96px);line-height:1;text-align:center;letter-spacing:.06em;color:#fff;
   text-shadow:0 0 10px #ff5fd2,0 0 30px #ff5fd2,0 0 60px #fde047,0 6px 0 #7c1d6f;animation:cxSlam 2.8s cubic-bezier(.2,1.6,.3,1) forwards,cupHue 1s linear infinite}
 #cupx .big span{display:inline-block;animation:cxWave .5s ease-in-out infinite alternate}
 #cupx .big .l2{display:block;font-size:.45em;margin-top:.3em;letter-spacing:.35em;color:#fde047}
-@keyframes cxSlam{0%{transform:scale(6) rotate(-14deg);opacity:0}12%{transform:scale(.85) rotate(3deg);opacity:1}20%{transform:scale(1.12) rotate(-2deg)}28%{transform:scale(1)}82%{transform:scale(1.05);opacity:1}100%{transform:scale(1.6);opacity:0}}
+@keyframes cxSlam{0%{transform:scale(2.2) rotate(-6deg);opacity:0}15%{transform:scale(.95) rotate(1deg);opacity:1}24%{transform:scale(1.04)}32%{transform:scale(1)}82%{transform:scale(1.05);opacity:1}100%{transform:scale(1.6);opacity:0}}
 @keyframes cxWave{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
 #cupx .cf{position:absolute;top:50%;left:50%;font-size:22px;animation:cxFly var(--d) cubic-bezier(.1,.7,.3,1) forwards}
 @keyframes cxFly{0%{transform:translate(-50%,-50%) scale(.3) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.2) rotate(var(--r));opacity:0}}
