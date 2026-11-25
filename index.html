@@ -35,9 +35,14 @@ body[data-theme="ocean"]{--glass:rgba(2,34,52,.72);--glass2:rgba(2,34,52,.86);--
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:400;font-size:18px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased}
 body.noscene #scene,body.noscene #veh{display:none}
-body.hubscene #veh{display:none}
+body.hubscene #veh{display:none}body.hubscene #scene{filter:saturate(.8) brightness(.88)}
 .shardv{display:block;font-size:11px;color:#a5f3fc;margin-top:2px}.shardv em{font-style:normal;color:#fde047;display:inline-block}.shardv.pop em{animation:shPop .9s ease-out}@keyframes shPop{from{transform:scale(1.8)}}
-.shbal{font-family:var(--head);font-size:14px;color:#a5f3fc}
+body:has(#pch) #ulogBtn{display:none!important}.pch{position:fixed;right:12px;bottom:12px;z-index:80;font-size:13px}.pch .pchbtn{display:none}.pch.off .pchwin{display:none}.pch.off .pchbtn{display:inline-flex}
+.pchwin{width:min(280px,calc(100vw - 24px));background:rgba(10,8,30,.85);border:2px solid var(--edge);display:flex;flex-direction:column}
+.pchhd{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;font-family:var(--head);font-size:10px;letter-spacing:.1em}.pchhd .pbtn{padding:0 8px}
+.pchlog{max-height:140px;overflow-y:auto;padding:4px 8px;line-height:1.35}.pchlog b{color:#ff8fe0;font-weight:400}.pchlog .hint{opacity:.6}
+.pchin{display:flex;gap:4px;padding:6px}.pchin input{flex:1;min-width:0;font-size:13px;padding:4px 6px}.pchbtn em{font-style:normal;background:#ff4d6d;color:#fff;padding:0 5px;margin-left:4px}
+.shgain{margin-top:6px;font-size:14px;color:#a5f3fc}.shbal{font-family:var(--head);font-size:14px;color:#a5f3fc}
 .shgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .shitem{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);color:var(--ink);cursor:pointer;font:inherit}
 .shitem b{font-size:13px}.shitem small{font-size:11px;opacity:.8}.shitem.on{border-color:#4ade80}.shitem:disabled{opacity:.45;cursor:default}
@@ -212,7 +217,12 @@ input:focus,select:focus{outline:none;--bc:var(--acc)}
 .mgwrap{position:relative;display:grid;place-items:center}
 #mgc{image-rendering:pixelated;box-shadow:0 0 0 2px rgba(0,0,0,.5),0 0 30px rgba(255,95,210,.18);background:#000;touch-action:none}
 #mgo{position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,4,20,.45)}#mgo .card{min-width:240px}#mgo{overflow:auto;padding:8px}#mgo .mglb{max-height:38vh;overflow:auto;margin-top:8px;text-align:left}#mgo .mglb .glass{background:transparent;box-shadow:none;border:0;padding:4px 0}
-.mgfoot{text-align:center;max-width:900px}.mgfoot .row{margin-bottom:6px}
+.mgfoot{text-align:center;max-width:900px}
+/* arcade games fill the screen like Chicken Horse: no frame, no page around them */
+#mg{padding:0!important;gap:0!important;background:#05040f!important;justify-content:flex-start!important}
+#mg>.mgbar{width:100%!important;max-width:none;border-radius:0;padding:6px 12px}
+#mg>.mgwrap{width:100%}#mg #mgc{box-shadow:none}
+#mg>.mgfoot{padding:8px 16px 16px}.mgfoot .row{margin-bottom:6px}
 .atabs{display:flex;gap:4px;padding:5px;justify-content:center;flex-wrap:wrap}
 .atabs button{font-family:var(--head);font-size:11px;letter-spacing:.12em;padding:9px 14px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px}
 .atabs button small{font-size:9px;opacity:.7;background:rgba(255,255,255,.1);padding:1px 5px}
@@ -898,7 +908,7 @@ body.gated>*:not(#gateBlock){visibility:hidden!important}
 #panel:has(#trCv) .trtools{top:50px;left:10px}
 #panel:has(#trCv) .trbar{position:absolute;left:10px;bottom:max(10px,env(safe-area-inset-bottom,0px));z-index:7;max-width:calc(100% - 20px)}#panel:has(#trCv) .trbar>span{background:rgba(5,4,20,.6)}
 #panel:has(#trCv) .trpad{position:absolute;left:10px;right:10px;bottom:calc(max(10px,env(safe-area-inset-bottom,0px)) + 34px);z-index:7}
-body:has(#trCv) #socBtn,body:has(#trCv) #ulogBtn{display:none!important}
+body:has(#trCv) #socBtn,body:has(#trCv) #ulogBtn,body:has(#mg) #socBtn,body:has(#mg) #ulogBtn{display:none!important}
 @media (max-width:560px){#panel:has(#trCv) .trtop{gap:6px}#panel:has(#trCv) .trtop>b{display:none}#panel:has(#trCv) .trtop>span{font-size:10px;line-height:1.2}}
 .trwrap{display:flex;flex-direction:column;gap:6px;user-select:none;-webkit-user-select:none}
 .trtop{display:flex;align-items:center;gap:10px}.trtop b{font-family:var(--head);letter-spacing:.12em}.trtop span{flex:1;font-family:var(--head);font-size:11px;opacity:.8}
@@ -4245,6 +4255,8 @@ function frame(t){
   // the themed scene (ocean, space, dream, Marius) belongs to Off the Charts itself: on menus and in the other games
   // (Chicken Horse, arcade, casino…) it's hidden and not drawn at all
   {const off=MENU&&!FL.dur&&!CUP&&!SCENE_MENU,hub=MENU&&SCENE_MENU==="hub";if(off!==frame._off){frame._off=off;document.body.classList.toggle("noscene",off);}if(hub!==frame._hub){frame._hub=hub;document.body.classList.toggle("hubscene",hub);}if(off)return;}
+  // main menu: a calm version of the theme's scene, drifting at a fifth of the speed, drawn ~20 times a second, no vehicle
+  if(frame._hub&&dt<48)return;
   if(MENU&&!FL.dur&&dt<(HQ?14:30))return;  // menus: full speed on good devices, ~30fps in performance mode
   lastFrame=t;frameN++;
   if(PERF==="auto"&&HQ&&frameN>40&&!document.hidden){if(dt>26&&dt<500)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
@@ -4259,10 +4271,12 @@ function frame(t){
   cam+=(camTarget()-cam)*Math.min(1,.25*Math.max(1,dt)/16.7);
   let sx=0,sy=0;if(SC.shake>0){SC.shake-=16;sx=(Math.random()-.5)*3;sy=(Math.random()-.5)*3;}
   g.save();g.translate(Math.round(sx),Math.round(sy));VEH.x.clearRect(0,0,VEH.c.width,VEH.c.height);VEH.sx=Math.round(sx);VEH.sy=Math.round(sy);
+  const hub=!!frame._hub;{const T=t;t=hub?T*.2:T;}
   if(isDream()){skyScene(t);sceneExtras(t);skyNear(t);}else if(TH.up){spaceScene(t);sceneExtras(t);}else{oceanScene(t);sceneExtras(t);}
   if(THEME==="space"){spaceNear(t);for(const c of SEED.clouds)if(!c.far&&c.s>9&&visK(c.a,1.5,40)){g.globalAlpha=.35;cloud(((c.x*W*1.7+t*c.v*.02)%(W+120))-60,ysK(c.a,1.5),c.s*1.4,"#ffffff","#e2ecfb");g.globalAlpha=1;}}
   else if(THEME==="ocean")oceanNear(t);
-  speedLines(t);vignette();
+  if(!hub)speedLines(t);vignette();
+  if(hub){SC.parts.length=0;g.restore();hudTick();return;}
   if(CUP&&TH.up)speed=Math.max(speed,1);
   const vx=CUP?Math.round(CUP.x):W/2,vy=Math.round(ys(SC.alt));VX=vx;
   const trc=typeof trailCols==="function"?trailCols():null;
@@ -4669,7 +4683,7 @@ function resultCard(p,pi,entry,pts,label,nextLabel,onNext,extra){
   showCard(`<div class="result">
     <div class="lbl">${label}</div><div class="cq" style="font-size:clamp(17px,3.6vw,22px)">${esc(p.q)}</div>
     <div class="ansbig${t>=4?" cupwin":""}">${glow(t,t<0?"MISSED":TIERS[t].name)}</div>
-    <div class="ansname">${entry?esc(entry.display)+(entry.ai?`<span class="aitag">AI</span>`:""):"no answer"} <span class="hint">· +${pts}</span></div>
+    <div class="ansname">${entry?esc(entry.display)+(entry.ai?`<span class="aitag">AI</span>`:""):"no answer"} <span class="hint">· +${pts}</span></div>${shardLine()}
     ${extra||""}
     <div class="examples">Rarest picks: <b>${examples(pi).map(esc).join(", ")}</b></div>
     <div class="row" style="justify-content:center;margin-top:14px"><button class="pbtn c m-sun big" id="nextBtn">${nextLabel} ▶</button></div>
@@ -5527,7 +5541,7 @@ function blitzRound(){
       <div class="ansbig">${glow(best,`${got.length} ANSWER${got.length===1?"":"S"} · +${pts()}`)}</div>
       <div class="found">${got.map(x=>tchip(x.tier,esc(x.display.toUpperCase()))).join("")||`<span class="hint">no answers this time</span>`}</div>
       <div class="examples">Rarest picks: <b>${examples(pi).map(esc).join(", ")}</b></div>
-      ${RE?fuelHTML(fd):""}<div class="row" style="justify-content:center;margin-top:14px"><button class="pbtn c m-fire big" id="nextBtn">${last||out?(out?"OUT OF FUEL · RESULTS":"SEE RESULTS"):"NEXT PROMPT"} ▶</button></div>${RE&&!out?runBtns():""}</div>`,{prog:blitzProg()});
+      ${shardLine()}${RE?fuelHTML(fd):""}<div class="row" style="justify-content:center;margin-top:14px"><button class="pbtn c m-fire big" id="nextBtn">${last||out?(out?"OUT OF FUEL · RESULTS":"SEE RESULTS"):"NEXT PROMPT"} ▶</button></div>${RE&&!out?runBtns():""}</div>`,{prog:blitzProg()});
     $("nextBtn").onclick=()=>{if(out)return endRun();if(!RE)S.i++;blitzRound();};$("nextBtn").focus();};
   go.onclick=submit;inp.onkeydown=ev=>{if(ev.key==="Enter"){ev.preventDefault();submit();}
     else if(asking&&ev.key==="Escape"){ev.preventDefault();asking.no();}
@@ -6221,7 +6235,8 @@ function mgPtr(e){if(!MG||!MG.G.ptr||MG.paused)return;if(e.type==="pointerdown")
 // the canvas is drawn at (on-screen size × screen density) so text and numbers stay sharp instead of being stretched
 function mgFit(){if(!MG)return;const bar=document.querySelector("#mg .mgbar"),row=document.querySelector("#mg .mgfoot > .row");
   // leave room for the top bar (score + QUIT) and the button row so they're always on screen; the help text can scroll
-  const aw=Math.min(innerWidth-24,900),ah=Math.max(160,innerHeight-((bar?bar.offsetHeight:45)+(row?row.offsetHeight+8:0)+52)),s=Math.max(1,Math.min(aw/MG.W,ah/MG.H));MG.c.style.width=Math.floor(MG.W*s)+"px";MG.c.style.height=Math.floor(MG.H*s)+"px";
+  // full screen: as big as the whole window allows (the help text sits below, scroll to read it)
+  const aw=innerWidth,ah=Math.max(160,innerHeight-((bar?bar.offsetHeight:40)+(row?row.offsetHeight+8:0))),s=Math.max(.5,Math.min(aw/MG.W,ah/MG.H));MG.c.style.width=Math.floor(MG.W*s)+"px";MG.c.style.height=Math.floor(MG.H*s)+"px";
   const S=Math.max(2,Math.min(MG.G.maxS||4,Math.ceil(s*(window.devicePixelRatio||1))));if(MG.S!==S){MG.S=S;MG.c.width=MG.W*S;MG.c.height=MG.H*S;MG.x.setTransform(S,0,0,S,0,0);MG.x.imageSmoothingEnabled=false;}}
 addEventListener("resize",()=>MG&&mgFit());
 function mgLoop(now){if(!MG)return;const dt=Math.min(50,now-MG.last);MG.last=now;
@@ -6672,7 +6687,7 @@ MGAMES.stack={name:"CUPIDIUM STACKER",w:160,h:240,blurb:"A 3D tower of crystal f
     if(m.choose){x.globalAlpha=.75;mR(x,0,0,m.W,m.H,"#0a0820");x.globalAlpha=1;mT(x,"PICK A POWER-UP",m.W/2,58,"#5eead4",8);mT(x,"perfect drops don't use a charge",m.W/2,68,"#c4b5fd",4.5);
       m.choose.forEach((k,i)=>{const P=this.POW[k],y=76+i*36;mRR(x,14,y,132,32,4,"#241b40");mR(x,14,y,3,32,P.c);mT(x,`${i+1}  ${P.nm}`,22,y+10,P.c,7,"left");mT(x,this.pd(m,k),22,y+23,"#e9d5ff",5,"left");});}}};
 // ---------- 4. CUPIDIUM RHYTHM ----------
-MGAMES.rhythm={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"osu!mania meets DDR: 4 lanes of arrows fall onto the receptors. Hit them on the beat, hold the long ones. Pick a song and a difficulty.",
+const RH_DDR={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"osu!mania meets DDR: 4 lanes of arrows fall onto the receptors. Hit them on the beat, hold the long ones. Pick a song and a difficulty.",
   controls:"Lanes: D F J K or ← ↓ ↑ → (or tap the lanes). Tap arrows: press as they reach the receptors. Long notes: hold until the tail. Arrow colour shows the beat: red = on the beat, blue = half beat, yellow = quarter beat. Song select: ← → song, ↑ ↓ difficulty, Enter to play. Esc during a song ends it.",
   SONGS:[{nm:"PINK ATOM",art:"CUPIDIUM",bpm:128,root:220,sc:[0,2,4,7,9,12,14,16],c:"#ff5fd2"},{nm:"MOONSHOT",art:"OFF THE CHARTS",bpm:110,root:196,sc:[0,3,5,7,10,12,15,17],c:"#93c5fd"},
     {nm:"DEEP SEA DRIFT",art:"THE PUFFERS",bpm:140,root:247,sc:[0,2,3,7,8,12,14,15],c:"#2dd4bf"},{nm:"CUPID OVERDRIVE",art:"ONE IN A CUPIDIUM",bpm:170,root:262,sc:[0,4,7,11,12,16,19,23],c:"#fde047"}],
@@ -6792,6 +6807,146 @@ MGAMES.rhythm={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"osu!mania
     mT(x,m.score.toLocaleString(),W/2+30,58,"#fde047",12);mT(x,`MAX COMBO ${m.maxc} · ${Math.round(m.acc*1000)/10}%`,W/2+30,72,"#e9d5ff",5);
     [["PERFECT",J.P,"#7dd3fc"],["GREAT",J.G,"#fde047"],["GOOD",J.O,"#4ade80"],["BAD",J.B,"#c4b5fd"],["MISS",J.M,"#f87171"]].forEach(([n,v,c],i)=>{mT(x,n,100,90+i*12,c,6,"left");mT(x,String(v),200,90+i*12,"#fff",6,"right");});
     mT(x,"TAP OR PRESS ENTER FOR SONG SELECT",W/2,this.h-10,"#a78bfa",5);}};
+const RH_PJSK={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"A Project Sekai style rhythm game: 6 lanes, holds, flicks and gold criticals on a 3D highway. Pick a song and a difficulty.",
+  controls:"Lanes: S D F J K L (or tap / hold the lanes). Tap notes: press. GREEN holds: keep holding until the end. PINK flicks: press the lane like any note (on a keyboard or mouse that's all you do; on touch you can also swipe up). Flicks score 1.5×. GOLD criticals score double. Song select: ← → song, ↑ ↓ difficulty, Enter to play. Esc during a song ends it.",
+  SONGS:[{nm:"PINK ATOM",art:"CUPIDIUM",bpm:128,root:220,sc:[0,2,4,7,9,12,14,16],c:"#ff5fd2"},{nm:"MOONSHOT",art:"OFF THE CHARTS",bpm:110,root:196,sc:[0,3,5,7,10,12,15,17],c:"#93c5fd"},
+    {nm:"DEEP SEA DRIFT",art:"THE PUFFERS",bpm:140,root:247,sc:[0,2,3,7,8,12,14,15],c:"#2dd4bf"},{nm:"CUPID OVERDRIVE",art:"ONE IN A CUPIDIUM",bpm:170,root:262,sc:[0,4,7,11,12,16,19,23],c:"#fde047"}],
+  DIFFS:[{nm:"EASY",lv:7,c:"#4ade80",d:0.59,hold:.10,flick:0,wide:0,chord:0,crit:.04},{nm:"NORMAL",lv:13,c:"#60a5fa",d:0.98,hold:.14,flick:.04,wide:.05,chord:.03,crit:.05},
+    {nm:"HARD",lv:20,c:"#fbbf24",d:1.43,hold:.16,flick:.07,wide:.08,chord:.08,crit:.06},{nm:"EXPERT",lv:27,c:"#f87171",d:2.08,hold:.18,flick:.1,wide:.1,chord:.14,crit:.07},
+    {nm:"MASTER",lv:33,c:"#c084fc",d:2.86,hold:.2,flick:.13,wide:.12,chord:.2,crit:.08}],
+  LANES:6,KEYS:["s","d","f","j","k","l"],LEN:64000,TRAVEL:1000,HZ:34,JY:172,J:{P:45,G:85,O:125,B:160},
+  init(m){m.scr="select";m.song=store.get("otc.rh.song",0)%this.SONGS.length;m.diff=store.get("otc.rh.diff",1)%this.DIFFS.length;m.held=[0,0,0,0,0,0];m.fb=[];m.fx=[];mgHud("PICK A SONG");},
+  // ---- chart: made from the song + difficulty seed, so a chart is the same every time ----
+  chart(m){const S=this.SONGS[m.song],D=this.DIFFS[m.diff],r=rng("rh|"+S.nm+"|"+D.nm),beat=60000/S.bpm,notes=[],busy=Array(6).fill(-1);
+    const sub=D.d>1.5?4:D.d>.9?2:1,step=beat/sub;let lastL=2;
+    for(let t=2400;t<this.LEN-1500;t+=step){const onBeat=Math.abs((t-2400)%beat)<1,bar=Math.floor((t-2400)/(beat*4)),phrase=bar%8;
+      let p=D.d/sub*(onBeat?1.25:.8)*(phrase>=6?1.35:phrase<2?.7:1);if(r()>Math.min(.97,p))continue;
+      const w=r()<D.wide?(r()<.5?2:3):1;let l=Math.max(0,Math.min(6-w,Math.round(lastL+(r()-.5)*4)));
+      const free=x=>{for(let k=x;k<x+w;k++)if(busy[k]>t-30)return false;return true;};let tries=0;while(!free(l)&&tries++<8)l=Math.floor(r()*(7-w));if(!free(l))continue;lastL=l;
+      const n={l,w,at:t,ty:"tap"};const roll=r();
+      if(roll<D.hold&&t<this.LEN-4000){n.ty="hold";n.end=t+beat*(r()<.5?1:2)*(D.d>1.5&&r()<.4?2:1);}
+      else if(roll<D.hold+D.flick)n.ty="flick";else if(roll<D.hold+D.flick+D.crit)n.ty="crit";
+      notes.push(n);for(let k=l;k<l+w;k++)busy[k]=n.end||t;
+      if(D.chord&&onBeat&&r()<D.chord){const l2=l<3?l+w+1+Math.floor(r()*2):l-2-Math.floor(r()*2);if(l2>=0&&l2<6&&busy[l2]<t-30){notes.push({l:l2,w:1,at:t,ty:r()<.3?"crit":"tap"});busy[l2]=t;}}}
+    return notes;},
+  start(m){const S=this.SONGS[m.song];store.set("otc.rh.song",m.song);store.set("otc.rh.diff",m.diff);m.notes=this.chart(m);m.total=m.notes.reduce((a,n)=>a+(n.ty==="hold"?2:1),0);
+    m.scr="play";m.t0=m.t;m.combo=0;m.maxc=0;m.life=1000;m.jc={P:0,G:0,O:0,B:0,M:0};m.score=0;m.pts=0;m.nb=0;m.fb=[];m.fx=[];m.held=[0,0,0,0,0,0];mgHud(`${S.nm} · ${this.DIFFS[m.diff].nm}`);},
+  st(m){return m.t-m.t0;},
+  // judge a press in a lane: the nearest unhit note whose span covers the lane
+  press(m,lane,flick){if(m.scr!=="play")return;const now=this.st(m);m.held[lane]=m.t;let best=null,bd=1e9;
+    for(const n of m.notes){if(n.hit||n.miss||lane<n.l||lane>=n.l+n.w)continue;const d=Math.abs(n.at-now);if(d<bd){bd=d;best=n;}}
+    if(!best||bd>this.J.B){tone(this.SONGS[m.song].root*2,.03,"triangle",.012);return;}
+    if(best.ty==="flick"&&flick===false){/* touch flick needs a swipe: wait for the swipe */best.armed=now;return;}
+    this.judge(m,best,bd);if(best.ty==="hold"){best.holding=lane;}},
+  judge(m,n,d,end){const J=this.J,k=d<=J.P?"P":d<=J.G?"G":d<=J.O?"O":d<=J.B?"B":"M";if(end)n.done=1;else n.hit=1;m.jc[k]++;
+    const crit=n.ty==="crit"?2:n.ty==="flick"?1.5:1,base={P:300,G:200,O:100,B:50,M:0}[k]*crit;m.pts+=base;
+    if(k==="M"||k==="B"){m.combo=0;m.life-=k==="M"?60:20;}else{m.combo++;m.maxc=Math.max(m.maxc,m.combo);m.life=Math.min(1000,m.life+3);}
+    m.score=Math.round(m.pts*(1+Math.min(m.combo,100)/400));
+    const L={P:"PERFECT",G:"GREAT",O:"GOOD",B:"BAD",M:"MISS"}[k],C={P:"#ff8fe0",G:"#fde047",O:"#67e8f9",B:"#93c5fd",M:"#94a3b8"}[k];m.fb=[{txt:L,c:C,t:m.t}];
+    if(k!=="M"){const S=this.SONGS[m.song];tone(S.root*Math.pow(2,S.sc[(n.l+m.combo)%8]/12)*2,.07,n.ty==="crit"?"sawtooth":"square",.028);m.fx.push({l:n.l,w:n.w,t:m.t,c:n.ty==="crit"?"#fde047":n.ty==="flick"?"#ff5fd2":n.ty==="hold"?"#4ade80":"#67e8f9"});}
+    else tone(120,.06,"triangle",.02);
+    if(m.life<=0){m.life=0;this.finish(m,true);}},
+  release(m,lane){m.held[lane]=0;if(m.scr!=="play")return;const now=this.st(m);
+    for(const n of m.notes)if(n.ty==="hold"&&n.hit&&!n.done&&n.holding===lane){const d=n.end-now;if(d>this.J.B)this.judge(m,n,1e9,true);else this.judge(m,n,Math.abs(d)*.6,true);}},
+  key(m,k,down,first,raw){
+    if(m.scr==="select"){if(!down||!first)return;if(k==="l"||raw==="arrowleft"){m.song=(m.song+this.SONGS.length-1)%this.SONGS.length;sfx.tick();}else if(k==="r"||raw==="arrowright"){m.song=(m.song+1)%this.SONGS.length;sfx.tick();}
+      else if(k==="u"||raw==="arrowup"){m.diff=Math.min(4,m.diff+1);sfx.tick();}else if(k==="dn"||raw==="arrowdown"){m.diff=Math.max(0,m.diff-1);sfx.tick();}else if(k==="ent"||k==="sp")this.start(m);return;}
+    if(m.scr==="result"){if(down&&first&&(k==="ent"||k==="sp"))this.toSelect(m);return;}
+    if(raw==="escape"&&down&&first)return this.finish(m,false,true);
+    const lane=this.KEYS.indexOf(raw);if(lane<0)return;if(down&&first)this.press(m,lane,true);else if(!down)this.release(m,lane);},
+  // touch: lanes along the judgment line; swipe up for flicks; drag between lanes keeps holds going
+  laneAt(m,x){const g=this.geo(1);return Math.max(0,Math.min(5,Math.floor((x-g.l)/(g.r-g.l)*6)));},
+  ptr(m,x,y,t){if(m.scr==="select"){if(t!=="pointerdown")return;
+      if(y>150&&y<180)return this.start(m);if(y>34&&y<70){if(x<40)m.song=(m.song+3)%4;else if(x>200)m.song=(m.song+1)%4;sfx.tick();return;}
+      if(y>=90&&y<=140){const i=Math.floor((x-10)/44);if(i>=0&&i<5){m.diff=i;sfx.tick();}}return;}
+    if(m.scr==="result"){if(t==="pointerdown")this.toSelect(m);return;}
+    const lane=this.laneAt(m,x);
+    if(t==="pointerdown"){m.ptr={lane,y,x};this.press(m,lane,true);}
+    else if(t==="pointermove"&&m.ptr){if(m.ptr.y-y>8){const now=this.st(m);for(const n of m.notes)if(n.ty==="flick"&&!n.hit&&n.armed!=null&&lane>=n.l-1&&lane<=n.l+n.w)this.judge(m,n,Math.abs(n.at-now));m.ptr.y=y;}
+      if(lane!==m.ptr.lane){for(const n of m.notes)if(n.ty==="hold"&&n.hit&&!n.done&&n.holding===m.ptr.lane&&lane>=n.l-1&&lane<=n.l+n.w)n.holding=lane;m.held[m.ptr.lane]=0;m.held[lane]=m.t;m.ptr.lane=lane;}}
+    else if(t==="pointerup"&&m.ptr){this.release(m,m.ptr.lane);m.ptr=null;}},
+  toSelect(m){m.scr="select";m.score=0;mgHud("PICK A SONG");},
+  finish(m,failed,quit){if(m.scr!=="play")return;m.scr="result";m.failed=failed;m.quit=quit;const J=m.jc,n=J.P+J.G+J.O+J.B+J.M;
+    m.acc=n?(J.P*1+J.G*.8+J.O*.5+J.B*.2)/Math.max(1,m.total):0;m.fc=!failed&&!quit&&J.M===0&&J.B===0&&n>=m.total;m.ap=m.fc&&J.G===0&&J.O===0;
+    m.rank=failed?"F":m.acc>=.97?"S":m.acc>=.9?"A":m.acc>=.8?"B":m.acc>=.65?"C":"D";
+    const key="otc.rh.best",b=store.get(key,{}),k=m.song+"-"+m.diff,o=b[k]||{};if(!quit&&!failed){b[k]={s:Math.max(o.s||0,m.score),fc:o.fc||m.fc,ap:o.ap||m.ap,r:o.r&&o.r<m.rank?o.r:m.rank};store.set(key,b);}
+    if(!failed&&!quit)burst(m.ap?140:m.fc?90:40);sfx.ok(failed?0:4);
+    if(!quit&&!failed&&m.score>0){const sc=m.score;setTimeout(()=>{if(MG===m&&m.scr==="result"){m.score=sc;mgEnd(m.ap?"ALL PERFECT!":m.fc?"FULL COMBO!":"SONG CLEAR",`${this.SONGS[m.song].nm} · ${this.DIFFS[m.diff].nm} · rank ${m.rank} · max combo ${m.maxc}`);}},2600);}},
+  update(m,dt){if(m.scr!=="play")return;const now=this.st(m),S=this.SONGS[m.song],beat=60000/S.bpm;
+    // backing beat: kick on 1 and 3, hat on the off-beats, a bass note per bar
+    const b=Math.floor((now-2400)/beat*2);if(now>2400&&b!==m.nb){m.nb=b;if(b%2===0){tone(S.root/2*Math.pow(2,S.sc[[0,0,3,4][Math.floor(b/8)%4]]/12),.09,"triangle",.045);if(b%4===0)tone(70,.06,"sine",.06);}else tone(2400,.012,"square",.008);}
+    for(const n of m.notes){if(!n.hit&&!n.miss&&now-n.at>this.J.B){n.miss=1;this.judge(m,n,1e9);if(n.ty==="hold"){n.done=1;this.judge(m,n,1e9,true);}if(m.scr!=="play")return;}
+      if(n.ty==="hold"&&n.hit&&!n.done){if(n.holding==null||!m.held[n.holding]){if(n.end-now>this.J.B)this.judge(m,n,1e9,true);}else if(now>=n.end)this.judge(m,n,0,true);}}
+    m.notes=m.notes.filter(n=>now-(n.end||n.at)<600);m.fb=m.fb.filter(f=>m.t-f.t<600);m.fx=m.fx.filter(f=>m.t-f.t<300);
+    if(now>this.LEN&&!m.notes.some(n=>!n.miss&&!(n.ty==="hold"?n.done:n.hit)))this.finish(m,false);},
+  // ---- 3D highway: lanes meet at the horizon, notes grow as they come toward you ----
+  geo(f){const W=this.w,top=26,bot=W-12,half=top/2+(bot-top)/2*f;return{l:W/2-half,r:W/2+half,y:this.HZ+(this.JY-this.HZ)*f};},
+  fOf(dt){return Math.max(0,Math.min(1.08,1-dt/this.TRAVEL));},
+  draw(m,x,t){const W=this.w,H=this.h;
+    if(m.scr==="select")return this.drawSelect(m,x,t);
+    const S=this.SONGS[m.song],now=this.st(m);mBg(x,W,H,t,"#160a2e","#05040f");
+    {const bt=60000/S.bpm,ph=now>2400?((now-2400)/bt)%1:1,pulse=1-ph,mt=m.t||0,cols=["#ff5fd2","#67e8f9","#fde047","#a78bfa"];
+      for(let i=0;i<4;i++){const a=Math.sin(mt/900+i*1.7)*.45;x.save();x.globalAlpha=.08+.06*pulse;x.fillStyle=cols[i];x.translate(W*(.12+i*.25),-6);x.rotate(a);x.beginPath();x.moveTo(-2,0);x.lineTo(2,0);x.lineTo(26,H);x.lineTo(-26,H);x.fill();x.restore();}
+      if(now>2400){x.strokeStyle=`rgba(255,143,224,${.45*pulse})`;x.lineWidth=1;for(const k of [0,.5]){const q=(ph+k)%1;x.beginPath();x.ellipse(W/2,this.HZ,14+70*q,4+18*q,0,0,7);x.stroke();}}
+      for(let i=0;i<34;i++){const sx=((i*53+mt*.012*(1+i%3))%W+W)%W,sy=((i*37-mt*.02*(1+i%4))%H+H)%H,tw=.3+.7*Math.abs(Math.sin(mt/400+i));x.fillStyle=`rgba(255,255,255,${.35*tw})`;x.fillRect(sx,sy,i%5?1:2,i%5?1:2);}
+      for(const side of [0,1]){const bx=side?W-5:2;for(let k=0;k<8;k++){const on=(Math.floor(mt/120)+k+side*3)%8<3;x.fillStyle=on?cols[(k+side)%4]:"rgba(255,255,255,.06)";x.globalAlpha=on?.55+.3*pulse:1;x.fillRect(bx,28+k*20,3,14);x.globalAlpha=1;}}}
+    // highway
+    const g0=this.geo(0),g1=this.geo(1.06);x.fillStyle="rgba(20,14,48,.92)";x.beginPath();x.moveTo(g0.l,g0.y);x.lineTo(g0.r,g0.y);x.lineTo(g1.r,g1.y);x.lineTo(g1.l,g1.y);x.closePath();x.fill();
+    for(let i=0;i<6;i++){const lit=m.held[i]&&m.t-m.held[i]<5000;if(!lit)continue;const a=this.geo(0),b=this.geo(1.06),la=a.l+(a.r-a.l)*i/6,lb=b.l+(b.r-b.l)*i/6,ra=a.l+(a.r-a.l)*(i+1)/6,rb=b.l+(b.r-b.l)*(i+1)/6;
+      const gr=x.createLinearGradient(0,a.y,0,b.y);gr.addColorStop(0,"rgba(255,143,224,0)");gr.addColorStop(1,"rgba(255,143,224,.28)");x.fillStyle=gr;x.beginPath();x.moveTo(la,a.y);x.lineTo(ra,a.y);x.lineTo(rb,b.y);x.lineTo(lb,b.y);x.fill();}
+    x.strokeStyle="rgba(196,181,253,.35)";x.lineWidth=.5;for(let i=0;i<=6;i++){const a=this.geo(0),b=this.geo(1.06);x.beginPath();x.moveTo(a.l+(a.r-a.l)*i/6,a.y);x.lineTo(b.l+(b.r-b.l)*i/6,b.y);x.stroke();}
+    // beat lines sliding down
+    const beat=60000/S.bpm;for(let k=0;k<8;k++){const bt=Math.ceil((now-2400)/beat)*beat+2400+k*beat,dtt=bt-now;if(dtt>this.TRAVEL)break;const g=this.geo(this.fOf(dtt));x.fillStyle="rgba(196,181,253,.12)";x.fillRect(g.l,g.y,g.r-g.l,.5);}
+    // judgment line
+    const gj=this.geo(1);{const bt=60000/S.bpm,pu=now>2400?1-((now-2400)/bt)%1:0;mGlow(x,W/2,gj.y,(gj.r-gj.l)/2+6*pu,"#ff8fe0",.25+.25*pu);}mR(x,gj.l-2,gj.y-1,gj.r-gj.l+4,2,"#ff8fe0");mR(x,gj.l-2,gj.y-1,gj.r-gj.l+4,1,"#ffffff");for(let i=0;i<6;i++)mT(x,this.KEYS[i].toUpperCase(),gj.l+(gj.r-gj.l)*(i+.5)/6,gj.y+12,m.held[i]?"#ff8fe0":"#a78bfa",6);
+    // holds first (bodies), then heads
+    const span=(n,f)=>{const g=this.geo(f);return{x0:g.l+(g.r-g.l)*n.l/6+.6,x1:g.l+(g.r-g.l)*(n.l+n.w)/6-.6,y:g.y,s:f};};
+    for(const n of m.notes){if(n.ty!=="hold"||n.done)continue;const fa=this.fOf(n.hit?0:n.at-now),fb=this.fOf(n.end-now);if(fb<=0&&fa<=0)continue;const A=span(n,Math.min(1,fa)),B=span(n,Math.max(0,fb));
+      x.fillStyle=n.hit&&m.held[n.holding]?"rgba(74,222,128,.55)":"rgba(74,222,128,.32)";x.beginPath();x.moveTo(B.x0,B.y);x.lineTo(B.x1,B.y);x.lineTo(A.x1,A.y);x.lineTo(A.x0,A.y);x.fill();
+      if(fb>0){const E=span(n,fb),h=1+3*fb;x.fillStyle="#86efac";x.fillRect(E.x0,E.y-h/2,E.x1-E.x0,h);}}
+    for(const n of m.notes){if(n.hit||n.miss)continue;const dtt=n.at-now;if(dtt>this.TRAVEL)continue;const f=this.fOf(dtt),P=span(n,f),h=1.4+4.2*f;
+      const col=n.ty==="crit"?["#fde047","#a16207"]:n.ty==="flick"?["#ff5fd2","#9d174d"]:n.ty==="hold"?["#4ade80","#166534"]:["#67e8f9","#0e7490"];
+      if(n.ty==="crit"||n.ty==="flick")mGlow(x,(P.x0+P.x1)/2,P.y,(P.x1-P.x0)*.6,col[0],.35*f);
+      x.fillStyle=col[1];x.fillRect(P.x0,P.y-h/2,P.x1-P.x0,h);x.fillStyle=col[0];x.fillRect(P.x0+.5,P.y-h/2,P.x1-P.x0-1,h-1);x.fillStyle="rgba(255,255,255,.7)";x.fillRect(P.x0+1,P.y-h/2+.5,P.x1-P.x0-2,Math.max(.5,h*.25));
+      if(n.ty==="flick"){const cx=(P.x0+P.x1)/2,ah=3+6*f;x.fillStyle="#ff8fe0";x.beginPath();x.moveTo(cx,P.y-h/2-ah);x.lineTo(cx-ah*.8,P.y-h/2-1);x.lineTo(cx+ah*.8,P.y-h/2-1);x.fill();}}
+    // hit sparks
+    for(const f of m.fx){const a=1-(m.t-f.t)/300,P=span(f,1),Q=span(f,.55);x.globalAlpha=a*.35;x.fillStyle=f.c;x.beginPath();x.moveTo(P.x0,P.y);x.lineTo(P.x1,P.y);x.lineTo(Q.x1,Q.y);x.lineTo(Q.x0,Q.y);x.fill();x.globalAlpha=1;}
+    for(const f of m.fx){const a=1-(m.t-f.t)/300,P=span(f,1);x.globalAlpha=a;x.fillStyle=f.c;x.fillRect(P.x0,P.y-10*(1-a)-4,P.x1-P.x0,3);mGlow(x,(P.x0+P.x1)/2,P.y,8+10*(1-a),f.c,.6);x.globalAlpha=1;}
+    // combo + judgment, big in the middle like the real game
+    if(m.combo>=2){mT(x,String(m.combo),W/2,78,"#ffffff",18);mT(x,"COMBO",W/2,94,"#c4b5fd",6);}
+    for(const f of m.fb){const a=1-(m.t-f.t)/600;x.globalAlpha=Math.max(0,a);mT(x,f.txt,W/2,118-(1-a)*6,f.c,10);x.globalAlpha=1;}
+    // top bar: song, life, score
+    mR(x,0,0,W,20,"rgba(5,4,15,.75)");mT(x,S.nm,6,6,S.c,6,"left");mT(x,`${this.DIFFS[m.diff].nm} ${this.DIFFS[m.diff].lv}`,6,14,this.DIFFS[m.diff].c,5,"left");
+    mR(x,90,4,70,5,"#1f1b3a");mR(x,90,4,70*m.life/1000,5,m.life<300?"#f87171":"#4ade80");mT(x,"LIFE",125,14,"#a78bfa",5);
+    mT(x,String(m.score).padStart(7,"0"),W-6,8,"#fde047",8,"right");mR(x,W-80,15,74,2,"#1f1b3a");mR(x,W-80,15,74*Math.min(1,now/this.LEN),2,"#ff5fd2");
+    if(now<2400)mT(x,now<1600?"READY?":"GO!",W/2,110,"#ff8fe0",14);
+    if(m.scr==="result")this.drawResult(m,x,t);},
+  drawSelect(m,x,t){const W=this.w,S=this.SONGS[m.song],D=this.DIFFS[m.diff],b=store.get("otc.rh.best",{});mBg(x,W,this.h,t,"#1a0b2e","#07061a");
+    mT(x,"SONG SELECT",W/2,12,"#c4b5fd",7);mT(x,"◀",16,52,"#a78bfa",12);mT(x,"▶",W-16,52,"#a78bfa",12);
+    mRR(x,40,30,160,46,4,"rgba(255,255,255,.06)");mT(x,S.nm,W/2,44,S.c,10);mT(x,S.art+" · "+S.bpm+" BPM",W/2,58,"#e9d5ff",5);mT(x,`${m.song+1} / ${this.SONGS.length}`,W/2,69,"#a78bfa",5);
+    this.DIFFS.forEach((d,i)=>{const bx=10+i*44,on=i===m.diff,r=b[m.song+"-"+i];mRR(x,bx,90,40,44,3,on?d.c:"rgba(255,255,255,.08)");mT(x,d.nm,bx+20,100,on?"#0b1020":d.c,5);mT(x,String(d.lv),bx+20,114,on?"#0b1020":"#fff",11);
+      if(r)mT(x,r.ap?"AP":r.fc?"FC":r.r,bx+20,128,on?"#0b1020":r.ap?"#ff8fe0":r.fc?"#fde047":"#c4b5fd",6);});
+    const r=b[m.song+"-"+m.diff];mT(x,r?`BEST ${r.s.toLocaleString()}${r.ap?" · ALL PERFECT":r.fc?" · FULL COMBO":""}`:"NOT PLAYED YET",W/2,144,"#e9d5ff",5);
+    mRR(x,70,152,100,22,4,CUPC);mT(x,"▶ PLAY",W/2,163,"#0b1020",8);mT(x,"← → SONG · ↑ ↓ DIFFICULTY · ENTER",W/2,186,"#a78bfa",5);},
+  drawResult(m,x,t){const W=this.w,J=m.jc;x.fillStyle="rgba(5,4,15,.82)";x.fillRect(0,20,W,this.h-20);
+    mT(x,m.failed?"FAILED":m.quit?"ENDED":m.ap?"ALL PERFECT":m.fc?"FULL COMBO":"CLEAR",W/2,36,m.failed?"#f87171":m.ap?"#ff8fe0":m.fc?"#fde047":"#4ade80",11);
+    mT(x,m.rank,48,80,{S:"#fde047",A:"#ff8fe0",B:"#93c5fd",C:"#86efac",D:"#c4b5fd",F:"#f87171"}[m.rank]||"#fff",34);
+    mT(x,m.score.toLocaleString(),W/2+30,58,"#fde047",12);mT(x,`MAX COMBO ${m.maxc} · ${Math.round(m.acc*1000)/10}%`,W/2+30,72,"#e9d5ff",5);
+    [["PERFECT",J.P,"#ff8fe0"],["GREAT",J.G,"#fde047"],["GOOD",J.O,"#67e8f9"],["BAD",J.B,"#93c5fd"],["MISS",J.M,"#94a3b8"]].forEach(([n,v,c],i)=>{mT(x,n,100,90+i*12,c,6,"left");mT(x,String(v),200,90+i*12,"#fff",6,"right");});
+    mT(x,"TAP OR PRESS ENTER FOR SONG SELECT",W/2,this.h-10,"#a78bfa",5);}};
+
+// Cupidium Rhythm has two styles, picked on the song select screen (T or the STYLE button) and remembered:
+// DDR (4 lanes of arrows falling onto receptors) or 3D Project Sekai (6 lanes on a highway, holds, flicks, criticals)
+MGAMES.rhythm={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,
+  blurb:"Two styles: DDR (4 lanes of falling arrows) or 3D Project Sekai (6 lanes on a highway with holds and flicks). Switch on the song select screen.",
+  get controls(){return (store.get("otc.rh.style","ddr")==="pjsk"?RH_PJSK:RH_DDR).controls+" Song select: T (or tap STYLE, top right) switches between DDR and 3D Project Sekai style.";},
+  E(m){return m.sty==="pjsk"?RH_PJSK:RH_DDR;},
+  swap(m){m.sty=m.sty==="pjsk"?"ddr":"pjsk";store.set("otc.rh.style",m.sty);this.E(m).init(m);sfx.tick();const h=document.querySelector("#mg .mgfoot .hint");if(h)h.textContent=this.controls;},
+  init(m){m.sty=store.get("otc.rh.style","ddr")==="pjsk"?"pjsk":"ddr";return this.E(m).init(m);},
+  update(m,dt){return this.E(m).update(m,dt);},
+  draw(m,x,t){this.E(m).draw(m,x,t);if(m.scr==="select"){mRR(x,178,3,58,14,3,"rgba(255,255,255,.12)");mT(x,"STYLE: "+(m.sty==="pjsk"?"3D":"DDR"),207,10,"#fde047",5);}},
+  key(m,k,down,first,raw){if(m.scr==="select"&&down&&first&&raw==="t")return this.swap(m);return this.E(m).key(m,k,down,first,raw);},
+  ptr(m,x,y,t){if(m.scr==="select"&&t==="pointerdown"&&y<20&&x>176)return this.swap(m);return this.E(m).ptr(m,x,y,t);}};
 
 // ---------- 5. IS IT CUPIDIUM? ----------
 const REAL_ELEM="hydrogen helium lithium beryllium boron carbon nitrogen oxygen fluorine neon sodium magnesium aluminium silicon phosphorus sulfur chlorine argon potassium calcium scandium titanium vanadium chromium manganese iron cobalt nickel copper zinc gallium germanium arsenic selenium bromine krypton rubidium strontium yttrium zirconium niobium molybdenum technetium ruthenium rhodium palladium silver cadmium indium tin antimony tellurium iodine xenon cesium barium lanthanum cerium praseodymium neodymium promethium samarium europium gadolinium terbium dysprosium holmium erbium thulium ytterbium lutetium hafnium tantalum tungsten rhenium osmium iridium platinum gold mercury thallium lead bismuth polonium astatine radon francium radium actinium thorium protactinium uranium neptunium plutonium americium curium berkelium californium einsteinium fermium mendelevium nobelium lawrencium rutherfordium dubnium seaborgium bohrium hassium meitnerium darmstadtium roentgenium copernicium nihonium flerovium moscovium livermorium tennessine oganesson".split(" ");
@@ -7578,53 +7733,111 @@ MGAMES.breaker={name:"CUPIDIUM BREAKER",w:180,h:240,blurb:"Brick breaker with mu
     mFx(m,x,dt);mPops(m,x,dt);}};
 
 // ---------- 12. CUPIDIUM GOLF (mini golf, 9 random holes) ----------
-MGAMES.golf={name:"CUPIDIUM GOLF",w:240,h:160,blurb:"Mini golf through 9 random holes with bumpers, sand, water and spinning windmills.",
-  controls:"Drag back from the ball and let go to putt (or ← → aim, hold SPACE to charge). Fewer strokes = more points.",
-  init(m){m.hole=0;m.total=0;this.newHole(m);},
-  newHole(m){m.hole++;const R=Math.random;m.ball={x:22,y:80+(R()-.5)*60,vx:0,vy:0};m.cup={x:210,y:30+R()*100};m.strokes=0;m.par=3;m.sunk=0;m.aim=0;m.charge=0;
-    m.walls=[[0,0,240,4],[0,156,240,4],[0,0,4,160],[236,0,4,160]];m.bump=[];m.sand=[];m.water=[];m.mill=null;
-    const n=2+Math.min(3,Math.floor(m.hole/2));for(let i=0;i<n;i++){const vert=R()<.6,x=60+R()*130,y=10+R()*120;m.walls.push(vert?[x,y,5,30+R()*40]:[x-20,y,40+R()*30,5]);}
-    for(let i=0;i<1+Math.floor(R()*3);i++)m.bump.push({x:60+R()*130,y:20+R()*120,r:6});
-    if(R()<.6)m.sand.push({x:70+R()*100,y:20+R()*100,r:14+R()*8});if(m.hole>2&&R()<.5)m.water.push({x:80+R()*90,y:20+R()*110,r:11+R()*6});
-    if(m.hole>3&&R()<.6)m.mill={x:100+R()*60,y:40+R()*80,a:0,len:24,sp:.0015+R()*.0015};
-    const cl=(o)=>Math.hypot(o.x-m.cup.x,o.y-m.cup.y)<22||Math.hypot(o.x-m.ball.x,o.y-m.ball.y)<22;
-    m.bump=m.bump.filter(b=>!cl(b));m.sand=m.sand.filter(b=>!cl(b));m.water=m.water.filter(b=>!cl(b));
-    m.walls=m.walls.filter((w,i)=>i<4||!(m.cup.x>w[0]-8&&m.cup.x<w[0]+w[2]+8&&m.cup.y>w[1]-8&&m.cup.y<w[1]+w[3]+8)&&!(m.ball.x>w[0]-8&&m.ball.x<w[0]+w[2]+8&&m.ball.y>w[1]-8&&m.ball.y<w[1]+w[3]+8));
-    m.start={x:m.ball.x,y:m.ball.y};mgHud(`HOLE ${m.hole}/9 · PAR ${m.par}`);},
-  still(m){return Math.hypot(m.ball.vx,m.ball.vy)<.004;},
-  shoot(m,ang,pow){if(!this.still(m)||m.sunk)return;m.ball.vx=Math.cos(ang)*pow;m.ball.vy=Math.sin(ang)*pow;m.strokes++;m.lastPos={x:m.ball.x,y:m.ball.y};tone(260,.05,"triangle",.04);mgHud(`HOLE ${m.hole}/9 · STROKE ${m.strokes}`);},
-  ptr(m,x,y,t){const b=m.ball;if(t==="pointerdown"&&this.still(m)&&!m.sunk){m.drag={x,y};}
-    else if(t==="pointermove"&&m.drag){m.drag.cx=x;m.drag.cy=y;}
-    else if(t==="pointerup"&&m.drag){const dx=b.x-x,dy=b.y-y,d=Math.min(60,Math.hypot(dx,dy));m.drag=null;if(d>4)this.shoot(m,Math.atan2(dy,dx),d*.0045);}},
-  key(m,k,down,first){if(k==="sp"){if(down&&first&&this.still(m))m.charging=m.t;if(!down&&m.charging){const p=Math.min(1,(m.t-m.charging)/1200);m.charging=0;this.shoot(m,m.aim,.04+p*.23);}}},
-  update(m,dt){const b=m.ball,k=m.keys;if(k.l)m.aim-=dt*.003;if(k.r)m.aim+=dt*.003;if(m.sunk){if(m.t-m.sunk>1400){if(m.hole>=9)return mgEnd("COURSE COMPLETE",`${m.total} strokes over 9 holes`);this.newHole(m);}return;}
-    if(m.mill)m.mill.a+=m.mill.sp*dt;
-    const steps=Math.ceil(dt/4),h=dt/steps;
-    for(let i=0;i<steps;i++){b.x+=b.vx*h;b.y+=b.vy*h;let fr=.9985;for(const s of m.sand)if(Math.hypot(b.x-s.x,b.y-s.y)<s.r)fr=.985;b.vx*=Math.pow(fr,h);b.vy*=Math.pow(fr,h);
-      if(Math.hypot(b.vx,b.vy)<.006){b.vx*=.9;b.vy*=.9;}
-      for(const w of m.walls){const nx=Math.max(w[0],Math.min(w[0]+w[2],b.x)),ny=Math.max(w[1],Math.min(w[1]+w[3],b.y)),dx=b.x-nx,dy=b.y-ny,d=Math.hypot(dx,dy);
-        if(d<2.5&&d>0){const ux=dx/d,uy=dy/d,dot=b.vx*ux+b.vy*uy;if(dot<0){b.vx-=1.8*dot*ux;b.vy-=1.8*dot*uy;tone(200,.02,"square",.015);}b.x=nx+ux*2.5;b.y=ny+uy*2.5;}}
-      for(const o of m.bump){const dx=b.x-o.x,dy=b.y-o.y,d=Math.hypot(dx,dy);if(d<o.r+2.5){const ux=dx/d,uy=dy/d,sp=Math.max(.12,Math.hypot(b.vx,b.vy)*1.15);b.vx=ux*sp;b.vy=uy*sp;b.x=o.x+ux*(o.r+2.6);b.y=o.y+uy*(o.r+2.6);o.hit=m.t;tone(700,.04,"square",.03);mBurst(m,b.x,b.y,6,PAST2);}}
-      if(m.mill){const ml=m.mill;for(const sgn of[1,-1]){const ex=ml.x+Math.cos(ml.a)*ml.len*sgn,ey=ml.y+Math.sin(ml.a)*ml.len*sgn,vx=ex-ml.x,vy=ey-ml.y,L2=vx*vx+vy*vy,tt=Math.max(0,Math.min(1,((b.x-ml.x)*vx+(b.y-ml.y)*vy)/L2)),px=ml.x+vx*tt,py=ml.y+vy*tt,dx=b.x-px,dy=b.y-py,d=Math.hypot(dx,dy);
-        if(d<3&&d>0){const ux=dx/d,uy=dy/d;b.vx=ux*.15;b.vy=uy*.15;b.x=px+ux*3;b.y=py+uy*3;}}}
-      for(const wa of m.water)if(Math.hypot(b.x-wa.x,b.y-wa.y)<wa.r-1){mBurst(m,b.x,b.y,14,["#9bf6ff","#fff"]);mPop(m,b.x,b.y-6,"SPLASH +1","#9bf6ff");b.x=m.lastPos.x;b.y=m.lastPos.y;b.vx=b.vy=0;m.strokes++;sfx.bad();break;}
-      const dc=Math.hypot(b.x-m.cup.x,b.y-m.cup.y),sp=Math.hypot(b.vx,b.vy);
-      if(dc<4&&sp<.2){m.sunk=m.t;b.vx=b.vy=0;b.x=m.cup.x;b.y=m.cup.y;m.total+=m.strokes;const pts=Math.max(0,(m.par+3-m.strokes))*100+(m.strokes===1?500:0);m.score+=pts;
-        const nm=m.strokes===1?"HOLE IN ONE!":m.strokes===m.par-2?"EAGLE!":m.strokes===m.par-1?"BIRDIE!":m.strokes===m.par?"PAR":m.strokes===m.par+1?"BOGEY":"SUNK";
-        mPop(m,m.cup.x,m.cup.y-10,`${nm} +${pts}`,m.strokes<=m.par?"#fdffb6":"#e9d5ff");mBurst(m,m.cup.x,m.cup.y,m.strokes===1?60:24,PAST2,1.5);sfx.ok(m.strokes===1?5:m.strokes<=m.par?4:2);if(m.strokes===1)burst(80);mgHud(`HOLE ${m.hole}/9 · ${nm}`);break;}
-      else if(dc<6&&sp<.35){b.vx+=(m.cup.x-b.x)*.0008*h;b.vy+=(m.cup.y-b.y)*.0008*h;}}},
-  draw(m,x,t,dt){mR(x,0,0,m.W,m.H,"#2a1b4a");for(let yy=4;yy<156;yy+=8)for(let xx=4;xx<236;xx+=8)mR(x,xx,yy,8,8,((xx+yy)/8)%2?"#9be3b0":"#a9ebbc");
-    for(const s of m.sand){mD(x,s.x,s.y,s.r,"#fde7b3");mD(x,s.x-2,s.y-2,s.r*.7,"#fff0c8");}
-    for(const w of m.water){mD(x,w.x,w.y,w.r,"#7cc8f2");mD(x,w.x-2,w.y-2,w.r*.65,"#9be0ff");const s=Math.sin(t*.004)*2;mR(x,w.x-4+s,w.y-1,4,1,"#fff");mR(x,w.x+1-s,w.y+3,3,1,"#fff");}
-    for(const w of m.walls){mR(x,w[0],w[1]+1,w[2],w[3],"#5b3f8a");mR(x,w[0],w[1],w[2],w[3],"#c9a6e3");mR(x,w[0],w[1],w[2],1,"#efe0ff");}
-    for(const o of m.bump){const lit=o.hit&&m.t-o.hit<150;mD(x,o.x,o.y+1,o.r,"#7a4fb0");mD(x,o.x,o.y,o.r,lit?"#fff":"#ffadad");mD(x,o.x-2,o.y-2,o.r*.4,"#ffe0e0");}
-    if(m.mill){const ml=m.mill;for(let r=-ml.len;r<=ml.len;r+=1)mR(x,ml.x+Math.cos(ml.a)*r-1.5,ml.y+Math.sin(ml.a)*r-1.5,3,3,"#ffd6a5");mD(x,ml.x,ml.y,4,"#c9a6e3");}
-    mD(x,m.cup.x,m.cup.y,4.5,"#2d1b55");mD(x,m.cup.x,m.cup.y+.5,3.5,"#140a26");mR(x,m.cup.x,m.cup.y-18,1,18,"#fff");for(let k=0;k<5;k++)mR(x,m.cup.x+1,m.cup.y-18+k,6-k,1,"#ff5fd2");
-    const b=m.ball;if(!m.sunk){mD(x,b.x+.5,b.y+1,2.6,"#00000033");mD(x,b.x,b.y,2.5,"#fff");mR(x,b.x-1,b.y-1,1,1,"#e9d5ff");}
-    if(this.still(m)&&!m.sunk){let ang=m.aim,pw=0;if(m.drag&&m.drag.cx!==undefined){ang=Math.atan2(b.y-m.drag.cy,b.x-m.drag.cx);pw=Math.min(60,Math.hypot(b.x-m.drag.cx,b.y-m.drag.cy))/60;}else if(m.charging)pw=Math.min(1,(m.t-m.charging)/1200);
-      for(let i=1;i<=6+pw*10;i++){x.globalAlpha=1-i/18;mR(x,b.x+Math.cos(ang)*i*4-.5,b.y+Math.sin(ang)*i*4-.5,1.5,1.5,pw>.7?"#ffadad":"#fff");}x.globalAlpha=1;}
-    mT(x,`HOLE ${m.hole}/9  ·  STROKES ${m.strokes}  ·  TOTAL ${m.total}`,120,10,"#2d1b55",6);mFx(m,x,dt);mPops(m,x,dt);}};
-
+// ---------- CUPIDIUM GOLF: 3D mini golf (Super Golf / Putt Party style). 9 hand-built holes with ramps, plateaus, drops,
+// sand and water, real slope physics, and a chase camera behind the ball. Map key: . grass, 1-3 raised grass, ^ ramp (north-south),
+// > ramp (west-east), s sand, w water, S tee, H cup, # nothing (rails go around it)
+MGAMES.golf={persist:false,name:"CUPIDIUM GOLF",w:320,h:200,maxS:5,blurb:"3D mini golf: 9 holes of ramps, plateaus, drops, sand and water. Aim, pull back, putt.",
+  controls:"Aim with ← → (or drag sideways). Hold SPACE and let go to putt, the meter swings, or drag down from anywhere and let go (further = harder). Water costs a stroke. Fewer strokes = more points.",
+  HOLES:[
+    {par:2,m:[".H.","...","...","...","...",".S."]},
+    {par:3,m:[".......",".....H.",".......","...####","...####","...####",".S.####"]},
+    {par:3,m:[".H.","111","111","^^^","...","...",".S."]},
+    {par:3,m:["..H..",".sss.",".....","ww.ww",".....",".....","..S.."]},
+    {par:4,m:["H....####","####.####","####.####","#....####","#.#######","#.....S.."]},
+    {par:3,m:[".H.","...","^^^","111","111","^^^","...",".S."]},
+    {par:2,m:["..H..",".....",".....","22222","22222","22S22"]},
+    {par:3,m:[".......",".sssss.",".s.H.s.",".s...s.",".sssss.","...w...","...S..."]},
+    {par:5,m:["H......","######.",".......",".######",".......","######.","S......"]}],
+  HU:.4,R:.12,
+  init(m){m.hi=-1;m.total=0;m.score=0;m.strokesAll=0;m.parAll=0;this.next(m);},
+  next(m){m.hi++;if(m.hi>=this.HOLES.length){const d=m.strokesAll-m.parAll;return mgEnd("COURSE DONE",`${m.strokesAll} strokes · ${d===0?"even par":d>0?"+"+d+" over par":-d+" under par"}`);}
+    const H=this.HOLES[m.hi];m.map=H.m;m.par=H.par;m.strokes=0;m.state="aim";m.msg="";m.pw=0;m.charging=false;m.pdir=1;
+    for(let z=0;z<m.map.length;z++)for(let x=0;x<m.map[z].length;x++){const c=m.map[z][x];if(c==="S")m.tee={x:x+.5,z:z+.5};if(c==="H")m.cup={x:x+.5,z:z+.5};}
+    m.b={x:m.tee.x,z:m.tee.z,vx:0,vz:0};m.prevB={x:m.b.x,z:m.b.z};m.aim=Math.atan2(m.cup.z-m.b.z,m.cup.x-m.b.x);m.cam={x:m.b.x,z:m.b.z,a:m.aim};
+    mgHud(`HOLE ${m.hi+1}/9 · PAR ${m.par}`);},
+  // ---- the course as numbers
+  ch(m,x,z){const r=m.map[z];if(!r||x<0||x>=r.length)return null;const c=r[x];return c==="#"||c===undefined?null:c;},
+  flat(m,x,z){const c=this.ch(m,x,z);if(c==null)return null;return /[1-3]/.test(c)?+c*this.HU:0;},
+  corners(m,x,z){const c=this.ch(m,x,z);if(c==null)return null;let h=this.flat(m,x,z);
+    if(c==="^"){const n=this.flat(m,x,z-1),s=this.flat(m,x,z+1);const a=n==null?h:n,b=s==null?h:s;return[a,a,b,b];}
+    if(c===">"){const w=this.flat(m,x-1,z),e=this.flat(m,x+1,z);const a=w==null?h:w,b=e==null?h:e;return[a,b,a,b];}
+    return[h,h,h,h];},// NW, NE, SW, SE
+  ground(m,px,pz){const x=Math.floor(px),z=Math.floor(pz),k=this.corners(m,x,z);if(!k)return null;const u=px-x,v=pz-z;
+    const h=k[0]*(1-u)*(1-v)+k[1]*u*(1-v)+k[2]*(1-u)*v+k[3]*u*v;return{h,gx:(k[1]-k[0])*(1-v)+(k[3]-k[2])*v,gz:(k[2]-k[0])*(1-u)+(k[3]-k[1])*u,c:this.ch(m,x,z)};},
+  // ---- physics: slopes pull the ball, sand slows it, rails and steps bounce it, falling down a step is fine
+  update(m,dt){const s=dt/1000;
+    if(m.state==="aim"){if(m.rot)m.aim+=m.rot*s*1.8;if(m.charging){m.pw+=m.pdir*s*.9;if(m.pw>=1){m.pw=1;m.pdir=-1;}if(m.pw<=0){m.pw=0;m.pdir=1;}}}
+    if(m.state==="roll"){const b=m.b;for(let i=0;i<4;i++){const q=s/4,g=this.ground(m,b.x,b.z)||{h:0,gx:0,gz:0,c:"."};
+        b.vx-=9*g.gx*q;b.vz-=9*g.gz*q;const sp=Math.hypot(b.vx,b.vz),fr=(g.c==="s"?3.2:.9)*sp+(g.c==="s"?1.6:.55);
+        if(sp>0){const k=Math.max(0,sp-fr*q)/sp;b.vx*=k;b.vz*=k;}
+        const R=this.R,nx=b.x+b.vx*q,nz=b.z+b.vz*q,h0=g.h;
+        const blocked=(px,pz)=>{const gg=this.ground(m,px,pz);return!gg||gg.h-h0>.15;};
+        if(blocked(nx+Math.sign(b.vx)*R,b.z)){b.vx*=-.65;}else b.x=nx;
+        if(blocked(b.x,nz+Math.sign(b.vz)*R)){b.vz*=-.65;}else b.z=nz;
+        if(Math.abs(b.vx)+Math.abs(b.vz)>.01&&blocked(b.x,b.z)){b.x=m.prevB.x;b.z=m.prevB.z;b.vx=b.vz=0;}}
+      const g=this.ground(m,b.x,b.z),sp=Math.hypot(b.vx,b.vz);
+      if(g&&g.c==="w"){m.strokes++;m.msg="SPLASH · +1";m.msgT=m.t;sfx.bad();b.x=m.prevB.x;b.z=m.prevB.z;b.vx=b.vz=0;m.state="aim";return;}
+      const dc=Math.hypot(b.x-m.cup.x,b.z-m.cup.z);
+      if(dc<.2&&sp<4.2){m.state="sunk";m.sunkT=m.t;const pts=m.strokes===1?800:Math.max(50,300+(m.par-m.strokes)*100);m.score+=pts;m.strokesAll+=m.strokes;m.parAll+=m.par;
+        const d=m.strokes-m.par;m.msg=m.strokes===1?"HOLE IN ONE!":d<=-2?"EAGLE!":d===-1?"BIRDIE!":d===0?"PAR":d===1?"BOGEY":"+"+d;m.msgT=m.t;sfx.ok(m.strokes===1?5:3);if(m.strokes===1)burst(80);mgHud(`HOLE ${m.hi+1}/9 · PAR ${m.par}`);return;}
+      else if(dc<.35&&sp<6){b.vx+=(m.cup.x-b.x)*.6*s*10;b.vz+=(m.cup.z-b.z)*.6*s*10;}
+      if(sp<.06&&(!g||Math.hypot(g.gx,g.gz)<.05)){b.vx=b.vz=0;m.prevB={x:b.x,z:b.z};
+        if(m.strokes>=10){m.strokesAll+=12;m.parAll+=m.par;m.msg="PICKED UP";m.msgT=m.t;m.state="sunk";m.sunkT=m.t;return;}
+        m.state="aim";m.aim=Math.atan2(m.cup.z-b.z,m.cup.x-b.x);}}
+    if(m.state==="sunk"&&m.t-m.sunkT>1800)this.next(m);
+    // the camera glides behind the ball and turns with your aim
+    const c=m.cam,k=Math.min(1,s*4);c.x+=(m.b.x-c.x)*k;c.z+=(m.b.z-c.z)*k;let da=m.aim-c.a;da=Math.atan2(Math.sin(da),Math.cos(da));c.a+=da*Math.min(1,s*6);},
+  shoot(m,pw){if(m.state!=="aim"||pw<.04)return;m.strokes++;m.prevB={x:m.b.x,z:m.b.z};const v=1.2+pw*8;m.b.vx=Math.cos(m.aim)*v;m.b.vz=Math.sin(m.aim)*v;m.state="roll";m.pw=0;m.charging=false;tone(260+pw*300,.08,"triangle",.05);
+    mgHud(`HOLE ${m.hi+1}/9 · PAR ${m.par} · STROKE ${m.strokes}`);},
+  key(m,k,down,first){if(k==="l")m.rot=down?-1:(m.rot===-1?0:m.rot);if(k==="r")m.rot=down?1:(m.rot===1?0:m.rot);
+    if(k==="sp"||k==="u"||k==="ent"){if(down&&first&&m.state==="aim"){m.charging=true;m.pw=0;m.pdir=1;}else if(!down&&m.charging)this.shoot(m,m.pw);}},
+  ptr(m,x,y,t){if(t==="pointerdown"){m.drag={x,y,x0:x,y0:y};return;}const d=m.drag;if(!d)return;
+    if(t==="pointermove"){if(m.state==="aim"){m.aim+=(x-d.x)*.012;m.pw=Math.max(0,Math.min(1,(y-d.y0)/70));m.charging=false;}d.x=x;d.y=y;}
+    else if(t==="pointerup"){if(m.state==="aim"&&y-d.y0>8)this.shoot(m,Math.max(0,Math.min(1,(y-d.y0)/70)));else m.pw=0;m.drag=null;}},
+  // ---- drawing: every face of the course projected through a chase camera and painted back to front
+  draw(m,x,t){const W=this.w,H=this.h;if(!m.map)return;
+    const sky=x.createLinearGradient(0,0,0,H);sky.addColorStop(0,"#2a1b5e");sky.addColorStop(.55,"#7b4fa8");sky.addColorStop(1,"#f5a3c7");x.fillStyle=sky;x.fillRect(0,0,W,H);
+    for(let i=0;i<24;i++){x.fillStyle=`rgba(255,255,255,${.25+.25*Math.sin(t/700+i)})`;x.fillRect((i*67)%W,(i*29)%Math.floor(H*.45),1,1);}
+    const c=m.cam,fx=Math.cos(c.a),fz=Math.sin(c.a),bh=(this.ground(m,c.x,c.z)||{h:0}).h,D=3.4,Hc=2.3;
+    const cam=[c.x-fx*D,bh+Hc,c.z-fz*D],look=[c.x+fx*1.6,bh,c.z+fz*1.6];
+    const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],nrm=a=>{const l=Math.hypot(...a)||1;return[a[0]/l,a[1]/l,a[2]/l];},cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+    const F=nrm(sub(look,cam)),Rt=nrm(cross(F,[0,1,0])),U=cross(Rt,F),foc=W*.95;
+    const P=p=>{const d=sub(p,cam),zc=dot(d,F);if(zc<.08)return null;return[W/2+dot(d,Rt)/zc*foc,H/2-dot(d,U)/zc*foc,zc];};
+    const L=nrm([-.45,1,-.3]),faces=[];
+    const face=(pts,col,shade)=>{const pp=pts.map(P);if(pp.some(q=>!q))return;const n=nrm(cross(sub(pts[1],pts[0]),sub(pts[2],pts[0])));
+      const lit=shade===false?1:.55+.45*Math.abs(dot(n,L));faces.push({pp,col,lit,z:pp.reduce((a,q)=>a+q[2],0)/pp.length});};
+    const Hm=m.map.length;
+    for(let z=0;z<Hm;z++)for(let xx=0;xx<m.map[z].length;xx++){const cc=this.ch(m,xx,z);if(cc==null)continue;const k=this.corners(m,xx,z);
+      const NW=[xx,k[0],z],NE=[xx+1,k[1],z],SW=[xx,k[2],z+1],SE=[xx+1,k[3],z+1];
+      const col=cc==="s"?"#e9d29a":cc==="w"?`hsl(${200+Math.sin(t/400+xx+z)*6},85%,58%)`:cc==="S"?"#a78bfa":(xx+z)%2?"#4ade80":"#34c56b";
+      face([NW,NE,SE,SW],col);
+      // sides down to a lower neighbour, rails along the edge of the course
+      const edges=[[0,-1,NW,NE],[0,1,SE,SW],[-1,0,SW,NW],[1,0,NE,SE]];
+      for(const [dx,dz,A,B] of edges){const nk=this.corners(m,xx+dx,z+dz);
+        if(!nk){const r=.2;face([A,B,[B[0],B[1]+r,B[2]],[A[0],A[1]+r,A[2]]],"#ff8fe0");face([[A[0],A[1]-.6,A[2]],[B[0],B[1]-.6,B[2]],B,A],"#7a4a2e");continue;}
+        const nb=dz===-1?[nk[2],nk[3]]:dz===1?[nk[1],nk[0]]:dx===-1?[nk[3],nk[1]]:[nk[0],nk[2]];
+        if(A[1]-nb[0]>.01||B[1]-nb[1]>.01)face([[A[0],nb[0],A[2]],[B[0],nb[1],B[2]],B,A],"#7a4a2e");}}
+    faces.sort((a,b)=>b.z-a.z);
+    for(const f of faces){x.beginPath();f.pp.forEach((q,i)=>i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));x.closePath();x.fillStyle=f.col;x.fill();
+      if(f.lit<1){x.fillStyle=`rgba(10,6,30,${(1-f.lit)*.9})`;x.fill();}x.strokeStyle="rgba(0,0,0,.12)";x.lineWidth=.5;x.stroke();}
+    // cup and flag
+    const ch=(this.ground(m,m.cup.x,m.cup.z)||{h:0}).h+.005,cup=[];for(let i=0;i<14;i++){const a=i/14*Math.PI*2,q=P([m.cup.x+Math.cos(a)*.17,ch,m.cup.z+Math.sin(a)*.17]);if(q)cup.push(q);}
+    if(cup.length===14){x.beginPath();cup.forEach((q,i)=>i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));x.fillStyle="#0b0618";x.fill();}
+    const p0=P([m.cup.x,ch,m.cup.z]),p1=P([m.cup.x,ch+1.1,m.cup.z]),p2=P([m.cup.x+.45,ch+.95,m.cup.z]),p3=P([m.cup.x,ch+.8,m.cup.z]);
+    if(p0&&p1&&p2&&p3&&m.state!=="sunk"){x.strokeStyle="#f1f5f9";x.lineWidth=1.2;x.beginPath();x.moveTo(p0[0],p0[1]);x.lineTo(p1[0],p1[1]);x.stroke();
+      x.fillStyle="#ff5fd2";x.beginPath();x.moveTo(p1[0],p1[1]);x.lineTo(p2[0],p2[1]+Math.sin(t/200)*.8);x.lineTo(p3[0],p3[1]);x.fill();}
+    // aim line
+    const b=m.b,g=this.ground(m,b.x,b.z)||{h:0};
+    if(m.state==="aim"){const len=.6+m.pw*2.6;for(let i=1;i<=8;i++){const q=P([b.x+Math.cos(m.aim)*len*i/8,g.h+.05,b.z+Math.sin(m.aim)*len*i/8]);if(!q)continue;x.fillStyle=i%2?"#ffffff":"#fde047";x.globalAlpha=.4+.6*(1-i/8);x.fillRect(q[0]-1,q[1]-1,2,2);}x.globalAlpha=1;}
+    // ball and its shadow
+    if(m.state!=="sunk"){const sh=P([b.x+.05,g.h+.002,b.z+.05]),bp=P([b.x,g.h+this.R,b.z]);
+      if(sh){x.fillStyle="rgba(0,0,0,.3)";x.beginPath();x.ellipse(sh[0],sh[1],this.R/sh[2]*foc,this.R/sh[2]*foc*.45,0,0,7);x.fill();}
+      if(bp){const r=this.R/bp[2]*foc,gr=x.createRadialGradient(bp[0]-r*.35,bp[1]-r*.35,r*.1,bp[0],bp[1],r);gr.addColorStop(0,"#ffffff");gr.addColorStop(1,"#c9b8e8");x.fillStyle=gr;x.beginPath();x.arc(bp[0],bp[1],r,0,7);x.fill();}}
+    // HUD: hole, par, strokes, power meter, messages
+    mR(x,0,0,W,16,"rgba(10,6,30,.6)");mT(x,`HOLE ${m.hi+1}/9`,6,8,"#fde047",6,"left");mT(x,`PAR ${m.par}`,W/2,8,"#e9d5ff",6);mT(x,`STROKES ${m.strokes}`,W-6,8,"#ff8fe0",6,"right");
+    if(m.state==="aim"&&(m.charging||m.pw>0)){mR(x,W/2-50,H-14,100,6,"rgba(10,6,30,.7)");mR(x,W/2-49,H-13,98*m.pw,4,m.pw>.8?"#f87171":m.pw>.5?"#fde047":"#4ade80");}
+    else if(m.state==="aim"&&m.strokes===0&&m.hi===0)mT(x,"← → AIM · HOLD SPACE OR DRAG DOWN, THEN LET GO",W/2,H-10,"#ffffff",5);
+    if(m.msg&&m.t-m.msgT<1800){const a=1-Math.max(0,(m.t-m.msgT-1200)/600);x.globalAlpha=a;mT(x,m.msg,W/2,H*.38,"#ffffff",16);x.globalAlpha=1;}}};
 // ---------- 13. CUPIDIUM DASH (endless runner) ----------
 MGAMES.dash={name:"CUPIDIUM DASH",w:240,h:135,blurb:"Endless runner: jump, double-jump and slide through a neon world that keeps speeding up.",
   controls:"SPACE / ↑ / tap = jump (tap again in the air to double-jump, let go early for a short hop). Hold ↓ (or tap the bottom of the screen) to slide under barriers or drop fast.",
@@ -7879,9 +8092,9 @@ MGAMES.fight={persist:false,name:"CUPIDIUM BRAWL",w:320,h:180,blurb:"Platform fi
 // ---------- hub ----------
 const ARCADE_CATS=[
   ["action","ACTION",[["blaster","Shoot waves of thieves and beat the boss."],["dash","Endless runner. Jump, slide, don't fall."],["rush","Fly and grab cupidium, dodge hazards."],["defense","Build turrets to guard the core."]]],
-  ["arcade","ARCADE",[["breaker","Brick breaker with power-ups."],["golf","9 holes of wacky mini golf."],["stack","Stack the tallest crystal tower."],["rhythm","osu!mania + DDR: 4 lanes of falling arrows, long notes, fast charts."]]],
+  ["arcade","ARCADE",[["breaker","Brick breaker with power-ups."],["golf","3D mini golf: ramps, drops, sand and water."],["stack","Stack the tallest crystal tower."],["rhythm","Rhythm game: DDR arrows or a 3D Project Sekai highway."]]],
   ["puzzle","PUZZLE",[["lab","Fuse elements up to cupidium."],["merge","Drop and merge atoms in a jar."],["isit","Real element or made up?"],["heist","Sneak the vial past the guards."]]],
-  ["versus","VERSUS",[["fight","1v1, 2v2 or free-for-all brawls."],["catch","Grab the most atoms, bump rivals."],["badminton","BETA · Racket Rivals style badminton: power swings, set + smash, skills."]]],
+  ["versus","VERSUS",[["fight","1v1, 2v2 or free-for-all brawls."]]],
   ["more","MORE",[["miner","Drill deep for rare ore."],["xc","Cross country career: train and race 5Ks."]]]];
 const ARCADE_NAMES={rush:"CUPIDIUM RUSH"};
 // small pixel icons for the arcade list
@@ -8706,59 +8919,46 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
- {v:"5.3",t:"Smarter back buttons",d:"Nov 24, 2026",s:{"Menus":["Every ◀ back button now returns to the page you came from (Party opened from Chicken Horse goes back to Chicken Horse, Leaderboards opened from the Academy goes back to the Academy) instead of the main screen"]}},
- {v:"5.2",t:"Shards",d:"Nov 24, 2026",s:{"Off the Charts":["New currency: SHARDS 💎. Earn 1 for every 10 points you climb or dive, in every mode, so rarer answers pay more","SHARD SHOP (on the Off the Charts menu): 8 vehicle trails that replace your exhaust (Love Hearts to ONE IN A CUPIDIUM)","Fuel cans: when an endless run's tank hits empty, a can refills it to 40 (one per run, hold up to 5)","Exchange shards for casino chips: 50 → 100, and bigger bundles get up to 30% extra"]}},
- {v:"5.1",t:"Real full screen",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course covers the entire screen on any device, big monitor or phone (portrait or landscape), with the buttons and scores floating on top"],
-   "Look":["Main page: your theme's own pixel scene again, parked at its prettiest spot (deep space, the deep sea, floating islands), instead of the synthwave grid","Off the Charts menu: the background now scrolls the same way as the menu","The rarity-names poll is gone from the main page"]}},
- {v:"5.0",t:"Full-screen Chicken Horse, new backgrounds",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course now fills the whole screen at any window size (even in browser full screen)","FRIENDS and UPDATE LOG buttons hide while you play"],
-   "Look":["New main-page background: a starry synthwave night with a setting sun and a glowing grid","The Off the Charts menu shows your theme again, Krillion style: the surface near the top, and scrolling down glides into the deep (or up into the sky)"]}},
- {v:"4.9",t:"Join mid-game and Aces Parties",d:"Nov 24, 2026",s:{"Party":["Join any party while a game is already going (Chicken Horse, Academy, Puffer Party and the trivia modes)","ACES PARTIES on the home screen, weekdays 2:20 to 2:40 pm: see every open party, what's being played and who's in it, and JOIN with one tap","When the game gets an update, the page tells you and reloads (it waits until your game is over)"],
-   "Ultimate Chicken Horse":["The Trap Kill badge shows up again when your trap gets someone","A tiny death animation","New Fixed Turret: shoots straight in one direction. The aiming Turret is now rare","Spectating: when the player you're watching is out, you jump to the next one still racing","CUSTOMIZE button during the game","The course fills the screen, with no theme background behind it"],
-   "Chips":["+1 chip for a new best on any arcade game, or for winning Chicken Horse, a Cuepon puzzle or an Academy party"],
-   "Cupidium Rhythm":["Now osu!mania + DDR style: 4 lanes of arrows falling onto receptors, long notes, arrows coloured by beat","More notes and faster scrolling"],
-   "Answers":["Daily Tower prompts are a touch more specific (no more 'something fluffy')","The AI no longer accepts genetic or viral diseases (like Huntington's) for 'a disease caused by bacteria'"],
-   "Look":["The theme background only shows in Off the Charts; menus and other games have a plain background"]}},
- {v:"4.8",t:"Frame makeover",d:"Nov 20, 2026",s:{"Chip shop":["New Custom Gradient card frame: pick 3 colours, the angle, and whether it flows","Rose Vine redrawn: a thorny green vine with leaves and real roses, big roses in the corners","Royal Velvet redrawn: crimson velvet with gold piping, gold studs and jewelled gold corners","Glitch now actually shows its red and blue split","Mochi background removed (if you bought it, your 🪙 3,500 is refunded)"],"Ultimate Chicken Horse":["Frozen Peaks: the top of the ice mountain slants in on both sides now"]}},
- {v:"4.7",t:"Better maps",d:"Nov 20, 2026",s:{"Ultimate Chicken Horse":["Sunset Woods: climb through a winding cave inside a giant red rock instead of the baobab","Cloud Kingdom: cloud steps, a short rainbow, a hot-air balloon, a cloud bank and a castle to climb","Coral Reef: a coral arch, a sunken ship you run through, a trench on coral pillars and a reef cave down to the treasure","Frozen Peaks: the top of the ice mountain curves in, so you can climb its shoulder (try a portal up there)"],"Daniel Simons mode":["More geography prompts explain their tricky words"]}},
- {v:"4.6",t:"Daniel Simons geography",d:"Nov 20, 2026",s:{"Daniel Simons mode":["150+ niche geography prompts (straits, glaciers, atolls, Swiss cantons, Silk Road cities…), each with a short explanation of any tricky word","The mode button is now an on/off switch"],"Ultimate Chicken Horse":["Frozen Peaks: the ice mountain reaches the sky, so the cave and chimney is the only way","The preview button no longer looks like a map"],"Look":["Home buttons and themes on separate lines","New card background: Mochi"]}},
- {v:"4.5",t:"Tidier screens",d:"Nov 20, 2026",s:{"Look":["The Daily card is as wide as the row under it, with bigger text","Chip shop: each section is one box, easier-to-read section names","No more big gaps in leaderboards, the dev player list and between shop items"],"Ultimate Chicken Horse":["Shorter, simpler menu text"],"Daniel Simons mode":["18 more niche geography prompts"]}},
- {v:"4.4",t:"Maps, rarities and CUPIDIUM SMASH",d:"Nov 20, 2026",s:{"Ultimate Chicken Horse":["Crystal Cavern remade from the original map; new Tropical Islands, Sunset Woods and Coral Reef","Frozen Peaks has one path to the flag","A Trap Kill badge pops up when your trap gets someone"],"Rarities":["Every prompt has an answer in every rarity","Famous places (Paris, Seoul, London, Vatican City) aren't in the rare tiers any more"],"Checking":["IT'S REAL shows up after you turn down an autocorrect","Daily Tower: Enter says yes to autocorrect, and you can prove an answer is real"],"Arcade":["New: CUPIDIUM SMASH (beta), badminton like Racket Rivals","Rhythm notes move at a steady speed, with a livelier stage","Cupidium's symbol is Ci"],"Other":["Daniel Simons results show the Daniel Simons board","Blackjack deals the dealer's cards one at a time","Off the Charts menu: NORMAL and RAPID FIRE"]}},
- {v:"4.3",t:"Chicken Horse overhaul",d:"Nov 20, 2026",s:{
-   "Ultimate Chicken Horse maps":["Frozen Peaks, Crystal Cavern, Tropical Islands and Sunset Woods are rebuilt to match the original maps: ice staircases, the ice mountain with a cave, giant crystals, palm-top climbs and red acacia canopies","3 new maps: Moon Base (space, low gravity), Cloud Kingdom (dream, rainbow bridge) and Coral Reef (ocean, dive down to the flag)","Preview any map from the map picker","In a party room, players can vote for a map. The host still picks; votes just show what everyone wants"],
-   "Ultimate Chicken Horse rules":["Points to win setting (50 to 200, default 100), and solo practice now scores and ends","The score screen shows the whole game: every point, coloured by what earned it","Bombs, dynamite and nukes only blow up placed items. The rare Cupidium Nuke scorches the map itself","A bomb, dynamite or nuke shows up at least every 2 rounds; the nuke looks like an atomic bomb","Spikes, honey and ice must sit on a block; honey and ice are full blocks","One portal per pick (your next portal links to it); one coin grab per round","Trusses are solid and climbable, the candy cane carries you, frozen players don't fall, the angry cube sleeps until you go near it, fans are a touch weaker","See a fan's reach (and flamethrowers, freeze rays, crossbows) while placing; turrets and bullets are much easier to see","You can't move before GO, can't get stuck inside walls, and Play as Ghost only shows once you're out","Customize button on the Chicken Horse menu"],
-   "Look":["Boxes hug their content: no more big empty bands","Rows of buttons and cards are centred, including the last row, and their text is centred","Leaderboards stack neatly with no random gaps, and empty boards no longer say 'No scores yet'"]}},
- {v:"4.2",t:"Academy fixes",d:"Nov 20, 2026",s:{"Cupidium Academy":["New look for the Academy menu: dark glass cards with a colored edge instead of solid color blocks","PLAY WITH FRIENDS, TAKE THE TEST, PRACTICE and GHOST CLASH sit in a 2x2 grid; CUSTOMIZE is a small button next to LEADERBOARDS","Choices show a number (1, 2, 3...) in the same corner every time, in the order you see them, and the numbers no longer move around in Speed Sorting. Arrow keys / WASD are only used where the game is about directions (Whack Match, Train Turn, Tick-Tock Turn)","Choices are centered, even when a row isn't full","The right answer lights up green when you miss, and the one you tapped lights up red or green","Frame Filler now moves like the real game: the shapes spin and drift, the pieces in the tray move too, and only one keeps moving like the picture","Get In Shape and Match Blast accept every valid solution, not just one","True View never shows two choices that look the same","Higher scores: faster answers and answer streaks now earn bonus points"]}},
- {v:"4.1",t:"Smarter checking",d:"Nov 19, 2026",s:{"Autocorrect":["Autocorrect now ALWAYS asks 'did you mean…?' first (only the Rapid modes skip it), even when you type another name for an answer: saint kitts → saint kitts and nevis, hot spring monkey → snow monkey","Leaving words out now gets a 'did you mean…?': satanic gecko → satanic leaf-tailed gecko, bosnia → bosnia and herzegovina","A shortened name asks first too (sun → sun tzu), and your own name stays yours (salvator rosa no longer turns into a film title)","Typos are corrected against every answer in the game, not just this prompt's list (truto → truro)"],"AI checking":["Before turning an answer down, the AI takes a second careful look at every meaning of it, so you rarely need IT'S REAL (eon, turkey)","Theories, jokes and related things no longer count as the thing (pentagon pizza theory is not a Mexican food), and the color or condition in a prompt is checked (tepig is not black and white)","An answer that needed a check is never common: tier 2 at least (tier 3 for long names), whatever Wikipedia page views say"],"Answers":["More explanations under obscure prompts (what the Hanseatic League was, and about 200 more)","Rarity fixes: dumb ways to die, zugzwang, hans gruber, vatican city and more","ONE IN A CUPIDIUM picks for countries, capitals and states now rotate every week so they can't be memorized, and a few too-famous picks were swapped","Former names of countries: turkey, czech republic, macedonia and more"]}},
- {v:"4.0",t:"Daniel Simons Mode",d:"Nov 17, 2026",s:{"New":["DANIEL SIMONS MODE (on the main menu): 245 super-niche prompts you only see in this mode, 15 seconds each, with its own dailies, runs and leaderboards","Cupidium Rhythm is now Project Sekai style: 6 lanes on a 3D highway, holds, flicks, gold criticals, 4 songs and 5 difficulties","Endless shows a graph of your fuel over the run","Mihir’s Cupididdium Token: every Daily hides one secret deep-cut answer. Say it to get any chip shop item free (or 1,500 chips)","58 new prompts, including 19 geography ones, so the dailies and category days last longer","Usernames are unique now: nobody can take a name someone else already has"],
-  "Ultimate Chicken Horse":["All 4 maps rebuilt: shorter, and every map can be finished with nothing placed","Zoom in and out (mouse wheel, pinch, + and - buttons) and a WHOLE MAP button","Spectate the others after your run, and PLAY AS GHOST to run the course just for fun","Moving and flying platforms show the path they'll travel before you place them","Spikes are easier to see, and nothing floats in the air anymore","Clearer points screen with bars that fill toward the win line","Portals are rarer and their two ends must be close together, away from the flag","Pick the map on the party page","The view keeps scrolling when your mouse goes past the edge"],
-  "Cupidium Academy":["Pick your starting class in practice, and every right answer moves you up a level","Back button during activities and tests","Four answers sit in a cross (up, left, right, down) so each arrow key points at its answer, and the key labels no longer cover the words","Flash Memory: type the whole pattern, fix it with ⌫ or Backspace, then press ENTER","Cubegame towers can always be counted (no hidden stacks)","Species Spotlight choices are centered"],
-  "Answers":["Lots of new TikTok and brainrot memes (tung tung tung sahur, tralalero tralala, 67...) and fixed meme rarities","One Piece pirates count as explorers, more One Piece ships","Famous singer is now any singer, rapper or music artist, with hundreds of smaller artists","Cupidium is a bonus answer for every element prompt","Prompts with terms like G20 or NATO explain them","The AI judge is stricter: no joke phrases, non-primes or 'people' for things you'd find somewhere","Other rarity fixes (Oman, Going Merry, Yellow River)"],
-  "Other":["Rapid Fire checks answers with the AI in the background: the clock never stops and you can keep typing","Rapid Fire fixes small typos on its own; every other mode asks 'did you mean…?' first","Collection Book shows your finds in the order you unlocked them","Common answers fly up slower","Space theme: LOW ORBIT is now ORBITAL","No Category Daily board on days without one","Endless leaderboards show EASY, NORMAL or HARD next to each score","Stacker's tower view fits even very wide towers"]}},
- {v:"3.9",d:"Nov 16, 2026",s:{"Menus":["Back and Main buttons are now always at the top left of each screen"],"Fixes":["ALL ANSWERS no longer freezes the game on some prompts"],"Cupidium Academy":["Match Blast works like the real game: tapping a block blasts every block of the same color touching it, and the blocks above fall down","Whack Match works like the real game: moles pop up and duck back down in four holes, and each hole always has the same arrow key","Covered Cages no longer pile on top of each other: cages swap by passing over and under each other so you can follow them","True View no longer shows two choices that look the same","Party games go until someone reaches 100, and you pick your class right before the activity starts","Quit button during party activities","Party class select works like the real game: everyone picks their own class on the class ladder and hits READY","Party is now a run of matches: the loser picks the next activity or spins the wheel, and a big winner moves up a class","Practice starts at Sprout and your class moves up and down on its own, like the real game","Sprout Support option in Practice keeps every question at Sprout level","Covered Cages swap wider apart so they are easier to follow","Rebuilt 8 activities to play like the real game: Frame Filler (fill the missing square of a picture), Fast Focus (the picture is uncovered square by square), Memo-Random (press MEMORIZED, then name the ? cards), Covered Cages (covers hop around a grid, FASTER button), Add Agency (count the pictures), Tick-Tock Turn (spring forward and fall back), Get In Shape (pick every piece that fills the silhouette) and Train Turn (turn left, go straight or turn right at each ?)","Reworked the other 12 activities to match the real game too: Whack Match (several targets, 2 to 4 holes), Species Spotlight (eyes in the dark and a GOT IT button), Flash Memory (number display and keypad with a symbol key), Reverse Retention (a row of spots with an arrow), Cubegame (12-number grid), Heavyweight (several things on each side), Match Blast (break blocks of one color), Speed Sorting (tap every picture that fits, or tap them in order), Mallet Math (colored 1-9 blocks and a Sum up card), Balloon Burst (numbers that spin, with negatives and fractions at Elite and Super Elite), Shadow Shift (shadows made of several things) and True View (real objects like a tank, house, robot, dice and pipes on a platform, seen from the arrow; 2 choices at Sprout and Beginner, 3 after)"],"Ultimate Chicken Horse":["Rotate items 4 ways (R): conveyors, boost pads, planks, stairs, spikes, cannons, crossbows, fans, flamethrowers, freeze rays, trusses and more","The view starts scrolling before your mouse reaches the edge, and keeps scrolling if you go past it","Fixed racers sometimes dying the moment the race started"],"Party":["When someone leaves a party room, everyone gets a message and they disappear from the scoreboard"],"Answers":["Fairer rarities for a few prompts","Some full country names now count as the short name","More answers count that people expected to","The AI judge now rejects answers that don't meet the prompt's condition, and rates how common each answer it checks really is, double-checked against a second estimate and Wikipedia, so well-known answers stay common and obscure ones stay rare. Only the hand-picked answers can be the rarest tier","The middle rarity tier is red now","Close typos now ask \"did you mean...?\" before counting, except in rapid fire","Every theme shows its own name for the rarest tier","Endless leaderboards only show a run in progress when it beats that player's best","A wrong developer passcode now says so","ALL ANSWERS opens and scrolls faster"],"Other":["Daily Cuepon accepts every word the NYT Wordle accepts","Cupidium XC background trees stand on the ground"]}},
- {v:"3.8",d:"Nov 16, 2026",s:{"Ultimate Chicken Horse":["New main game: ULTIMATE CHICKEN HORSE. Pick an item from the party box, place it on the course while seeing everyone else's cursors, then race your friends to the flag as your Cupidium Academy buddy","Reach the flag for points, +5 for first and +5 if you're the only one, and your traps score when they get someone. If everyone makes it or nobody does, nobody scores. First to 50 wins","Practice solo, or play with friends from Party","4 big maps that scroll (the camera follows you): Crystal Cavern (one long tunnel through the rock, full of giant crystals), Frozen Peaks (snow and ice islands over a frozen lake), Tropical Islands (island hopping at sunset, a shipwreck and a cliff-top finish) and Sunset Woods (climb the giant red trees to the treetop hut)","While placing, drag, use the arrow keys or tap the minimap to look around the map","Party box items from Party Chaos: Crate, Plank, Stairs, Truss, Slime Block, Ice, Spring, Conveyor, Fan, Reverse Fan, Moving Platform, Flying Platform, Trapdoor, Movable Box, Portal, Banana Peel, Spikes, Saw, Saw Spinner, Spinning Candy Cane, Axe, Swingstone, Angry Cube, Cannon, Turret, Crossbow, Freeze Ray, Bomb, Dynamite and Nuke, plus a few extras (Flamethrower, Black Hole, Barbed Wire, Honey, Boost Pad, Coin)"],"Main page":["A cleaner main page without the big title","Cupidium Academy and Ultimate Chicken Horse are marked as currently in development (still playable)"]}},
- {v:"3.7",d:"Nov 15, 2026",s:{"Cupidium Academy":["🧠 New main game: CUPIDIUM ACADEMY, with the 20 Brain vs. Brain activities across Identify, Memorize, Analyze, Compute and Visualize","Solo works like Brain vs. Brain: 60-second activities, your class goes up as you get answers right and drops when you miss, Test adds up your Big Brain Brawn (S+ at 4,000), medals with stars, and Super Practice once you have gold on everything","Customize your brain buddy: pick a pixel blob or animal, then its color, eyes, hats and extras (some cost chips, some you unlock)","GHOST CLASH: race a ghost (your own best runs or one of four rivals) through one activity per category, first to 100 each, and win trophies","Practice lets you start at any class you have reached, and the Test starts each activity a little harder and shows a pentagon chart of your five categories","Party scoring matches Brain vs. Brain: 20 for the first right answer, 8 for the next, and everyone else gets 10 seconds once someone gets it","Play with your keyboard: type numbers for number answers and keypads (Backspace works), 1–4 picks a choice, and the arrow keys or WASD hit the choice in that direction (with more than 4, they move a highlight and Space hits it)","Leaderboards for the Test and every activity","All the Cupidium Academy art is custom pixel art"],"Party":["PARTY now has its own button on the main screen, with every party mode in one place","Party rooms now use live WebSocket connections, so everything updates instantly","🐡 Puffer Party moved into Pass & Play","Party rooms now run only through the Cupidium relay, so joining is more reliable"]}},
- {v:"3.6",d:"Nov 15, 2026",s:{"New dailies":["⚡ SPEED DAILY every day: 5 prompts, 10 seconds each","Category days with a second daily on top of the normal one, every Monday, Wednesday, Thursday and Friday","Each category day switches between its themes week to week, and a theme is retired once its prompts run out"],"Endless":["🔥 Streaks: answers worth 60+ in a row build a multiplier (×1.5 at 3, ×2 at 5, ×3 at 8)"],"Duels":["⚔️ Duels: make a duel, copy the link and send it to anyone. You both pay the entry fee, play the same 7 prompts, and the higher score takes the pot","You can also challenge someone straight from a friend's chat"],"Progress":["📖 Collection Book: every ONE IN A CUPIDIUM you find gets saved, the rest stay hidden","🏅 Achievements that pay out chips","🏅 Weekly seasons: your Daily points add up Monday to Sunday, and the top 3 win chips (#1 also gets a Champion badge and frame)"],"Prompts":["🍥 8 new anime prompts","30 new music, game, movie and TV prompts for the category days","No repeats: a prompt never shows up twice in the same daily","Anime shows and movies now have proper rarities in Name a TV show and Name a movie"],"Fixes":["Some valid answers were being rejected; they count now"]}},
- {v:"3.5",d:"Nov 15, 2026",s:{"Casino":["CHIP SHOP on the main screen: spend chips on name colors, badges and titles that show on every leaderboard","Player cards: tap anyone's name on a leaderboard to see their card","Daily Bounty: the rarest answers in each Daily win a chip pot"],"Leaderboards":["Endless boards show runs still in progress (updated when a player exits)","Leaderboards and friends now run on the Cupidium relay, so they're more reliable"]}},
- {v:"3.4",d:"Nov 15, 2026",s:{"Scoring":["Points are now 10 / 30 / 60 / 85 / 100 from most common to ONE IN A CUPIDIUM","Rapid modes use the same points as everything else"],"All Answers":["Each ONE IN A CUPIDIUM answer has a short note on why it's special","Search inside any rarity tab"]}},
- {v:"3.3",d:"Nov 15, 2026",s:{"Word bank":["Answers the AI accepts are saved for good on the Cupidium relay","When a prompt starts, the game looks up that prompt's player-added answers, so the word bank keeps growing without slowing anything down"],"Prompts":["Removed prompts where any made-up answer could count (names, excuses, colors and similar)","Renamed the chess opening prompt to include defenses and gambits"],"Party":["Parties now fit up to 10 players"]}},
- {v:"3.2",d:"Nov 15, 2026",s:{"Rarity changes":["ONE IN A CUPIDIUM is usually just 1 answer per prompt, with a few exceptions","Every ONE IN A CUPIDIUM answer was re-picked to be a real deep cut","Well-known answers moved up into the common tiers","The 2nd most common tier now holds up to 40 answers"],"AI checking":["Answers the bank doesn't list are scored by how common the AI thinks they are, so common answers no longer get rare points"]}},
- {v:"3.1",d:"Nov 15, 2026",s:{"New":["ALL ANSWERS: after a round, see every answer for a prompt","Tabs show how many answers are in each rarity","Search bar to look up any answer","Update log"]}},
- {v:"3.0",t:"Krillion rarities",d:"Nov 15, 2026",s:{"Rarity changes":["Rarities reworked to match Krillion: ONE IN A CUPIDIUM is the rarest tier (100 pts)","ONE IN A CUPIDIUM answers are hand-picked fun deep cuts","AI-checked answers max out at 70 pts"],"Prompts":["27 new prompts (time travel movies, animal logos, college majors and more)"]}},
- {v:"2.9",d:"Nov 13, 2026",s:{"Answer banks":["Duplicates and junk entries removed"],"Fixes":["Geography HARD practice now really uses hard prompts","Arcade no longer breaks on some devices"],"New":["Leaderboards button on practice results"]}},
- {v:"2.8",d:"Nov 13, 2026",s:{"Gameplay":["Endless gets harder over time and stops repeating prompts","Geography NORMAL / HARD mode"],"Casino":["Blackjack uses a real shuffled 6-deck shoe"],"Party":["Our own party relay so parties connect reliably"]}},
- {v:"2.7",d:"Nov 12, 2026",s:{"Arcade":["New game: Cupidium XC, a running career (15 arcade games now)"]}},
- {v:"2.6",d:"Nov 10, 2026",s:{"Casino":["Poker bots have facial expressions"],"Arcade":["Stacker: zoom out to see your whole tower"],"Prompts":["About 50 new prompts (423 total)"]}},
- {v:"2.5",t:"Cupidium Casino & Daily Cuepon",d:"Nov 8, 2026",s:{"New":["Cupidium Casino: blackjack, poker, slots, roulette and more","Daily Cuepon word puzzles"],"Arcade":["Stacker gets the Rocket"],"Prompts":["About 35 new prompts"]}},
- {v:"2.4",d:"Nov 6, 2026",s:{"AI checking":["IT'S REAL appeals are judged more carefully"]}},
- {v:"2.3",d:"Nov 3, 2026",s:{"New":["Geography mode with its own Daily Geography"]}},
- {v:"2.2",d:"Nov 2, 2026",s:{"New":["Shared leaderboards","IT'S REAL button for answers the game didn't know"],"Word bank":["Answers the AI accepts get shared with other players","Much bigger answer banks"],"Prompts":["About 120 new prompts"]}},
- {v:"2.1",d:"Nov 1, 2026",s:{"Arcade":["Puffer Party arrives"]}},
- {v:"2.0",t:"Cupidium Arcade",d:"Oct 30, 2026",s:{"New":["Cupidium Arcade: 14 arcade games, including Stacker","Friends"],"Look":["Theme picker on the main screen"]}},
- {v:"1.4",t:"One in a Cupidium",d:"Oct 30, 2026",s:{"New":["Off the Charts becomes ONE IN A CUPIDIUM","Rapid Endless mode"],"Prompts":["About 100 new prompts (220 total)"]}},
- {v:"1.3",d:"Oct 29, 2026",s:{"New":["First upload to GitHub, so friends can play from a link","Rapid Fire mode"],"Prompts":["124 prompts"]}},
- {v:"1.2",d:"Oct 2026",s:{"New":["Oddball is renamed Off the Charts","Friends can play a downloaded copy with no setup"],"Look":["Space and ocean themes (just the look, not the questions)"]}},
- {v:"1.1",d:"Oct 2026",s:{"New":["Party mode: play with up to 5 friends","Endless mode"],"AI checking":["AI checks answers that aren't in the word bank"]}},
- {v:"1.0",t:"Oddball",d:"Oct 2026",s:{"New":["The very first version, Oddball: a Krillion-style trivia game where rarer answers score more","Daily prompts and a word bank of answers"]}}];}
+ {"v":"5.4","d":"Nov 25, 2026","s":{"Arcade":["Cupidium Golf is now 3D mini golf: 9 hand-built holes with ramps, plateaus, drops, sand and water, and a camera that follows your ball","Cupidium Rhythm: choose DDR or 3D Project Sekai style on the song select screen (T or the STYLE button). The 3D style is back, faster and with more notes","Arcade games fill the whole screen","Cupidium Smash and Cupidium Catch are gone from the arcade"],"Party":["Party chat: talk to your room on top of any game. Hide it with −, and new messages pop up while it's hidden"],"Off the Charts":["Each prompt's result shows how many shards you earned","Weekend dailies no longer use up prompts, so prompts aren't wasted on days nobody plays"],"Look":["The main screen shows your theme's scene, calmer and without your vehicle"],"Bug fixes":["The main screen had no background the first time you opened the site"]}},
+ {"v":"5.3","d":"Nov 24, 2026","s":{"Menus":["Every ◀ back button now returns to the page you came from (Party opened from Chicken Horse goes back to Chicken Horse, Leaderboards opened from the Academy goes back to the Academy) instead of the main screen"]}},
+ {"v":"5.2","t":"Shards","d":"Nov 24, 2026","s":{"Off the Charts":["New currency: SHARDS 💎. Earn 1 for every 10 points you climb or dive, in every mode, so rarer answers pay more","SHARD SHOP (on the Off the Charts menu): 8 vehicle trails that replace your exhaust (Love Hearts to ONE IN A CUPIDIUM)","Fuel cans: when an endless run's tank hits empty, a can refills it to 40 (one per run, hold up to 5)","Exchange shards for casino chips: 50 → 100, and bigger bundles get up to 30% extra"]}},
+ {"v":"5.1","d":"Nov 24, 2026","s":{"Ultimate Chicken Horse":["The course covers the entire screen on any device, big monitor or phone (portrait or landscape), with the buttons and scores floating on top"],"Look":["Main page: your theme's own pixel scene again, parked at its prettiest spot (deep space, the deep sea, floating islands), instead of the synthwave grid","The rarity-names poll is gone from the main page"],"Bug fixes":["Off the Charts menu: the background now scrolls the same way as the menu"]}},
+ {"v":"5.0","d":"Nov 24, 2026","s":{"Ultimate Chicken Horse":["The course now fills the whole screen at any window size (even in browser full screen)","FRIENDS and UPDATE LOG buttons hide while you play"],"Look":["New main-page background: a starry synthwave night with a setting sun and a glowing grid","The Off the Charts menu shows your theme again, Krillion style: the surface near the top, and scrolling down glides into the deep (or up into the sky)"]}},
+ {"v":"4.9","t":"Join mid-game and Aces Parties","d":"Nov 24, 2026","s":{"Party":["Join any party while a game is already going (Chicken Horse, Academy, Puffer Party and the trivia modes)","ACES PARTIES on the home screen, weekdays 2:20 to 2:40 pm: see every open party, what's being played and who's in it, and JOIN with one tap","When the game gets an update, the page tells you and reloads (it waits until your game is over)"],"Ultimate Chicken Horse":["A tiny death animation","New Fixed Turret: shoots straight in one direction. The aiming Turret is now rare","Spectating: when the player you're watching is out, you jump to the next one still racing","CUSTOMIZE button during the game","The course fills the screen, with no theme background behind it"],"Chips":["+1 chip for a new best on any arcade game, or for winning Chicken Horse, a Cuepon puzzle or an Academy party"],"Cupidium Rhythm":["Now osu!mania + DDR style: 4 lanes of arrows falling onto receptors, long notes, arrows coloured by beat","More notes and faster scrolling"],"Answers":["Daily Tower prompts are a touch more specific (no more 'something fluffy')"],"Look":["The theme background only shows in Off the Charts; menus and other games have a plain background"],"Bug fixes":["The Trap Kill badge shows up again when your trap gets someone","The AI no longer accepts genetic or viral diseases (like Huntington's) for 'a disease caused by bacteria'"]}},
+ {"v":"4.8","d":"Nov 20, 2026","s":{"Chip shop":["New Custom Gradient card frame: pick 3 colours, the angle, and whether it flows","Rose Vine redrawn: a thorny green vine with leaves and real roses, big roses in the corners","Royal Velvet redrawn: crimson velvet with gold piping, gold studs and jewelled gold corners","Mochi background removed (if you bought it, your 🪙 3,500 is refunded)"],"Ultimate Chicken Horse":["Frozen Peaks: the top of the ice mountain slants in on both sides now"],"Bug fixes":["Glitch now actually shows its red and blue split"]}},
+ {"v":"4.7","d":"Nov 20, 2026","s":{"Ultimate Chicken Horse":["Sunset Woods: climb through a winding cave inside a giant red rock instead of the baobab","Cloud Kingdom: cloud steps, a short rainbow, a hot-air balloon, a cloud bank and a castle to climb","Coral Reef: a coral arch, a sunken ship you run through, a trench on coral pillars and a reef cave down to the treasure","Frozen Peaks: the top of the ice mountain curves in, so you can climb its shoulder (try a portal up there)"],"Daniel Simons mode":["More geography prompts explain their tricky words"]}},
+ {"v":"4.6","d":"Nov 20, 2026","s":{"Daniel Simons mode":["150+ niche geography prompts (straits, glaciers, atolls, Swiss cantons, Silk Road cities…), each with a short explanation of any tricky word","The mode button is now an on/off switch"],"Ultimate Chicken Horse":["Frozen Peaks: the ice mountain reaches the sky, so the cave and chimney is the only way","The preview button no longer looks like a map"],"Look":["Home buttons and themes on separate lines","New card background: Mochi"]}},
+ {"v":"4.5","d":"Nov 20, 2026","s":{"Look":["The Daily card is as wide as the row under it, with bigger text","Chip shop: each section is one box, easier-to-read section names","No more big gaps in leaderboards, the dev player list and between shop items"],"Ultimate Chicken Horse":["Shorter, simpler menu text"],"Daniel Simons mode":["18 more niche geography prompts"]}},
+ {"v":"4.4","d":"Nov 20, 2026","s":{"Ultimate Chicken Horse":["Crystal Cavern remade from the original map; new Tropical Islands, Sunset Woods and Coral Reef","Frozen Peaks has one path to the flag","A Trap Kill badge pops up when your trap gets someone"],"Rarities":["Every prompt has an answer in every rarity","Famous places (Paris, Seoul, London, Vatican City) aren't in the rare tiers any more"],"Checking":["Daily Tower: Enter says yes to autocorrect, and you can prove an answer is real"],"Arcade":["New: CUPIDIUM SMASH (beta), badminton like Racket Rivals","Rhythm notes move at a steady speed, with a livelier stage","Cupidium's symbol is Ci"],"Other":["Blackjack deals the dealer's cards one at a time","Off the Charts menu: NORMAL and RAPID FIRE"],"Bug fixes":["IT'S REAL shows up after you turn down an autocorrect","Daniel Simons results show the Daniel Simons board"]}},
+ {"v":"4.3","t":"Chicken Horse overhaul","d":"Nov 20, 2026","s":{"Ultimate Chicken Horse maps":["Frozen Peaks, Crystal Cavern, Tropical Islands and Sunset Woods are rebuilt to match the original maps: ice staircases, the ice mountain with a cave, giant crystals, palm-top climbs and red acacia canopies","3 new maps: Moon Base (space, low gravity), Cloud Kingdom (dream, rainbow bridge) and Coral Reef (ocean, dive down to the flag)","Preview any map from the map picker","In a party room, players can vote for a map. The host still picks; votes just show what everyone wants"],"Ultimate Chicken Horse rules":["Points to win setting (50 to 200, default 100), and solo practice now scores and ends","The score screen shows the whole game: every point, coloured by what earned it","Bombs, dynamite and nukes only blow up placed items. The rare Cupidium Nuke scorches the map itself","A bomb, dynamite or nuke shows up at least every 2 rounds; the nuke looks like an atomic bomb","Spikes, honey and ice must sit on a block; honey and ice are full blocks","One portal per pick (your next portal links to it); one coin grab per round","Trusses are solid and climbable, the candy cane carries you, frozen players don't fall, the angry cube sleeps until you go near it, fans are a touch weaker","See a fan's reach (and flamethrowers, freeze rays, crossbows) while placing; turrets and bullets are much easier to see","Customize button on the Chicken Horse menu"],"Look":["Boxes hug their content: no more big empty bands","Rows of buttons and cards are centred, including the last row, and their text is centred","Leaderboards stack neatly with no random gaps, and empty boards no longer say 'No scores yet'"],"Bug fixes":["You can't move before GO, can't get stuck inside walls, and Play as Ghost only shows once you're out"]}},
+ {"v":"4.2","d":"Nov 20, 2026","s":{"Cupidium Academy":["New look for the Academy menu: dark glass cards with a colored edge instead of solid color blocks","PLAY WITH FRIENDS, TAKE THE TEST, PRACTICE and GHOST CLASH sit in a 2x2 grid; CUSTOMIZE is a small button next to LEADERBOARDS","Choices show a number (1, 2, 3...) in the same corner every time, in the order you see them, and the numbers no longer move around in Speed Sorting. Arrow keys / WASD are only used where the game is about directions (Whack Match, Train Turn, Tick-Tock Turn)","The right answer lights up green when you miss, and the one you tapped lights up red or green","Frame Filler now moves like the real game: the shapes spin and drift, the pieces in the tray move too, and only one keeps moving like the picture","Higher scores: faster answers and answer streaks now earn bonus points"],"Bug fixes":["Choices are centered, even when a row isn't full","Get In Shape and Match Blast accept every valid solution, not just one","True View never shows two choices that look the same"]}},
+ {"v":"4.1","d":"Nov 19, 2026","s":{"Autocorrect":["Autocorrect now ALWAYS asks 'did you mean…?' first (only the Rapid modes skip it), even when you type another name for an answer: saint kitts → saint kitts and nevis, hot spring monkey → snow monkey","Leaving words out now gets a 'did you mean…?': satanic gecko → satanic leaf-tailed gecko, bosnia → bosnia and herzegovina","A shortened name asks first too (sun → sun tzu), and your own name stays yours (salvator rosa no longer turns into a film title)","Typos are corrected against every answer in the game, not just this prompt's list (truto → truro)"],"AI checking":["Before turning an answer down, the AI takes a second careful look at every meaning of it, so you rarely need IT'S REAL (eon, turkey)","Theories, jokes and related things no longer count as the thing (pentagon pizza theory is not a Mexican food), and the color or condition in a prompt is checked (tepig is not black and white)","An answer that needed a check is never common: tier 2 at least (tier 3 for long names), whatever Wikipedia page views say"],"Answers":["More explanations under obscure prompts (what the Hanseatic League was, and about 200 more)","ONE IN A CUPIDIUM picks for countries, capitals and states now rotate every week so they can't be memorized, and a few too-famous picks were swapped","Former names of countries: turkey, czech republic, macedonia and more"],"Bug fixes":["Rarity fixes: dumb ways to die, zugzwang, hans gruber, vatican city and more"]}},
+ {"v":"4.0","t":"Daniel Simons Mode","d":"Nov 17, 2026","s":{"New":["DANIEL SIMONS MODE (on the main menu): 245 super-niche prompts you only see in this mode, 15 seconds each, with its own dailies, runs and leaderboards","Cupidium Rhythm is now Project Sekai style: 6 lanes on a 3D highway, holds, flicks, gold criticals, 4 songs and 5 difficulties","Endless shows a graph of your fuel over the run","Mihir’s Cupididdium Token: every Daily hides one secret deep-cut answer. Say it to get any chip shop item free (or 1,500 chips)","58 new prompts, including 19 geography ones, so the dailies and category days last longer","Usernames are unique now: nobody can take a name someone else already has"],"Ultimate Chicken Horse":["All 4 maps rebuilt: shorter, and every map can be finished with nothing placed","Zoom in and out (mouse wheel, pinch, + and - buttons) and a WHOLE MAP button","Spectate the others after your run, and PLAY AS GHOST to run the course just for fun","Moving and flying platforms show the path they'll travel before you place them","Spikes are easier to see, and nothing floats in the air anymore","Clearer points screen with bars that fill toward the win line","Portals are rarer and their two ends must be close together, away from the flag","Pick the map on the party page","The view keeps scrolling when your mouse goes past the edge"],"Cupidium Academy":["Pick your starting class in practice, and every right answer moves you up a level","Back button during activities and tests","Four answers sit in a cross (up, left, right, down) so each arrow key points at its answer, and the key labels no longer cover the words","Flash Memory: type the whole pattern, fix it with ⌫ or Backspace, then press ENTER"],"Answers":["Lots of new TikTok and brainrot memes (tung tung tung sahur, tralalero tralala, 67...) and fixed meme rarities","One Piece pirates count as explorers, more One Piece ships","Famous singer is now any singer, rapper or music artist, with hundreds of smaller artists","Cupidium is a bonus answer for every element prompt","Prompts with terms like G20 or NATO explain them","The AI judge is stricter: no joke phrases, non-primes or 'people' for things you'd find somewhere"],"Other":["Rapid Fire checks answers with the AI in the background: the clock never stops and you can keep typing","Rapid Fire fixes small typos on its own; every other mode asks 'did you mean…?' first","Collection Book shows your finds in the order you unlocked them","Common answers fly up slower","Space theme: LOW ORBIT is now ORBITAL","Endless leaderboards show EASY, NORMAL or HARD next to each score"],"Bug fixes":["Cubegame towers can always be counted (no hidden stacks)","Species Spotlight choices are centered","Other rarity fixes (Oman, Going Merry, Yellow River)","No Category Daily board on days without one","Stacker's tower view fits even very wide towers"]}},
+ {"v":"3.9","d":"Nov 16, 2026","s":{"Menus":["Back and Main buttons are now always at the top left of each screen"],"Cupidium Academy":["Match Blast works like the real game: tapping a block blasts every block of the same color touching it, and the blocks above fall down","Whack Match works like the real game: moles pop up and duck back down in four holes, and each hole always has the same arrow key","Party games go until someone reaches 100, and you pick your class right before the activity starts","Quit button during party activities","Party class select works like the real game: everyone picks their own class on the class ladder and hits READY","Party is now a run of matches: the loser picks the next activity or spins the wheel, and a big winner moves up a class","Practice starts at Sprout and your class moves up and down on its own, like the real game","Sprout Support option in Practice keeps every question at Sprout level","Covered Cages swap wider apart so they are easier to follow","Rebuilt 8 activities to play like the real game: Frame Filler (fill the missing square of a picture), Fast Focus (the picture is uncovered square by square), Memo-Random (press MEMORIZED, then name the ? cards), Covered Cages (covers hop around a grid, FASTER button), Add Agency (count the pictures), Tick-Tock Turn (spring forward and fall back), Get In Shape (pick every piece that fills the silhouette) and Train Turn (turn left, go straight or turn right at each ?)","Reworked the other 12 activities to match the real game too: Whack Match (several targets, 2 to 4 holes), Species Spotlight (eyes in the dark and a GOT IT button), Flash Memory (number display and keypad with a symbol key), Reverse Retention (a row of spots with an arrow), Cubegame (12-number grid), Heavyweight (several things on each side), Match Blast (break blocks of one color), Speed Sorting (tap every picture that fits, or tap them in order), Mallet Math (colored 1-9 blocks and a Sum up card), Balloon Burst (numbers that spin, with negatives and fractions at Elite and Super Elite), Shadow Shift (shadows made of several things) and True View (real objects like a tank, house, robot, dice and pipes on a platform, seen from the arrow; 2 choices at Sprout and Beginner, 3 after)"],"Ultimate Chicken Horse":["Rotate items 4 ways (R): conveyors, boost pads, planks, stairs, spikes, cannons, crossbows, fans, flamethrowers, freeze rays, trusses and more","The view starts scrolling before your mouse reaches the edge, and keeps scrolling if you go past it"],"Party":["When someone leaves a party room, everyone gets a message and they disappear from the scoreboard"],"Answers":["Fairer rarities for a few prompts","Some full country names now count as the short name","More answers count that people expected to","The AI judge now rejects answers that don't meet the prompt's condition, and rates how common each answer it checks really is, double-checked against a second estimate and Wikipedia, so well-known answers stay common and obscure ones stay rare. Only the hand-picked answers can be the rarest tier","The middle rarity tier is red now","Close typos now ask \"did you mean...?\" before counting, except in rapid fire","Every theme shows its own name for the rarest tier","Endless leaderboards only show a run in progress when it beats that player's best","ALL ANSWERS opens and scrolls faster"],"Other":["Daily Cuepon accepts every word the NYT Wordle accepts"],"Bug fixes":["ALL ANSWERS no longer freezes the game on some prompts","Covered Cages no longer pile on top of each other: cages swap by passing over and under each other so you can follow them","True View no longer shows two choices that look the same","Fixed racers sometimes dying the moment the race started","A wrong developer passcode now says so","Cupidium XC background trees stand on the ground"]}},
+ {"v":"3.8","t":"Ultimate Chicken Horse","d":"Nov 16, 2026","s":{"Ultimate Chicken Horse":["New main game: ULTIMATE CHICKEN HORSE. Pick an item from the party box, place it on the course while seeing everyone else's cursors, then race your friends to the flag as your Cupidium Academy buddy","Reach the flag for points, +5 for first and +5 if you're the only one, and your traps score when they get someone. If everyone makes it or nobody does, nobody scores. First to 50 wins","Practice solo, or play with friends from Party","4 big maps that scroll (the camera follows you): Crystal Cavern (one long tunnel through the rock, full of giant crystals), Frozen Peaks (snow and ice islands over a frozen lake), Tropical Islands (island hopping at sunset, a shipwreck and a cliff-top finish) and Sunset Woods (climb the giant red trees to the treetop hut)","While placing, drag, use the arrow keys or tap the minimap to look around the map","Party box items from Party Chaos: Crate, Plank, Stairs, Truss, Slime Block, Ice, Spring, Conveyor, Fan, Reverse Fan, Moving Platform, Flying Platform, Trapdoor, Movable Box, Portal, Banana Peel, Spikes, Saw, Saw Spinner, Spinning Candy Cane, Axe, Swingstone, Angry Cube, Cannon, Turret, Crossbow, Freeze Ray, Bomb, Dynamite and Nuke, plus a few extras (Flamethrower, Black Hole, Barbed Wire, Honey, Boost Pad, Coin)"],"Main page":["A cleaner main page without the big title","Cupidium Academy and Ultimate Chicken Horse are marked as currently in development (still playable)"]}},
+ {"v":"3.7","t":"Cupidium Academy","d":"Nov 15, 2026","s":{"Cupidium Academy":["🧠 New main game: CUPIDIUM ACADEMY, with the 20 Brain vs. Brain activities across Identify, Memorize, Analyze, Compute and Visualize","Solo works like Brain vs. Brain: 60-second activities, your class goes up as you get answers right and drops when you miss, Test adds up your Big Brain Brawn (S+ at 4,000), medals with stars, and Super Practice once you have gold on everything","Customize your brain buddy: pick a pixel blob or animal, then its color, eyes, hats and extras (some cost chips, some you unlock)","GHOST CLASH: race a ghost (your own best runs or one of four rivals) through one activity per category, first to 100 each, and win trophies","Practice lets you start at any class you have reached, and the Test starts each activity a little harder and shows a pentagon chart of your five categories","Party scoring matches Brain vs. Brain: 20 for the first right answer, 8 for the next, and everyone else gets 10 seconds once someone gets it","Play with your keyboard: type numbers for number answers and keypads (Backspace works), 1–4 picks a choice, and the arrow keys or WASD hit the choice in that direction (with more than 4, they move a highlight and Space hits it)","Leaderboards for the Test and every activity","All the Cupidium Academy art is custom pixel art"],"Party":["PARTY now has its own button on the main screen, with every party mode in one place","Party rooms now use live WebSocket connections, so everything updates instantly","🐡 Puffer Party moved into Pass & Play","Party rooms now run only through the Cupidium relay, so joining is more reliable"]}},
+ {"v":"3.6","d":"Nov 15, 2026","s":{"New dailies":["⚡ SPEED DAILY every day: 5 prompts, 10 seconds each","Category days with a second daily on top of the normal one, every Monday, Wednesday, Thursday and Friday","Each category day switches between its themes week to week, and a theme is retired once its prompts run out"],"Endless":["🔥 Streaks: answers worth 60+ in a row build a multiplier (×1.5 at 3, ×2 at 5, ×3 at 8)"],"Duels":["⚔️ Duels: make a duel, copy the link and send it to anyone. You both pay the entry fee, play the same 7 prompts, and the higher score takes the pot","You can also challenge someone straight from a friend's chat"],"Progress":["📖 Collection Book: every ONE IN A CUPIDIUM you find gets saved, the rest stay hidden","🏅 Achievements that pay out chips","🏅 Weekly seasons: your Daily points add up Monday to Sunday, and the top 3 win chips (#1 also gets a Champion badge and frame)"],"Prompts":["🍥 8 new anime prompts","30 new music, game, movie and TV prompts for the category days","No repeats: a prompt never shows up twice in the same daily","Anime shows and movies now have proper rarities in Name a TV show and Name a movie"],"Bug fixes":["Some valid answers were being rejected; they count now"]}},
+ {"v":"3.5","d":"Nov 15, 2026","s":{"Casino":["CHIP SHOP on the main screen: spend chips on name colors, badges and titles that show on every leaderboard","Player cards: tap anyone's name on a leaderboard to see their card","Daily Bounty: the rarest answers in each Daily win a chip pot"],"Leaderboards":["Endless boards show runs still in progress (updated when a player exits)","Leaderboards and friends now run on the Cupidium relay, so they're more reliable"]}},
+ {"v":"3.4","d":"Nov 15, 2026","s":{"Scoring":["Points are now 10 / 30 / 60 / 85 / 100 from most common to ONE IN A CUPIDIUM","Rapid modes use the same points as everything else"],"All Answers":["Each ONE IN A CUPIDIUM answer has a short note on why it's special","Search inside any rarity tab"]}},
+ {"v":"3.3","d":"Nov 15, 2026","s":{"Word bank":["Answers the AI accepts are saved for good on the Cupidium relay","When a prompt starts, the game looks up that prompt's player-added answers, so the word bank keeps growing without slowing anything down"],"Prompts":["Removed prompts where any made-up answer could count (names, excuses, colors and similar)","Renamed the chess opening prompt to include defenses and gambits"],"Party":["Parties now fit up to 10 players"]}},
+ {"v":"3.2","d":"Nov 15, 2026","s":{"Rarity changes":["ONE IN A CUPIDIUM is usually just 1 answer per prompt, with a few exceptions","Every ONE IN A CUPIDIUM answer was re-picked to be a real deep cut","Well-known answers moved up into the common tiers","The 2nd most common tier now holds up to 40 answers"],"AI checking":["Answers the bank doesn't list are scored by how common the AI thinks they are, so common answers no longer get rare points"]}},
+ {"v":"3.1","d":"Nov 15, 2026","s":{"New":["ALL ANSWERS: after a round, see every answer for a prompt","Tabs show how many answers are in each rarity","Search bar to look up any answer","Update log"]}},
+ {"v":"3.0","t":"Krillion rarities","d":"Nov 15, 2026","s":{"Rarity changes":["Rarities reworked to match Krillion: ONE IN A CUPIDIUM is the rarest tier (100 pts)","ONE IN A CUPIDIUM answers are hand-picked fun deep cuts","AI-checked answers max out at 70 pts"],"Prompts":["27 new prompts (time travel movies, animal logos, college majors and more)"]}},
+ {"v":"2.9","d":"Nov 13, 2026","s":{"Answer banks":["Duplicates and junk entries removed"],"New":["Leaderboards button on practice results"],"Bug fixes":["Geography HARD practice now really uses hard prompts","Arcade no longer breaks on some devices"]}},
+ {"v":"2.8","d":"Nov 13, 2026","s":{"Gameplay":["Endless gets harder over time and stops repeating prompts","Geography NORMAL / HARD mode"],"Casino":["Blackjack uses a real shuffled 6-deck shoe"],"Party":["Our own party relay so parties connect reliably"]}},
+ {"v":"2.7","d":"Nov 12, 2026","s":{"Arcade":["New game: Cupidium XC, a running career (15 arcade games now)"]}},
+ {"v":"2.6","d":"Nov 10, 2026","s":{"Casino":["Poker bots have facial expressions"],"Arcade":["Stacker: zoom out to see your whole tower"],"Prompts":["About 50 new prompts (423 total)"]}},
+ {"v":"2.5","t":"Cupidium Casino & Daily Cuepon","d":"Nov 8, 2026","s":{"New":["Cupidium Casino: blackjack, poker, slots, roulette and more","Daily Cuepon word puzzles"],"Arcade":["Stacker gets the Rocket"],"Prompts":["About 35 new prompts"]}},
+ {"v":"2.4","d":"Nov 6, 2026","s":{"AI checking":["IT'S REAL appeals are judged more carefully"]}},
+ {"v":"2.3","d":"Nov 3, 2026","s":{"New":["Geography mode with its own Daily Geography"]}},
+ {"v":"2.2","d":"Nov 2, 2026","s":{"New":["Shared leaderboards","IT'S REAL button for answers the game didn't know"],"Word bank":["Answers the AI accepts get shared with other players","Much bigger answer banks"],"Prompts":["About 120 new prompts"]}},
+ {"v":"2.1","d":"Nov 1, 2026","s":{"Arcade":["Puffer Party arrives"]}},
+ {"v":"2.0","t":"Cupidium Arcade","d":"Oct 30, 2026","s":{"New":["Cupidium Arcade: 14 arcade games, including Stacker","Friends"],"Look":["Theme picker on the main screen"]}},
+ {"v":"1.4","t":"One in a Cupidium","d":"Oct 30, 2026","s":{"New":["Off the Charts becomes ONE IN A CUPIDIUM","Rapid Endless mode"],"Prompts":["About 100 new prompts (220 total)"]}},
+ {"v":"1.3","d":"Oct 29, 2026","s":{"New":["First upload to GitHub, so friends can play from a link","Rapid Fire mode"],"Prompts":["124 prompts"]}},
+ {"v":"1.2","d":"Oct 2026","s":{"New":["Oddball is renamed Off the Charts","Friends can play a downloaded copy with no setup"],"Look":["Space and ocean themes (just the look, not the questions)"]}},
+ {"v":"1.1","d":"Oct 2026","s":{"New":["Party mode: play with up to 5 friends","Endless mode"],"AI checking":["AI checks answers that aren't in the word bank"]}},
+ {"v":"1.0","t":"Oddball","d":"Oct 2026","s":{"New":["The very first version, Oddball: a Krillion-style trivia game where rarer answers score more","Daily prompts and a word bank of answers"]}}];}
 function updLog(){const UPD=updList();store.set("otc.seenUpd",UPD[0].v);const m=$("modal");m.hidden=false;
   m.innerHTML=`<div class="glass abox"><div class="row" style="justify-content:space-between"><b style="font-size:15px">📜 UPDATE LOG</b><button class="pbtn sm" data-act="closeModal">✕</button></div>
   <div class="ablist">${UPD.map((u,i)=>`<div class="updv"><div class="row" style="justify-content:space-between;gap:8px"><b style="font-size:15px">v${u.v}${u.t?` · ${esc(u.t)}`:""}${i===0?` <span class="aitag" style="background:#ff5fd2">NEW</span>`:""}</b><small class="hint">${esc(u.d)}</small></div>${Object.entries(u.s).map(([h,l])=>`<div class="updh">${esc(h)}</div><ul>${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`).join("")}</div>`).join("")}</div></div>`;
@@ -9436,6 +9636,10 @@ Object.assign(ACT,{duels:()=>duels(),duelNew:b=>duelPick(b&&b.dataset&&b.dataset
 // Starts 2026-11-16 (earlier days keep the old picks so past results still match). Same for every player.
 const DECK_START="2026-11-16";
 const deckDays=d=>Math.round((Date.parse(d+"T12:00:00Z")-Date.parse(DECK_START+"T12:00:00Z"))/864e5);
+const DECK_WKD="2026-11-26",isWkd=d=>{const w=new Date(d+"T12:00:00Z").getUTCDay();return w===0||w===6;};
+// deck position: one step per day until Nov 26, then one step per weekday only
+function deckK(d){if(d<DECK_WKD)return deckDays(d);let k=deckDays(DECK_WKD),t=Date.parse(DECK_WKD+"T12:00:00Z");const end=Date.parse(d+"T12:00:00Z");
+  for(;t<end;t+=864e5){const w=new Date(t).getUTCDay();if(w!==0&&w!==6)k++;}return k;}
 function deckIds(name,occ,n,pool,skip){pool=pool.slice().sort((a,b)=>PROMPTS[a].q<PROMPTS[b].q?-1:1);const P=pool.length;if(!P)return[];
   const cyc=c=>pool.slice().sort((a,b)=>hash32(name+"|"+c+"|"+PROMPTS[a].q)-hash32(name+"|"+c+"|"+PROMPTS[b].q));
   const out=[];let pos=occ*n,g=0;const cache={};
@@ -9448,7 +9652,11 @@ function deckSeq(name,pool){const byH={};pool.forEach(i=>byH[dkHash(i)]=i);const
   return base.map(h=>byH[h]!=null?byH[h]:null).concat(pool.filter(i=>!inBase.has(dkHash(i))).sort((a,b)=>a-b));}
 const deckTake=(seq,from,n)=>seq.slice(from,from+n).filter(i=>i!=null);
 {const _di=dailyIds;dailyIds=function(day,n,only){if(DSM())return _di(day,n,only);const m=/^otc-(daily|dailygeo|speed|cat)-(\d{4}-\d\d-\d\d)$/.exec(day||"");
-  if(!m||m[2]<DECK_START)return _di(day,n,only);const kind=m[1],d=m[2],k=deckDays(d);
+  if(!m||m[2]<DECK_START)return _di(day,n,only);const kind=m[1],d=m[2];
+  // from Nov 26: weekend dailies (hardly anyone plays them) don't use up the deck. The deck only moves on weekdays, and
+  // Saturday/Sunday get their own random draw, so prompts are never burned on days nobody played
+  if(d>=DECK_WKD&&kind!=="cat"&&isWkd(d))return _di("wknd|"+day,n,only);
+  const k=deckK(d);
   if(kind==="cat"){const c=catFor(d);return c?c.ids:[];}
   const ids=deckTake(deckSeq(kind,dailyPool(only)),k*n,n);if(kind==="speed"){const main=new Set(dailyIds("otc-daily-"+d,ROUNDS));return ids.filter(i=>!main.has(i));}return ids;};}
 
@@ -11317,7 +11525,10 @@ function shardSet(v){store.set("otc.shards",Math.max(0,Math.floor(v)));shardHud(
 function shardSync(score){SHD.last=score;}
 function shardEarn(score){if(SHD.last==null||score<SHD.last){SHD.last=score;return;}const g=score-SHD.last;SHD.last=score;
   if(g<=0||g>600)return;// a big jump is a resumed run or a reset, not new height
-  SHD.acc+=g;const n=Math.floor(SHD.acc/10);if(!n)return;SHD.acc-=n*10;shardSet(shards()+n);shardHud(n);}
+  SHD.acc+=g;const n=Math.floor(SHD.acc/10);if(!n)return;SHD.acc-=n*10;SHD.round=(SHD.round||0)+n;shardSet(shards()+n);shardHud(n);}
+// shards earned on the current prompt, shown on its result card
+function shardLine(){const n=(typeof SHD!=="undefined"&&SHD.round)||0;return `<div class="shgain">${n?`+${n} 💎 shard${n===1?"":"s"}`:"no shards this time"} <span class="hint">· 💎 ${shards().toLocaleString()}</span></div>`;}
+{const _pr=playRound;playRound=function(){SHD.round=0;return _pr.apply(this,arguments);};const _rr=rapidRound;rapidRound=function(){SHD.round=0;return _rr.apply(this,arguments);};}
 function shardHud(n){const el=$("shardv");if(!el)return;el.innerHTML=`💎 ${shards().toLocaleString()}${n?` <em>+${n}</em>`:""}`;if(n){el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");}}
 setTimeout(()=>shardHud(),0);
 // ---- trails: replace your vehicle's exhaust in every theme
@@ -11367,6 +11578,33 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(
   const st=NAV.st;if(!st.length)return;let i=st.length-1;if(st[i].tok===tok)i--;// on a page in the history: go one back; on a page that isn't (a game, a sub-page): go to the last page
   if(i<0)return;const to=st[i];st.length=i+1;e.preventDefault();e.stopImmediatePropagation();
   try{to.tok=-1;eval(to.fn).apply(null,to.a||[]);}catch(x){console.error(x);landing();}},true);
+
+// the main screen first shown at boot was drawn before the background code above existed: give it the same background now
+try{if(document.querySelector("#panel .landing")){SCENE_MENU="hub";jumpTo(HUB_ALT[THEME]||1500);if(!NAV.st.length)NAV.st.push({fn:"landing",a:[],tok});}}catch(e){}
+
+// ===== Nov 25: PARTY CHAT. In any party room a small chat sits in the corner, on top of every game. Hide it with the − button;
+// while it's hidden, new messages show a toast and a count on the CHAT button. Messages go through the host like everything else.
+const PCH={log:[],hidden:innerWidth<600,unread:0,last:0,code:null};
+function pchMsg(n,x){x=String(x||"").slice(0,120);n=String(n||"?").slice(0,16);if(!x.trim())return;PCH.log.push({n,x});if(PCH.log.length>40)PCH.log.shift();
+  const mine=typeof N!=="undefined"&&N&&n===N.me;if(PCH.hidden&&!mine){PCH.unread++;toast(`💬 <b>${esc(n)}</b>: ${esc(x.slice(0,60))}`);try{sfx.tick&&sfx.tick();}catch(e){}}pchDraw();}
+function pchSend(){const el=$("pchIn");if(!el||!N)return;const x=el.value.trim().slice(0,120);if(!x)return;if(Date.now()-PCH.last<700)return;PCH.last=Date.now();el.value="";
+  if(N.host){broadcast({t:"chat",n:N.me,x});pchMsg(N.me,x);}else{try{N.conn.send({t:"chat",x});}catch(e){}}}
+function pchDraw(){const box=$("pch");if(!box)return;box.classList.toggle("off",PCH.hidden);
+  const b=$("pchBtn");if(b)b.innerHTML=`💬 CHAT${PCH.unread?` <em>${PCH.unread}</em>`:""}`;
+  const L=$("pchLog");if(L){L.innerHTML=PCH.log.slice(-30).map(m=>`<div><b>${esc(m.n)}</b> ${esc(m.x)}</div>`).join("")||`<div class="hint">Say hi to your party</div>`;L.scrollTop=L.scrollHeight;}}
+function pchSync(){const on=typeof N!=="undefined"&&N&&N.code;let box=$("pch");
+  if(!on){if(box)box.remove();PCH.code=null;return;}
+  if(PCH.code!==N.code){PCH.code=N.code;PCH.log=[];PCH.unread=0;}
+  if(!box){document.body.insertAdjacentHTML("beforeend",`<div id="pch" class="pch"><div class="pchwin"><div class="pchhd"><b>PARTY CHAT</b><button class="pbtn sm" data-act="pchHide" title="Hide chat">−</button></div>
+      <div id="pchLog" class="pchlog"></div><div class="pchin"><input id="pchIn" maxlength="120" placeholder="Message" autocomplete="off"><button class="pbtn sm c m-nova" data-act="pchSend">SEND</button></div></div>
+      <button id="pchBtn" class="pbtn sm pchbtn" data-act="pchShow"></button></div>`);
+    box=$("pch");const inp=$("pchIn");["keydown","keyup","keypress"].forEach(ev=>inp.addEventListener(ev,e=>{e.stopPropagation();if(ev==="keydown"&&e.key==="Enter"){e.preventDefault();pchSend();}if(ev==="keydown"&&e.key==="Escape")inp.blur();}));
+    pchDraw();}}
+setInterval(pchSync,1000);
+Object.assign(ACT,{pchSend:()=>pchSend(),pchHide:()=>{PCH.hidden=true;pchDraw();},pchShow:()=>{PCH.hidden=false;PCH.unread=0;pchDraw();const i=$("pchIn");if(i)i.focus();}});
+{const _cd=clientData;clientData=function(d){if(d&&d.t==="chat"){pchMsg(d.n,d.x);return;}return _cd(d);};}
+{const _hc=hostConn;hostConn=function(c){const on=c.on.bind(c);c.on=(e,f)=>on(e,e!=="data"?f:d=>{if(d&&d.t==="chat"){if(!N||!N.host)return;const p=N.players.find(x=>x.id===c.peer);if(!p)return;
+  const x=String(d.x||"").slice(0,120);if(!x.trim())return;broadcast({t:"chat",n:p.name,x});pchMsg(p.name,x);return;}return f(d);});_hc(c);};}
 </script>
 
 </body>

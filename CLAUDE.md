@@ -7,7 +7,8 @@ Relay: separate repo `lele-io/cupidium-relay` (Cloudflare Worker `index.js` + Du
 - NEVER read `index.html` (~1.9 MB) or `data/answers.js` whole. Grep them; list sections with `grep -n "^// =====" index.html`.
 - Run `node tools/check.js` after every edit. Never write the developer passcode into any file.
 - Other sessions push to main too: `git pull --rebase` first, push only your own changes.
-- After EVERY update add an entry at the top of `updList()` in index.html: next version (4.8 → 4.9…), date, short player-facing bullets.
+- After EVERY update add an entry at the top of `updList()` in index.html: next version (5.3 → 5.4…), date, short player-facing bullets.
+  Every fix goes in one `"Bug fixes"` section (last); other sections are by area. Title (`t`) only for big updates, otherwise just the version.
 - Don't add always-on relay streams or short polling (Durable Object awake time is limited); close streams when hidden/idle.
 
 ## Files
