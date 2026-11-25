@@ -35,21 +35,7 @@ body[data-theme="ocean"]{--glass:rgba(2,34,52,.72);--glass2:rgba(2,34,52,.86);--
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:400;font-size:18px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased}
 body.noscene #scene,body.noscene #veh{display:none}
-/* main page / other games: a synthwave night instead of a flat colour. Starfield, a striped setting sun, a pink grid rolling toward you */
-#bgfx{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#06031a 0%,#120936 40%,#33115a 60%,#6a1c6e 76%,#14072e 76.1%,#0b0420 100%)}
-body.noscene #bgfx{display:block}
-#bgfx i{position:absolute;display:block}
-#bgfx .st1,#bgfx .st2{inset:0 0 24% 0;background-repeat:repeat}
-#bgfx .st1{background-image:radial-gradient(1.5px 1.5px at 23px 41px,#fff 98%,transparent),radial-gradient(1px 1px at 141px 17px,#ffd1f0 98%,transparent),radial-gradient(1.5px 1.5px at 90px 120px,#c7f9ff 98%,transparent),radial-gradient(1px 1px at 190px 88px,#fff 98%,transparent);background-size:230px 160px;animation:bgTw 3.2s ease-in-out infinite alternate}
-#bgfx .st2{background-image:radial-gradient(2px 2px at 60px 70px,#fff 98%,transparent),radial-gradient(1px 1px at 250px 150px,#fde68a 98%,transparent),radial-gradient(1.5px 1.5px at 330px 30px,#fff 98%,transparent);background-size:390px 240px;animation:bgTw 4.7s ease-in-out infinite alternate-reverse;opacity:.8}
-#bgfx .sun{left:50%;bottom:24%;width:min(36vh,50vw);aspect-ratio:1;transform:translate(-50%,30%);border-radius:50%;background:linear-gradient(180deg,#fff27a 0%,#ffb347 38%,#ff5fa8 72%,#c026d3 100%);
-  -webkit-mask-image:linear-gradient(180deg,#000 48%,transparent 48%),repeating-linear-gradient(180deg,#000 0 7%,transparent 7% 10%);mask-image:linear-gradient(180deg,#000 48%,transparent 48%),repeating-linear-gradient(180deg,#000 0 7%,transparent 7% 10%);
-  filter:drop-shadow(0 0 28px rgba(255,95,190,.55))}
-#bgfx .floor{position:absolute;left:0;right:0;bottom:0;height:24%;perspective:260px;overflow:hidden;background:linear-gradient(180deg,#3a0f52,#0b0420 70%)}
-#bgfx .floor i{left:-60%;right:-60%;top:0;height:220%;transform-origin:50% 0;transform:rotateX(62deg);background-image:linear-gradient(90deg,rgba(255,95,210,.7) 2px,transparent 2px),linear-gradient(0deg,rgba(255,95,210,.7) 2px,transparent 2px);background-size:64px 64px;animation:bgRoll 1.6s linear infinite}
-#bgfx .floor::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,110,200,.55) 0%,rgba(106,28,110,.35) 8%,transparent 45%)}
-@keyframes bgTw{from{opacity:.35}to{opacity:1}}@keyframes bgRoll{to{background-position:0 64px}}
-@media (prefers-reduced-motion:reduce){#bgfx *{animation:none!important}}
+body.hubscene #veh{display:none}
 .updbar{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:14px;max-width:calc(100vw - 32px)}
 .updov{position:fixed;inset:0;z-index:95;display:grid;place-items:center;background:rgba(5,4,20,.75);padding:16px}.updov .card{max-width:360px}
 .aces{width:100%;box-sizing:border-box}.acerow{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-top:6px;background:rgba(255,255,255,.06);font-size:14px}
@@ -894,12 +880,19 @@ body.gated>*:not(#gateBlock){visibility:hidden!important}
 .lcard.trl em{background:linear-gradient(180deg,#ff8a1f,#d9480f);color:#fff}.lcard.ptl{grid-column:1/-1;min-height:110px}
 .inner.trmenu{width:min(1000px,100%)!important;max-width:1000px!important}
 /* in a Chicken Horse game the course fills the screen (as big as the window allows, keeping its shape) */
-#panel:has(#trCv){padding:6px max(8px,env(safe-area-inset-left,0px)) 6px;overflow:hidden}
-#panel:has(#trCv)>.inner.trmenu{width:100%!important;max-width:none!important;height:100%;margin:0}
-#panel:has(#trCv) .trwrap{height:100%;min-height:0}#panel:has(#trCv) .trstage{flex:1;min-height:0}
+/* Chicken Horse is truly full screen (like Roblox): the course covers the whole window on any screen; the title, buttons and scores float on top */
+#panel:has(#trCv){padding:0;overflow:hidden}
+#panel:has(#trCv)>.inner.trmenu{width:100%!important;max-width:none!important;height:100%;margin:0;padding:0}
+#panel:has(#trCv) .trwrap{position:fixed;inset:0;gap:0}
+#panel:has(#trCv) .trstage{position:absolute;inset:0;border:0}
 #panel:has(#trCv) #trCv{width:100%;height:100%}
+#panel:has(#trCv) .trtop{position:absolute;top:0;left:0;right:0;z-index:7;padding:max(6px,env(safe-area-inset-top,0px)) 10px 14px;background:linear-gradient(180deg,rgba(5,4,20,.6),rgba(5,4,20,0));pointer-events:none}
+#panel:has(#trCv) .trtop>*{pointer-events:auto}#panel:has(#trCv) .trtop b,#panel:has(#trCv) .trtop span{text-shadow:0 2px 0 #000,0 0 6px #000;pointer-events:none}
+#panel:has(#trCv) .trtools{top:50px;left:10px}
+#panel:has(#trCv) .trbar{position:absolute;left:10px;bottom:max(10px,env(safe-area-inset-bottom,0px));z-index:7;max-width:calc(100% - 20px)}#panel:has(#trCv) .trbar>span{background:rgba(5,4,20,.6)}
+#panel:has(#trCv) .trpad{position:absolute;left:10px;right:10px;bottom:calc(max(10px,env(safe-area-inset-bottom,0px)) + 34px);z-index:7}
 body:has(#trCv) #socBtn,body:has(#trCv) #ulogBtn{display:none!important}
-@media (max-width:560px){.trtop{flex-wrap:wrap;gap:6px}.trtop>span{order:5;flex-basis:100%}}
+@media (max-width:560px){#panel:has(#trCv) .trtop{gap:6px}#panel:has(#trCv) .trtop>b{display:none}#panel:has(#trCv) .trtop>span{font-size:10px;line-height:1.2}}
 .trwrap{display:flex;flex-direction:column;gap:6px;user-select:none;-webkit-user-select:none}
 .trtop{display:flex;align-items:center;gap:10px}.trtop b{font-family:var(--head);letter-spacing:.12em}.trtop span{flex:1;font-family:var(--head);font-size:11px;opacity:.8}
 .trstage{position:relative;border:2px solid var(--edge);line-height:0;background:#1b1747}
@@ -1201,7 +1194,6 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 </style>
 
 <canvas id="scene"></canvas>
-<div id="bgfx" aria-hidden="true"><i class="st1"></i><i class="st2"></i><i class="sun"></i><div class="floor"><i></i></div></div>
 <div id="hud" hidden>
   <div class="glass altbox"><b id="altv">0 km</b><span id="zonev"></span></div>
   <div class="glass prog" id="prog"></div>
@@ -3427,7 +3419,7 @@ const ysK=(a,k)=>TH.up?H-(a-cam*k):a-cam*k;
 const visK=(a,k,m=60)=>{const y=ysK(a,k);return y>-m&&y<H+m;};
 const camTarget=()=>TH.up?SC.alt-(H-VY):SC.alt-VY;
 // where the horizon sits on screen. Off the Charts menu (Krillion style): the surface near the top, and scrolling the menu glides down into the deep (or up into the sky)
-function vyTarget(){if(typeof SCENE_MENU!=="undefined"&&SCENE_MENU&&MENU&&!CUP){const pn=document.getElementById("panel"),sc=pn?pn.scrollTop*H/Math.max(1,innerHeight):0;return Math.round(TH.up?H*.82+sc*.7:H*.34-sc*.7);}
+function vyTarget(){if(typeof SCENE_MENU!=="undefined"&&SCENE_MENU&&MENU&&!CUP){const pn=document.getElementById("panel"),sc=pn?pn.scrollTop*H/Math.max(1,innerHeight):0;return Math.round((SCENE_MENU==="hub"?H*.5:TH.up?H*.82:H*.34)-sc*.8);}
   return Math.round(H*(CUP?(TH.up?.78:.3):MENU?.8:.27));}
 let SEED={};
 function resize(){
@@ -4245,7 +4237,7 @@ function frame(t){
   const dt=t-lastFrame;
   // the themed scene (ocean, space, dream, Marius) belongs to Off the Charts itself: on menus and in the other games
   // (Chicken Horse, arcade, casino…) it's hidden and not drawn at all
-  {const off=MENU&&!FL.dur&&!CUP&&!SCENE_MENU;if(off!==frame._off){frame._off=off;document.body.classList.toggle("noscene",off);}if(off)return;}
+  {const off=MENU&&!FL.dur&&!CUP&&!SCENE_MENU,hub=MENU&&SCENE_MENU==="hub";if(off!==frame._off){frame._off=off;document.body.classList.toggle("noscene",off);}if(hub!==frame._hub){frame._hub=hub;document.body.classList.toggle("hubscene",hub);}if(off)return;}
   if(MENU&&!FL.dur&&dt<(HQ?14:30))return;  // menus: full speed on good devices, ~30fps in performance mode
   lastFrame=t;frameN++;
   if(PERF==="auto"&&HQ&&frameN>40&&!document.hidden){if(dt>26&&dt<500)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
@@ -8705,6 +8697,8 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
+ {v:"5.1",t:"Real full screen",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course covers the entire screen on any device, big monitor or phone (portrait or landscape), with the buttons and scores floating on top"],
+   "Look":["Main page: your theme's own pixel scene again, parked at its prettiest spot (deep space, the deep sea, floating islands), instead of the synthwave grid","Off the Charts menu: the background now scrolls the same way as the menu","The rarity-names poll is gone from the main page"]}},
  {v:"5.0",t:"Full-screen Chicken Horse, new backgrounds",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course now fills the whole screen at any window size (even in browser full screen)","FRIENDS and UPDATE LOG buttons hide while you play"],
    "Look":["New main-page background: a starry synthwave night with a setting sun and a glowing grid","The Off the Charts menu shows your theme again, Krillion style: the surface near the top, and scrolling down glides into the deep (or up into the sky)"]}},
  {v:"4.9",t:"Join mid-game and Aces Parties",d:"Nov 24, 2026",s:{"Party":["Join any party while a game is already going (Chicken Horse, Academy, Puffer Party and the trivia modes)","ACES PARTIES on the home screen, weekdays 2:20 to 2:40 pm: see every open party, what's being played and who's in it, and JOIN with one tap","When the game gets an update, the page tells you and reloads (it waits until your game is over)"],
@@ -10761,10 +10755,10 @@ function trSendRes(){const P=TRG.meP;if(!P)return;trSend({t:"tres",r:TRG.st.r,st
 const trCvW=()=>{const c=$("trCv");return c?c.width:TR_VW*TR_TS;},trCvH=()=>{const c=$("trCv");return c?c.height:TR_VH*TR_TS;};
 const trZ=()=>(TRG&&TRG.zoom)||1,trVW=()=>trCvW()/trZ(),trVH=()=>trCvH()/trZ();
 const trZmin=()=>Math.min(1,trCvW()/TR_TS/TR_W,trCvH()/TR_TS/TR_H);
-// the course fills the whole screen: the canvas keeps ~22 tiles of height and gets as wide as the window's shape allows
-// (never wider than the map; then it shows a bit more height instead)
+// the course fills the whole screen: the shorter side always shows ~22 tiles, the longer side follows the window's shape
+// (never bigger than the map itself)
 function trFit(){const cv=$("trCv"),st=cv&&cv.parentElement;if(!st)return;const r=st.getBoundingClientRect();if(r.width<50||r.height<50)return;const ar=r.width/r.height;
-  let h=TR_VH*TR_TS,w=Math.round(h*ar);const mw=TR_W*TR_TS;if(w>mw){w=mw;h=Math.round(w/ar);}if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;if(TRG){TRG.zoom=Math.max(trZmin(),trZ());trCamClamp(TRG);}}}
+  const S=TR_VH*TR_TS,mw=TR_W*TR_TS,mh=TR_H*TR_TS;let w=ar>=1?S*ar:S,h=ar>=1?S:S/ar;if(w>mw){w=mw;h=w/ar;}if(h>mh){h=mh;w=h*ar;}w=Math.round(w);h=Math.round(h);if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;if(TRG){TRG.zoom=Math.max(trZmin(),trZ());trCamClamp(TRG);}}}
 function trCamClamp(G){const c=G.cam,mw=TR_W*TR_TS,mh=TR_H*TR_TS,vw=trVW(),vh=trVH();c.x=vw>=mw?(mw-vw)/2:Math.max(0,Math.min(mw-vw,c.x));c.y=vh>=mh?(mh-vh):Math.max(0,Math.min(mh-vh,c.y));}
 function trCamOn(G,px,py){G.cam.x=px-trVW()/2;G.cam.y=py-trVH()/2;trCamClamp(G);}
 function trZoomTo(z,sx,sy){const G=TRG;if(!G)return;const cv=$("trCv");sx=sx==null?cv.width/2:sx;sy=sy==null?cv.height/2:sy;const z0=trZ(),wx=G.cam.x+sx/z0,wy=G.cam.y+sy/z0;
@@ -11249,7 +11243,7 @@ function rpHTML(){const vs=Object.values(RPOLL.votes),tot=vs.length,cnt={};for(c
     ${socOn()?"":`<p class="hint" style="margin-top:6px">Live votes work on the GitHub version.</p>`}</div>`;}
 function rpRender(){const box=$("rpBox");if(box)box.outerHTML=rpHTML();}
 Object.assign(ACT,{rpVote:b=>rpVote(b.dataset.o)});
-{const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{const inner=$("panel").querySelector(".inner");if(inner&&!$("rpBox")){inner.insertAdjacentHTML("afterbegin",rpHTML());rpStart();}}catch(e){}return r;};}
+// (the rarity-names poll is no longer shown on the main screen)
 // ===== Nov 24: update notice. Some players never close the tab, so the page checks (now and then, and when the tab comes back)
 // whether index.html changed on the site. If it did: a banner while you're mid-game, then a reload screen once you're on a menu.
 const UPD={sig:null,shown:false,busyT:null};
@@ -11300,6 +11294,9 @@ function acesShow(){const pn=$("panel"),inner=pn&&pn.querySelector(".inner .land
 setInterval(()=>{acesShow();if($("acesBox")&&Date.now()-ACES.t>45e3){ACES.t=Date.now();acesFetch();}},5e3);
 {const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{acesShow();}catch(e){}return r;};}
 ACT.acesJoin=b=>joinRoom(b.dataset.c);
+// ===== main page background: your theme's own pixel scene, parked at its prettiest spot (no vehicle) =====
+const HUB_ALT={space:4000,sky:1500,ocean:4000,marius:1500};
+{const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{SCENE_MENU="hub";jumpTo(HUB_ALT[THEME]||1500);}catch(e){}return r;};}
 </script>
 
 </body>
