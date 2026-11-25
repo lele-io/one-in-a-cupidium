@@ -1198,6 +1198,32 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 @keyframes cxWin{50%{transform:scale(1.08);filter:drop-shadow(0 0 18px #ff5fd2) drop-shadow(0 0 30px #fde047)}}
 @media (prefers-reduced-motion:reduce){.cxShake{animation:none}#cupx .rays{display:none}}
 .rpoll{margin:0 0 12px}.rpoll .pollopts{grid-template-columns:1fr}
+
+/* ===== main screen polish (unslop): one wordmark with the Ci element tile, Off the Charts as the one wide feature card with the
+   only accent button, every other card the same quiet shape, no glows or tape, one tidy row of links and the theme switch below ===== */
+#panel .hubbrand{display:flex;align-items:center;justify-content:flex-start;gap:12px;width:100%;max-width:640px;margin:0 auto 16px;text-align:left;text-shadow:0 1px 0 rgba(0,0,0,.45),0 0 4px rgba(0,0,0,.35)}
+#panel .hubbrand b{display:block;font-family:var(--head);font-weight:400;font-size:20px;letter-spacing:.12em;color:var(--ink)}
+#panel .hubbrand span{display:block;font-size:14px;color:var(--muted);margin-top:4px}
+.citile{position:relative;display:inline-grid;place-items:center;flex:none;width:48px;height:48px;font-family:var(--head);font-style:normal;font-size:20px;color:var(--ink);background:rgba(10,8,30,.55);border:2px solid var(--acc);box-shadow:inset 0 0 0 2px rgba(10,8,30,.55)}
+.citile small{position:absolute;top:3px;left:4px;font-size:8px;color:var(--muted);letter-spacing:0}
+.citile.sm{width:20px;height:20px;font-size:8px;border-width:1px;box-shadow:none;margin-right:8px;vertical-align:middle}
+#panel .landing{gap:12px!important}
+#panel .landing>.lcard{flex-basis:calc(50% - 6px)!important;padding:20px 16px!important;gap:8px!important;min-height:140px!important;justify-content:center}
+#panel .landing>.lcard.otcl{flex-basis:100%!important;min-height:168px!important;padding:24px!important}
+#panel .landing>.lcard.otcl b{font-size:24px}
+#panel .landing>.lcard.ptl{flex:0 1 calc(50% - 6px)!important;width:auto;flex-direction:column;align-self:stretch;padding-inline:16px!important}
+#panel .landing>.lcard.ptl em{display:inline-block}
+#panel .landing .lcard b{font-size:16px}#panel .landing .lcard span{font-size:13px;max-width:30ch}
+#panel .landing .lcard em,#panel .landing .lcard.cupl em,#panel .landing .lcard.casl em,#panel .landing .lcard.cpl em,#panel .landing .lcard.bbl em,#panel .landing .lcard.trl em,#panel .landing .lcard.ptl em{
+  background:rgba(255,255,255,.1);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);padding:8px 16px;margin-top:4px}
+#panel .landing .lcard.otcl em{background:var(--acc);color:var(--ink2);box-shadow:none;padding:10px 24px}
+#panel .landing .lcard:hover em{background:rgba(255,255,255,.18)}#panel .landing .lcard.otcl:hover em{background:var(--acc2)}
+#panel .landing .lstat{display:flex;align-items:center;font-size:12px;color:var(--ink)}
+#panel .landing .devtag{position:static;transform:none;background:none;box-shadow:none;padding:0;color:var(--muted);font-size:8px;letter-spacing:.12em}
+#panel .landing .lcard:has(.devtag){padding-top:20px!important}
+#panel .landing .nb{display:none}
+#panel .menubar{gap:8px;margin-top:16px}#panel .menubar>.pbtn{padding:8px 12px}
+@media (max-width:560px){#panel .landing>.lcard,#panel .landing>.lcard.ptl{flex-basis:100%!important}#panel .hubbrand b{font-size:16px}}
 </style>
 
 <canvas id="scene"></canvas>
@@ -7919,18 +7945,19 @@ function cupHub(cat){
 function landing(){
   mgClose();if(N)leaveNet();L=null;S=null;CUP=null;MENU=true;jumpTo(0);SC.parts=[];renderSide(null);
   showPanel(`
+    <div class="hubbrand"><i class="citile" aria-hidden="true"><small>119</small>Ci</i><div><b>ONE IN A CUPIDIUM</b><span>Daily trivia and party games where the rarest answer wins</span></div></div>
     <div class="landing">
-      <button class="glass lcard" data-act="otc"><b>OFF THE CHARTS</b><span>Krillion</span><em>PLAY ${TH.up?"▲":"▼"}</em></button>
-      <button class="glass lcard cupl" data-act="cuphub"><b><span class="glow cup" style="padding:0 6px">CUPIDIUM ARCADE</span></b><em>ENTER 💖</em></button>
-      <button class="glass lcard casl" data-act="casino"><b><span class="glow cup" style="padding:0 6px">CUPIDIUM CASINO</span></b><em>🎰 ${(typeof casChips==="function"?casChips():1000).toLocaleString()} CHIPS</em></button>
-      <button class="glass lcard cpl" data-act="cuepon"><b>DAILY CUEPON</b><span>NYT Games</span><em>${typeof cpDoneCount==="function"?cpDoneCount():0}/3 DONE TODAY</em></button>
-      <button class="glass lcard bbl" data-act="brainLab"><i class="devtag">CURRENTLY IN DEVELOPMENT</i><b>CUPIDIUM ACADEMY</b><span>Big Brain Academy. 20 brain games</span><em>ENTER ▶</em></button>
-      <button class="glass lcard trl" data-act="trapHub"><i class="devtag">CURRENTLY IN DEVELOPMENT</i><b>ULTIMATE CHICKEN HORSE</b><em>PLAY ▶</em></button>
-      <button class="glass lcard ptl" data-act="party"><b>PARTY</b><em>ROOMS</em></button>
+      <button class="glass lcard otcl" data-act="otc"><b>OFF THE CHARTS</b><span>Name the rarest answer you can. Rarer answers fly higher</span>${(()=>{try{return anyDue(false);}catch(e){return false;}})()?`<small class="lstat"><i class="citile sm" aria-hidden="true">Ci</i>Today's daily is waiting</small>`:""}<em>PLAY ${TH.up?"▲":"▼"}</em></button>
+      <button class="glass lcard cupl" data-act="cuphub"><b>CUPIDIUM ARCADE</b><span>${typeof ARCADE_CATS!=="undefined"?ARCADE_CATS.reduce((n,c)=>n+c[2].length,0)+" ":""}mini games with leaderboards</span><em>ENTER</em></button>
+      <button class="glass lcard casl" data-act="casino"><b>CUPIDIUM CASINO</b><span>${typeof CAS_GAMES!=="undefined"?CAS_GAMES.length+" ":""}games to bet your chips on</span><em>${(typeof casChips==="function"?casChips():1000).toLocaleString()} CHIPS</em></button>
+      <button class="glass lcard cpl" data-act="cuepon"><b>DAILY CUEPON</b><span>3 daily word puzzles</span><em>${typeof cpDoneCount==="function"?cpDoneCount():0}/3 DONE TODAY</em></button>
+      <button class="glass lcard bbl" data-act="brainLab"><b>CUPIDIUM ACADEMY</b><span>20 brain games, solo or with friends</span><em>ENTER</em><i class="devtag">IN DEVELOPMENT</i></button>
+      <button class="glass lcard trl" data-act="trapHub"><b>ULTIMATE CHICKEN HORSE</b><span>Place traps, then race your friends to the flag</span><em>PLAY</em><i class="devtag">IN DEVELOPMENT</i></button>
+      <button class="glass lcard ptl" data-act="party"><b>PARTY</b><span>Online rooms or pass and play on one device</span><em>ROOMS</em></button>
     </div>
-    <div class="menubar"><button class="pbtn" data-act="leaderboards" data-back="landing" data-k="daily">🏆 LEADERBOARDS</button><button class="pbtn" data-act="chipShop">🛍 CHIP SHOP</button><button class="pbtn" data-act="collection">📖 COLLECTION</button>${store.get("otc.dev",false)?`<button class="pbtn" data-act="devHome">🛠 DEV PAGE</button>`:""}<button class="pbtn" data-act="skins">SKINS</button><button class="pbtn" data-act="palettes">COLORS</button>
-      <div class="glass themeseg">${Object.entries(THEMES).map(([k,t])=>`<button class="${k===THEME?"on":""}" data-act="theme3" data-t="${k}">${t.name}</button>`).join("")}</div>
-      <button class="pbtn" data-act="settings" aria-label="Settings">${icon("gear",18)}</button></div>
+    <div class="menubar"><button class="pbtn" data-act="leaderboards" data-back="landing" data-k="daily">LEADERBOARDS</button><button class="pbtn" data-act="chipShop">CHIP SHOP</button><button class="pbtn" data-act="collection">COLLECTION</button>${store.get("otc.dev",false)?`<button class="pbtn" data-act="devHome">DEV PAGE</button>`:""}<button class="pbtn" data-act="skins">SKINS</button><button class="pbtn" data-act="palettes">COLORS</button>
+      <button class="pbtn" data-act="settings" aria-label="Settings">${icon("gear",18)}</button>
+      <div class="glass themeseg">${Object.entries(THEMES).map(([k,t])=>`<button class="${k===THEME?"on":""}" data-act="theme3" data-t="${k}">${t.name}</button>`).join("")}</div></div>
 `,{cls:"menu"});
 }
 
@@ -8706,6 +8733,7 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
+ {v:"5.4",t:"Tidier main screen",d:"Nov 24, 2026",s:{"Look":["The main screen has a title again: ONE IN A CUPIDIUM with its own Ci element tile","Off the Charts is the big card on top, and its PLAY button is the only coloured one","Every game card says what the game is, and they all share one size and one quiet button style","No more glowing titles or yellow tape: 'in development' is small text now","The red dot is now a line on the Off the Charts card: 'Today's daily is waiting'","Party is a normal card, and the links sit in one row with the theme switch under them"]}},
  {v:"5.3",t:"Smarter back buttons",d:"Nov 24, 2026",s:{"Menus":["Every ◀ back button now returns to the page you came from (Party opened from Chicken Horse goes back to Chicken Horse, Leaderboards opened from the Academy goes back to the Academy) instead of the main screen"]}},
  {v:"5.2",t:"Shards",d:"Nov 24, 2026",s:{"Off the Charts":["New currency: SHARDS 💎. Earn 1 for every 10 points you climb or dive, in every mode, so rarer answers pay more","SHARD SHOP (on the Off the Charts menu): 8 vehicle trails that replace your exhaust (Love Hearts to ONE IN A CUPIDIUM)","Fuel cans: when an endless run's tank hits empty, a can refills it to 40 (one per run, hold up to 5)","Exchange shards for casino chips: 50 → 100, and bigger bundles get up to 30% extra"]}},
  {v:"5.1",t:"Real full screen",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course covers the entire screen on any device, big monitor or phone (portrait or landscape), with the buttons and scores floating on top"],
