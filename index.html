@@ -8706,6 +8706,7 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
+ {v:"5.3",t:"Smarter back buttons",d:"Nov 24, 2026",s:{"Menus":["Every ◀ back button now returns to the page you came from (Party opened from Chicken Horse goes back to Chicken Horse, Leaderboards opened from the Academy goes back to the Academy) instead of the main screen"]}},
  {v:"5.2",t:"Shards",d:"Nov 24, 2026",s:{"Off the Charts":["New currency: SHARDS 💎. Earn 1 for every 10 points you climb or dive, in every mode, so rarer answers pay more","SHARD SHOP (on the Off the Charts menu): 8 vehicle trails that replace your exhaust (Love Hearts to ONE IN A CUPIDIUM)","Fuel cans: when an endless run's tank hits empty, a can refills it to 40 (one per run, hold up to 5)","Exchange shards for casino chips: 50 → 100, and bigger bundles get up to 30% extra"]}},
  {v:"5.1",t:"Real full screen",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course covers the entire screen on any device, big monitor or phone (portrait or landscape), with the buttons and scores floating on top"],
    "Look":["Main page: your theme's own pixel scene again, parked at its prettiest spot (deep space, the deep sea, floating islands), instead of the synthwave grid","Off the Charts menu: the background now scrolls the same way as the menu","The rarity-names poll is gone from the main page"]}},
@@ -11352,6 +11353,20 @@ Object.assign(ACT,{shardShop:()=>shardShop(),
   shEx:b=>{const x=SHX[+b.dataset.i];if(!x)return;if(shards()<x[0])return toast("Not enough shards");shardSet(shards()-x[0]);casSet(casChips()+x[1]);sfx.ok(4);shardShop(`Exchanged 💎 ${x[0].toLocaleString()} for 🪙 ${x[1].toLocaleString()} chips.`);}});
 {const _h=home;home=function(){_h();try{const mb=document.querySelector("#panel .menubar");if(mb&&!mb.querySelector('[data-act="shardShop"]'))mb.insertAdjacentHTML("afterbegin",`<button class="pbtn" data-act="shardShop">💎 ${shards().toLocaleString()} · SHOP</button>`);}catch(e){}};}
 
+
+// ===== Nov 24: page history. Every ◀ back button returns to the page you actually came from (Party opened from Chicken Horse goes
+// back to Chicken Horse, not the main screen). The main screen starts the history over.
+const NAV={st:[],busy:false};
+const NAV_FN={landing:"landing",home:"home",party:"partyMenu",trapHub:"trapHub",brainLab:"brainLab",cuphub:"cupHub",casino:"casino",cuepon:"cuepon",chipShop:"chipShop",
+  collection:"collection",leaderboards:"leaderboards",settings:"settings",skins:"skins",palettes:"palettes",shardShop:"shardShop",geo:"geoMenu",duels:"duels",bbGhosts:"bbGhosts"};
+for(const fn of new Set(Object.values(NAV_FN))){const orig=window[fn]||(typeof eval(fn)==="function"?eval(fn):null);if(typeof orig!=="function")continue;
+  const w=function(...a){const r=orig.apply(this,a);try{if(fn==="landing")NAV.st=[];const top=NAV.st[NAV.st.length-1];
+      if(top&&top.fn===fn){top.a=a;top.tok=tok;}else{NAV.st.push({fn,a,tok});if(NAV.st.length>40)NAV.st.shift();}}catch(e){}return r;};
+  eval(fn+"=w");}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b||b.disabled||!NAV_FN[b.dataset.act]||!/^\s*◀/.test(b.textContent))return;
+  const st=NAV.st;if(!st.length)return;let i=st.length-1;if(st[i].tok===tok)i--;// on a page in the history: go one back; on a page that isn't (a game, a sub-page): go to the last page
+  if(i<0)return;const to=st[i];st.length=i+1;e.preventDefault();e.stopImmediatePropagation();
+  try{to.tok=-1;eval(to.fn).apply(null,to.a||[]);}catch(x){console.error(x);landing();}},true);
 </script>
 
 </body>
