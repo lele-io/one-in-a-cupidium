@@ -35,6 +35,21 @@ body[data-theme="ocean"]{--glass:rgba(2,34,52,.72);--glass2:rgba(2,34,52,.86);--
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:400;font-size:18px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased}
 body.noscene #scene,body.noscene #veh{display:none}
+/* main page / other games: a synthwave night instead of a flat colour. Starfield, a striped setting sun, a pink grid rolling toward you */
+#bgfx{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#06031a 0%,#120936 40%,#33115a 60%,#6a1c6e 76%,#14072e 76.1%,#0b0420 100%)}
+body.noscene #bgfx{display:block}
+#bgfx i{position:absolute;display:block}
+#bgfx .st1,#bgfx .st2{inset:0 0 24% 0;background-repeat:repeat}
+#bgfx .st1{background-image:radial-gradient(1.5px 1.5px at 23px 41px,#fff 98%,transparent),radial-gradient(1px 1px at 141px 17px,#ffd1f0 98%,transparent),radial-gradient(1.5px 1.5px at 90px 120px,#c7f9ff 98%,transparent),radial-gradient(1px 1px at 190px 88px,#fff 98%,transparent);background-size:230px 160px;animation:bgTw 3.2s ease-in-out infinite alternate}
+#bgfx .st2{background-image:radial-gradient(2px 2px at 60px 70px,#fff 98%,transparent),radial-gradient(1px 1px at 250px 150px,#fde68a 98%,transparent),radial-gradient(1.5px 1.5px at 330px 30px,#fff 98%,transparent);background-size:390px 240px;animation:bgTw 4.7s ease-in-out infinite alternate-reverse;opacity:.8}
+#bgfx .sun{left:50%;bottom:24%;width:min(36vh,50vw);aspect-ratio:1;transform:translate(-50%,30%);border-radius:50%;background:linear-gradient(180deg,#fff27a 0%,#ffb347 38%,#ff5fa8 72%,#c026d3 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 48%,transparent 48%),repeating-linear-gradient(180deg,#000 0 7%,transparent 7% 10%);mask-image:linear-gradient(180deg,#000 48%,transparent 48%),repeating-linear-gradient(180deg,#000 0 7%,transparent 7% 10%);
+  filter:drop-shadow(0 0 28px rgba(255,95,190,.55))}
+#bgfx .floor{position:absolute;left:0;right:0;bottom:0;height:24%;perspective:260px;overflow:hidden;background:linear-gradient(180deg,#3a0f52,#0b0420 70%)}
+#bgfx .floor i{left:-60%;right:-60%;top:0;height:220%;transform-origin:50% 0;transform:rotateX(62deg);background-image:linear-gradient(90deg,rgba(255,95,210,.7) 2px,transparent 2px),linear-gradient(0deg,rgba(255,95,210,.7) 2px,transparent 2px);background-size:64px 64px;animation:bgRoll 1.6s linear infinite}
+#bgfx .floor::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,110,200,.55) 0%,rgba(106,28,110,.35) 8%,transparent 45%)}
+@keyframes bgTw{from{opacity:.35}to{opacity:1}}@keyframes bgRoll{to{background-position:0 64px}}
+@media (prefers-reduced-motion:reduce){#bgfx *{animation:none!important}}
 .updbar{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:14px;max-width:calc(100vw - 32px)}
 .updov{position:fixed;inset:0;z-index:95;display:grid;place-items:center;background:rgba(5,4,20,.75);padding:16px}.updov .card{max-width:360px}
 .aces{width:100%;box-sizing:border-box}.acerow{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-top:6px;background:rgba(255,255,255,.06);font-size:14px}
@@ -879,9 +894,12 @@ body.gated>*:not(#gateBlock){visibility:hidden!important}
 .lcard.trl em{background:linear-gradient(180deg,#ff8a1f,#d9480f);color:#fff}.lcard.ptl{grid-column:1/-1;min-height:110px}
 .inner.trmenu{width:min(1000px,100%)!important;max-width:1000px!important}
 /* in a Chicken Horse game the course fills the screen (as big as the window allows, keeping its shape) */
-#panel:has(#trCv){padding:8px max(8px,env(safe-area-inset-left,0px)) 8px}
-#panel:has(#trCv)>.inner.trmenu{width:100%!important;max-width:none!important}
-#panel:has(#trCv) .trwrap{align-items:center}#panel:has(#trCv) .trwrap>*{width:min(100%,calc((100dvh - 150px)*1.818));box-sizing:border-box}
+#panel:has(#trCv){padding:6px max(8px,env(safe-area-inset-left,0px)) 6px;overflow:hidden}
+#panel:has(#trCv)>.inner.trmenu{width:100%!important;max-width:none!important;height:100%;margin:0}
+#panel:has(#trCv) .trwrap{height:100%;min-height:0}#panel:has(#trCv) .trstage{flex:1;min-height:0}
+#panel:has(#trCv) #trCv{width:100%;height:100%}
+body:has(#trCv) #socBtn,body:has(#trCv) #ulogBtn{display:none!important}
+@media (max-width:560px){.trtop{flex-wrap:wrap;gap:6px}.trtop>span{order:5;flex-basis:100%}}
 .trwrap{display:flex;flex-direction:column;gap:6px;user-select:none;-webkit-user-select:none}
 .trtop{display:flex;align-items:center;gap:10px}.trtop b{font-family:var(--head);letter-spacing:.12em}.trtop span{flex:1;font-family:var(--head);font-size:11px;opacity:.8}
 .trstage{position:relative;border:2px solid var(--edge);line-height:0;background:#1b1747}
@@ -1183,6 +1201,7 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 </style>
 
 <canvas id="scene"></canvas>
+<div id="bgfx" aria-hidden="true"><i class="st1"></i><i class="st2"></i><i class="sun"></i><div class="floor"><i></i></div></div>
 <div id="hud" hidden>
   <div class="glass altbox"><b id="altv">0 km</b><span id="zonev"></span></div>
   <div class="glass prog" id="prog"></div>
@@ -3407,11 +3426,14 @@ const vis=(a,m=60)=>a>cam-m&&a<cam+H+m;
 const ysK=(a,k)=>TH.up?H-(a-cam*k):a-cam*k;
 const visK=(a,k,m=60)=>{const y=ysK(a,k);return y>-m&&y<H+m;};
 const camTarget=()=>TH.up?SC.alt-(H-VY):SC.alt-VY;
+// where the horizon sits on screen. Off the Charts menu (Krillion style): the surface near the top, and scrolling the menu glides down into the deep (or up into the sky)
+function vyTarget(){if(typeof SCENE_MENU!=="undefined"&&SCENE_MENU&&MENU&&!CUP){const pn=document.getElementById("panel"),sc=pn?pn.scrollTop*H/Math.max(1,innerHeight):0;return Math.round(TH.up?H*.82+sc*.7:H*.34-sc*.7);}
+  return Math.round(H*(CUP?(TH.up?.78:.3):MENU?.8:.27));}
 let SEED={};
 function resize(){
   const base=HQ?340:210;
   if(innerWidth<innerHeight){W=base;H=Math.round(base*innerHeight/innerWidth);}else{H=base;W=Math.round(base*innerWidth/innerHeight);}
-  cv.width=W;cv.height=H;if(typeof vehResize==="function"&&VEH.c)vehResize();VY=Math.round(H*(MENU?.8:.27));for(const k in CACHE)delete CACHE[k];VIG=null;buildScene();cam=camTarget();prewarm();
+  cv.width=W;cv.height=H;if(typeof vehResize==="function"&&VEH.c)vehResize();VY=vyTarget();for(const k in CACHE)delete CACHE[k];VIG=null;buildScene();cam=camTarget();prewarm();
 }
 function buildScene(){
   const R=rng("scene"+W+THEME);SEED={};
@@ -4223,7 +4245,7 @@ function frame(t){
   const dt=t-lastFrame;
   // the themed scene (ocean, space, dream, Marius) belongs to Off the Charts itself: on menus and in the other games
   // (Chicken Horse, arcade, casino…) it's hidden and not drawn at all
-  {const off=MENU&&!FL.dur&&!CUP;if(off!==frame._off){frame._off=off;document.body.classList.toggle("noscene",off);}if(off)return;}
+  {const off=MENU&&!FL.dur&&!CUP&&!SCENE_MENU;if(off!==frame._off){frame._off=off;document.body.classList.toggle("noscene",off);}if(off)return;}
   if(MENU&&!FL.dur&&dt<(HQ?14:30))return;  // menus: full speed on good devices, ~30fps in performance mode
   lastFrame=t;frameN++;
   if(PERF==="auto"&&HQ&&frameN>40&&!document.hidden){if(dt>26&&dt<500)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
@@ -4233,7 +4255,8 @@ function frame(t){
   if(FL.dur){const k=Math.min(1,(performance.now()-FL.t0)/FL.dur);SC.alt=FL.from+(FL.to-FL.from)*ease(k);if(k>=1)FL.dur=0;}
   speed=SC.alt-prev;const moving=Math.abs(speed)>.3;
   if(CUP)cupTick(t);
-  const vt=Math.round(H*(CUP?(TH.up?.78:.3):MENU?.8:.27));if(VY!==vt)VY+=Math.sign(vt-VY)*Math.max(1,Math.round(Math.abs(vt-VY)*.12));
+  // Off the Charts menu (Krillion style): the surface sits near the top and scrolling the menu glides down into the deep (or up into the sky)
+  const vt=vyTarget();if(VY!==vt)VY+=Math.sign(vt-VY)*Math.max(1,Math.round(Math.abs(vt-VY)*.12));
   cam+=(camTarget()-cam)*Math.min(1,.25*Math.max(1,dt)/16.7);
   let sx=0,sy=0;if(SC.shake>0){SC.shake-=16;sx=(Math.random()-.5)*3;sy=(Math.random()-.5)*3;}
   g.save();g.translate(Math.round(sx),Math.round(sy));VEH.x.clearRect(0,0,VEH.c.width,VEH.c.height);VEH.sx=Math.round(sx);VEH.sy=Math.round(sy);
@@ -4552,7 +4575,8 @@ const qNote=p=>QNOTE[p.q]?`<div class="qnote">${esc(QNOTE[p.q])}</div>`:p.deep?`
 let timerId=null,tok=0,S=null,L=null,N=null,fxTimer=null,cdTimer=null;
 function closeModal(){$("modal").hidden=true;$("modal").innerHTML="";}
 function clearTimers(){clearInterval(timerId);clearTimeout(fxTimer);clearTimeout(cdTimer);}
-function showPanel(html,o={}){MENU=!o.hud;clearTimers();tok++;closeModal();$("card").hidden=true;$("fx").hidden=true;$("hud").hidden=!o.hud;$("side").hidden=!o.side;
+let SCENE_MENU=false;// true on Off the Charts menus: the themed scene shows behind them
+function showPanel(html,o={}){MENU=!o.hud;SCENE_MENU=false;clearTimers();tok++;closeModal();$("card").hidden=true;$("fx").hidden=true;$("hud").hidden=!o.hud;$("side").hidden=!o.side;
   const p=$("panel");p.className=o.hud?"withhud":"";p.innerHTML=`<div class="inner ${o.cls||""}">${html}</div>`;p.scrollTop=0;return tok;}
 function showCard(html,o={}){MENU=false;clearTimers();tok++;closeModal();$("panel").innerHTML="";$("fx").hidden=true;$("hud").hidden=false;$("side").hidden=!o.side;
   if(o.prog!==undefined)$("prog").innerHTML=o.prog;const c=$("card");c.hidden=false;c.classList.remove("ppcard","ppdanger");c.innerHTML=html;return tok;}
@@ -5232,6 +5256,7 @@ function home(){
     <div class="statline glass" style="padding:7px 12px;align-self:center">STREAK <b>${st.streak}</b> · BEST <b>${st.best}</b> · PLAYED <b>${st.played}</b></div>
     <details class="glass legend"><summary>HOW SCORING WORKS ▾</summary><div class="tiers">${TIERS.slice(0,5).map((t,i)=>`<span>${tchip(i)}</span><span class="hint">${t.desc}</span>`).join("")}</div>
       <p class="hint" style="margin:10px 0 0">⛽ Endless runs have fuel: common answers and misses burn it, rare answers refill it. Empty tank ends the run.</p><p class="hint" style="margin:10px 0 0">${PROMPTS.length} prompts · ${(window.__ansN=window.__ansN||PROMPTS.reduce((a,p)=>a+p.t.reduce((b,t)=>b+(t?t.split("|").length:0),0),0)).toLocaleString()} answers in the bank. Answers not on the list are checked by AI when it's on${SAMPLE?"":", and by Wikipedia, where fewer page views means a rarer answer"}.</p></details>`,{cls:"menu"});
+  SCENE_MENU=true;
 }
 // the mode picker on the Off the Charts menu
 function modeGrpHtml(){const g=store.get("otc.modeGrp","");return `<button class="mbtn m-ice${g==="normal"?" on":""}" data-act="modeGrp" data-g="normal">NORMAL<small>ENDLESS · PRACTICE</small></button><button class="mbtn m-fire${g==="rapid"?" on":""}" data-act="modeGrp" data-g="rapid">⚡ RAPID FIRE<small>ENDLESS · PRACTICE</small></button>`;}
@@ -8680,6 +8705,8 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
+ {v:"5.0",t:"Full-screen Chicken Horse, new backgrounds",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course now fills the whole screen at any window size (even in browser full screen)","FRIENDS and UPDATE LOG buttons hide while you play"],
+   "Look":["New main-page background: a starry synthwave night with a setting sun and a glowing grid","The Off the Charts menu shows your theme again, Krillion style: the surface near the top, and scrolling down glides into the deep (or up into the sky)"]}},
  {v:"4.9",t:"Join mid-game and Aces Parties",d:"Nov 24, 2026",s:{"Party":["Join any party while a game is already going (Chicken Horse, Academy, Puffer Party and the trivia modes)","ACES PARTIES on the home screen, weekdays 2:20 to 2:40 pm: see every open party, what's being played and who's in it, and JOIN with one tap","When the game gets an update, the page tells you and reloads (it waits until your game is over)"],
    "Ultimate Chicken Horse":["The Trap Kill badge shows up again when your trap gets someone","A tiny death animation","New Fixed Turret: shoots straight in one direction. The aiming Turret is now rare","Spectating: when the player you're watching is out, you jump to the next one still racing","CUSTOMIZE button during the game","The course fills the screen, with no theme background behind it"],
    "Chips":["+1 chip for a new best on any arcade game, or for winning Chicken Horse, a Cuepon puzzle or an Academy party"],
@@ -10731,8 +10758,13 @@ const trPub=d=>{if(TRG&&!TRG.solo&&N&&N.relay)N.relay.pub("*",{...d,n:TRG.me});}
 function trSendRes(){const P=TRG.meP;if(!P)return;trSend({t:"tres",r:TRG.st.r,st:P.st,ms:P.ms,kill:P.kill,coin:P.coin?1:0});trPub({t:"tp",r:TRG.st.r,x:P.x,y:P.y,f:P.f,st:P.st});
   setTimeout(()=>{if(TRG&&TRG.st&&TRG.st.ph==="run"&&!(TRG.solo||(N&&N.host)))trSend({t:"tres",r:TRG.st.r,st:P.st,ms:P.ms,kill:P.kill,coin:P.coin?1:0});},1500);}
 // zoom: 1 = normal; the smallest zoom shows the whole map
-const trZ=()=>(TRG&&TRG.zoom)||1,trVW=()=>TR_VW*TR_TS/trZ(),trVH=()=>TR_VH*TR_TS/trZ();
-const trZmin=()=>Math.min(1,TR_VW/TR_W,TR_VH/TR_H);
+const trCvW=()=>{const c=$("trCv");return c?c.width:TR_VW*TR_TS;},trCvH=()=>{const c=$("trCv");return c?c.height:TR_VH*TR_TS;};
+const trZ=()=>(TRG&&TRG.zoom)||1,trVW=()=>trCvW()/trZ(),trVH=()=>trCvH()/trZ();
+const trZmin=()=>Math.min(1,trCvW()/TR_TS/TR_W,trCvH()/TR_TS/TR_H);
+// the course fills the whole screen: the canvas keeps ~22 tiles of height and gets as wide as the window's shape allows
+// (never wider than the map; then it shows a bit more height instead)
+function trFit(){const cv=$("trCv"),st=cv&&cv.parentElement;if(!st)return;const r=st.getBoundingClientRect();if(r.width<50||r.height<50)return;const ar=r.width/r.height;
+  let h=TR_VH*TR_TS,w=Math.round(h*ar);const mw=TR_W*TR_TS;if(w>mw){w=mw;h=Math.round(w/ar);}if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;if(TRG){TRG.zoom=Math.max(trZmin(),trZ());trCamClamp(TRG);}}}
 function trCamClamp(G){const c=G.cam,mw=TR_W*TR_TS,mh=TR_H*TR_TS,vw=trVW(),vh=trVH();c.x=vw>=mw?(mw-vw)/2:Math.max(0,Math.min(mw-vw,c.x));c.y=vh>=mh?(mh-vh):Math.max(0,Math.min(mh-vh,c.y));}
 function trCamOn(G,px,py){G.cam.x=px-trVW()/2;G.cam.y=py-trVH()/2;trCamClamp(G);}
 function trZoomTo(z,sx,sy){const G=TRG;if(!G)return;const cv=$("trCv");sx=sx==null?cv.width/2:sx;sy=sy==null?cv.height/2:sy;const z0=trZ(),wx=G.cam.x+sx/z0,wy=G.cam.y+sy/z0;
@@ -10748,7 +10780,7 @@ function trApply(m){const G=TRG;if(!G)return;const prev=G.st;
     for(const n in m.res){const r=m.res[n];if(r&&r.st==="dead"&&r.kill===G.me&&n!==G.me&&!G.kseen.n[n]){G.kseen.n[n]=1;trKillNote(n);}}}G.st=m;G.endAt=Date.now()+(m.ends||0);const oldC=G.C;G.C=trBuild(m);
   // keep pushed boxes where they are while a run is going
   if(prev&&prev.r===m.r&&prev.ph===m.ph&&m.ph==="run"&&oldC){G.C.dyn.forEach((d,i)=>{const o=oldC.dyn[i];if(o&&o.ty===d.ty&&d.ty==="mbox"){d.bx=o.bx;d.by=o.by;d.vy=o.vy;}if(o&&o.ty===d.ty&&d.ty==="angry"){d.trig=o.trig;d.cool=o.cool;}});G.C.turrets.forEach((t,i)=>{if(oldC.turrets[i])t.next=oldC.turrets[i].next;});}
-  if(!$("trCv"))trShell();
+  if(!$("trCv"))trShell();else trFit();
   if(!prev||prev.r!==m.r||prev.ph!==m.ph){G.my={ty:null,placed:false,rot:0,hx:null,hy:null};G.cur={};G.ghost=null;G.spec=undefined;G.coinTaken={};if(G.whole&&m.ph==="run"){G.whole=false;G.zoom=G.zoom0||1;}
     if(m.ph==="pick"||m.ph==="place"&&(!prev||prev.ph!=="pick"))trCamOn(G,TR_START.x*TR_TS,TR_START.y*TR_TS);
     if(m.ph==="run"){G.meP={coins:{},x:TR_START.x*TR_TS+((Object.keys(m.scores).indexOf(G.me)%4)*4)-4,y:TR_START.y*TR_TS+16-TRP.h-1,vx:0,vy:0,w:TRP.w,h:TRP.h,f:1,st:"wait",t:0,coy:0,buf:0};G.goAt=Date.now()+Math.min(3000,Math.max(0,(m.ends||0)-(TR_RUN+1)*1000));G.cd=(G.goAt-Date.now())/1000;G.runT0=null;G.peers={};G.avSent=0;G.bullets=[];G.inp={};trCamOn(G,G.meP.x,G.meP.y);}
@@ -10761,7 +10793,7 @@ function trShell(){showPanel(`<div class="trwrap"><div class="trtop"><b>ULTIMATE
    <div class="trstage"><canvas id="trCv" width="${TR_VW*TR_TS}" height="${TR_VH*TR_TS}"></canvas><div id="trTools" class="trtools"></div><div id="trKills" class="trkills"></div><div id="trOver" class="trover"></div></div>
    <div id="trBar" class="trbar"></div>
    <div class="trpad" id="trPad"><button data-k="l">◀</button><button data-k="r">▶</button><span></span><button data-k="j" class="j">JUMP</button></div></div>`,{cls:"menu trmenu"});
-  const cv=$("trCv");
+  const cv=$("trCv");trFit();try{new ResizeObserver(()=>trFit()).observe(cv.parentElement);}catch(e){addEventListener("resize",trFit);}
   // mouse wheel or pinch zooms around the pointer; two-finger trackpad scrolling pans
   cv.addEventListener("wheel",e=>{const G=TRG;if(!G)return;e.preventDefault();const p=trCvPt(e),mouse=e.deltaMode===1||(e.deltaX===0&&Math.abs(e.deltaY)>=40&&Number.isInteger(e.deltaY));
     if(e.ctrlKey||mouse){G.whole=false;trZoomTo(trZ()*Math.exp(-e.deltaY*(e.ctrlKey?.01:.0015)),p.x,p.y);}else if(trFree(G)||G.st.ph==="place"&&!G.ghost){G.spec=null;G.cam.x+=e.deltaX/trZ();G.cam.y+=e.deltaY/trZ();trCamClamp(G);}},{passive:false});
