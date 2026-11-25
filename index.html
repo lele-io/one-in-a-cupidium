@@ -34,6 +34,12 @@ body[data-theme="ocean"]{--glass:rgba(2,34,52,.72);--glass2:rgba(2,34,52,.86);--
 [hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:400;font-size:18px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased}
+body.noscene #scene,body.noscene #veh{display:none}
+.updbar{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:14px;max-width:calc(100vw - 32px)}
+.updov{position:fixed;inset:0;z-index:95;display:grid;place-items:center;background:rgba(5,4,20,.75);padding:16px}.updov .card{max-width:360px}
+.aces{width:100%;box-sizing:border-box}.acerow{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-top:6px;background:rgba(255,255,255,.06);font-size:14px}
+.acerow b{white-space:nowrap}.acerow span{flex:1;min-width:0;font-size:13px;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:560px){.acerow{flex-wrap:wrap}.acerow b{flex:1}.acerow span{order:5;flex-basis:100%;text-align:left}}.acerow em{font-style:normal;font-size:11px;color:var(--hl);white-space:nowrap}
 #scene,#veh{position:fixed;inset:0;width:100vw;height:100vh;will-change:contents;image-rendering:pixelated;image-rendering:crisp-edges}#veh{pointer-events:none}
 /* frosted pixel panel: notched corners from four offset shadows */
 .glass,.daily,.mbtn{--tex:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,0) 28%,rgba(0,0,0,.14)),repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='1' fill='%23fff' fill-opacity='.07'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3C/svg%3E")}
@@ -872,6 +878,10 @@ body.gated>*:not(#gateBlock){visibility:hidden!important}
 /* Trap Race */
 .lcard.trl em{background:linear-gradient(180deg,#ff8a1f,#d9480f);color:#fff}.lcard.ptl{grid-column:1/-1;min-height:110px}
 .inner.trmenu{width:min(1000px,100%)!important;max-width:1000px!important}
+/* in a Chicken Horse game the course fills the screen (as big as the window allows, keeping its shape) */
+#panel:has(#trCv){padding:8px max(8px,env(safe-area-inset-left,0px)) 8px}
+#panel:has(#trCv)>.inner.trmenu{width:100%!important;max-width:none!important}
+#panel:has(#trCv) .trwrap{align-items:center}#panel:has(#trCv) .trwrap>*{width:min(100%,calc((100dvh - 150px)*1.818));box-sizing:border-box}
 .trwrap{display:flex;flex-direction:column;gap:6px;user-select:none;-webkit-user-select:none}
 .trtop{display:flex;align-items:center;gap:10px}.trtop b{font-family:var(--head);letter-spacing:.12em}.trtop span{flex:1;font-family:var(--head);font-size:11px;opacity:.8}
 .trstage{position:relative;border:2px solid var(--edge);line-height:0;background:#1b1747}
@@ -891,8 +901,9 @@ body.gated>*:not(#gateBlock){visibility:hidden!important}
 .trpv{width:min(760px,94vw);display:flex;flex-direction:column;gap:8px}.trpvpic{overflow:auto;max-height:60vh;border:2px solid var(--edge);background:#000}.trpvc{display:block;width:100%;image-rendering:pixelated}
 .trvotes{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0 8px}.trvote{display:flex;flex-direction:column;align-items:center;text-align:center;padding:5px 10px;border:2px solid var(--edge);background:rgba(255,255,255,.06)}
 .trvote.pick{border-color:var(--hl)}.trvote b{font-size:12px}.trvote .trvn{font-size:11px;color:var(--hl)}.trvote small{font-size:10px;opacity:.8}
+.trcust{position:fixed;inset:0;z-index:60;overflow:auto;background:rgba(6,4,22,.88);padding:16px 0}.trcust>.inner{max-width:640px;margin:0 auto;padding:0 16px}
 .trkills{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);display:flex;gap:14px;pointer-events:none;z-index:6}
-.trkill{display:flex;flex-direction:column;align-items:center;text-align:center;animation:trkIn .3s cubic-bezier(.2,1.5,.4,1) both;transition:opacity .4s}.trkill.out{opacity:0}
+.trkill{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.25;animation:trkIn .3s cubic-bezier(.2,1.5,.4,1) both;transition:opacity .4s}.trkill.out{opacity:0}
 .trkill .ring{width:58px;height:58px;border:3px solid #fff;border-radius:50%;background:rgba(10,8,30,.45);display:grid;place-items:center;box-shadow:0 0 10px rgba(0,0,0,.5)}
 .trkill img{width:42px;height:42px;image-rendering:pixelated}.trkill b{font-size:13px;color:#ffd1d9;text-shadow:0 2px 0 #000,0 0 4px #000;margin-top:2px}
 .trkill small{font-size:12px;color:#ff8fa3;text-shadow:0 2px 0 #000,0 0 4px #000}@keyframes trkIn{from{transform:scale(.3);opacity:0}}
@@ -2660,6 +2671,9 @@ if(typeof BLURBS!=="undefined")Object.assign(BLURBS,{
      for(let d=1;d<5&&j<0;d++){if(i+d<5&&t[i+d].length>=2)j=i+d;else if(i-d>=0&&t[i-d].length>=2)j=i-d;}if(j<0)break;
      if(j>i)for(let k=j;k>i;k--)t[k-1].push(t[k].shift());else for(let k=j;k<i;k++)t[k+1].unshift(t[k].pop());ch=true;}
    if(ch)save(p,t);}}
+// ===== Nov 24: answers the AI let through that don't fit (genetic or viral diseases aren't caused by bacteria) =====
+{const add=(q,list)=>{window.AI_REJECT=window.AI_REJECT||{};window.AI_REJECT[q]=(window.AI_REJECT[q]||[]).concat(list.map(norm));};
+ add("Name a disease caused by bacteria",["huntington's disease","huntingtons disease","huntington's","huntington disease","huntington's chorea","cystic fibrosis","sickle cell anemia","sickle cell","down syndrome","hemophilia","muscular dystrophy","tay-sachs","alzheimer's","alzheimers","parkinson's","parkinsons","cancer","diabetes","flu","influenza","covid","covid-19","coronavirus","measles","chickenpox","chicken pox","mumps","polio","rabies","ebola","hiv","aids","herpes","common cold","smallpox","malaria","zika","hepatitis","hepatitis b","shingles","rubella","dengue","athlete's foot","ringworm"]);}
 </script>
 <script>
 // ===== Pixel-art refiner: turns flat, black-outlined grids into multi-tone sprites with colored edges =====
@@ -2748,6 +2762,8 @@ function casSet(v,won){v=Math.max(0,Math.floor(v));const prev=casChips();store.s
   clearTimeout(casSet.t);casSet.t=setTimeout(()=>lbSubmit("casNow",casChips(),true),45000);const pk=store.get("otc.cas.peak",CAS_START);if(v>pk){store.set("otc.cas.peak",v);lbSubmit("casPeak",v);}
   if(won>0){const bw=store.get("otc.cas.bigWin",0);if(won>bw){store.set("otc.cas.bigWin",won);lbSubmit("casWin",won);}}
   const el=document.querySelector(".casbal b"),from=BALFX?BALFX.from:(el?+el.textContent.replace(/[^0-9]/g,""):v);BALFX={from,to:v};setTimeout(casBalFx,30);}
+// one chip for beating your arcade best, or winning Chicken Horse, a Cuepon puzzle or an Academy party
+function chipReward(why){casSet(casChips()+1);toast(`${typeof bbIco==="function"?bbIco("i_chip",14):"🪙"} <b>+1 CHIP</b> · ${esc(why)}`);try{sfx.ok(2);}catch(e){}}
 function casBet(){return Math.max(1,Math.min(casChips()||1,store.get("otc.cas.bet",25)));}
 const CAS_GAMES=[
   ["bj","🂡","BLACKJACK","Beat the dealer to 21. Blackjack pays 3:2."],
@@ -3025,7 +3041,7 @@ const cpKey=g=>`otc.cp.${g}.${today()}`;
 const cpGet=(g,d)=>store.get(cpKey(g),d),cpPut=(g,v)=>store.set(cpKey(g),v);
 // streaks & stats per puzzle
 function cpStat(g){return store.get("otc.cp.stats."+g,{played:0,wins:0,streak:0,best:0,last:"",dist:{}});}
-function cpRecord(g,win,k){const s=cpStat(g),d=today();if(s.last===d)return s;const y=etKey(Date.parse(d+"T12:00:00Z")-864e5);
+function cpRecord(g,win,k){const s=cpStat(g),d=today();if(s.last===d)return s;if(win)setTimeout(()=>chipReward("solved today's "+({word:"CUEPDLE",conn:"CUEPNECTIONS",bee:"CUPID BEE"}[g]||"Cuepon")),900);const y=etKey(Date.parse(d+"T12:00:00Z")-864e5);
   s.played++;if(win){s.wins++;s.streak=s.last===y?s.streak+1:1;s.best=Math.max(s.best,s.streak);if(k!=null)s.dist[k]=(s.dist[k]||0)+1;}else s.streak=0;s.last=d;store.set("otc.cp.stats."+g,s);return s;}
 function cpDoneCount(){let n=0;const w=cpGet("word",null),c=cpGet("conn",null),b=cpGet("bee",null);if(w&&w.done)n++;if(c&&c.done)n++;const bz=cpBee();if(b&&b.found&&bz&&cpBeeRank(b.score||0,bz.max)>=5)n++;return n;}
 function cpTop(t){return`<div class="row" style="justify-content:space-between;align-items:center"><h2 style="font-size:16px">${t}</h2><button class="pbtn sm" data-act="${t==="DAILY CUEPON"?"landing":"cuepon"}">◀ ${t==="DAILY CUEPON"?"MAIN":"CUEPON"}</button></div>`;}
@@ -4205,6 +4221,9 @@ function frame(t){
   // while the answer browser is open, the scene behind it only needs a slow refresh
   {const md=document.getElementById("modal");if(md&&!md.hidden&&md.querySelector(".abox")){if(t-(frame._mt||0)<200)return;frame._mt=t;}}
   const dt=t-lastFrame;
+  // the themed scene (ocean, space, dream, Marius) belongs to Off the Charts itself: on menus and in the other games
+  // (Chicken Horse, arcade, casino…) it's hidden and not drawn at all
+  {const off=MENU&&!FL.dur&&!CUP;if(off!==frame._off){frame._off=off;document.body.classList.toggle("noscene",off);}if(off)return;}
   if(MENU&&!FL.dur&&dt<(HQ?14:30))return;  // menus: full speed on good devices, ~30fps in performance mode
   lastFrame=t;frameN++;
   if(PERF==="auto"&&HQ&&frameN>40&&!document.hidden){if(dt>26&&dt<500)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
@@ -4922,6 +4941,7 @@ Be fair and fairly generous. Accept any answer that genuinely, even literally, f
 - literal or creative answers that truly fit and that a fair host would accept.
 For "something you'd find / see in or at a place" prompts, the answer must be something typically or characteristically found there (sand, a lifeguard, seashells at a beach). Things that could be almost anywhere (people, litter, trash, air, dust, dirt, germs, bugs, a phone) don't count, whatever excuse the player gives.
 A phrase that just tacks the prompt's word onto unrelated words ("gays eating garlic bread in the park" for a national park, "big ship guy" for a ship) is a joke non-answer: invalid. The answer must actually name a real thing of the asked kind.
+When the prompt names a cause or origin ("caused by bacteria", "made from milk"), the answer must really have that cause: a genetic disease (Huntington's, cystic fibrosis), a virus (flu, measles) or a parasite (malaria) is NOT caused by bacteria.
 For number prompts, check the math: the number must really meet the condition (93 = 3 x 31 is not prime).
 But when the prompt asks for a country, only sovereign countries count (England, Scotland, Wales and Northern Ireland are fine); territories, dependencies, regions and provinces (Puerto Rico, Greenland, Gibraltar, Hong Kong, French Guiana) are NOT countries. Likewise a capital must be a national capital (or a state capital when asked), and a city must really be in the named country.
 "Famous" in a prompt is loose: any real band, musician, singer, person, show, game, team or brand counts even if it's small, indie or local, as long as it really exists (Mickey Darling and Aurora Ave are real indie bands). Give little-known ones tier 4.
@@ -5852,9 +5872,9 @@ function hostConn(c){
   c.on("data",d=>{if(!N||!N.host||!d)return;
     if(d.t==="hello"){
       if(N.players.some(p=>p.id===c.peer))return;
-      if(N.started||N.players.length>=(N.mode==="puffer"?10:MAX_PLAYERS)){try{c.send({t:"full",reason:N.started?"That game already started.":"That room is full ("+MAX_PLAYERS+" players max)."});}catch(e){}setTimeout(()=>c.close(),500);return;}
+      if(N.players.length>=(N.mode==="puffer"?10:MAX_PLAYERS)){try{c.send({t:"full",reason:"That room is full ("+MAX_PLAYERS+" players max)."});}catch(e){}setTimeout(()=>c.close(),500);return;}
       const base=String(d.name||"Player").slice(0,16);let nm=base,k=2;while(N.players.some(p=>p.name===nm))nm=base+" "+k++;
-      N.players.push({id:c.peer,name:nm,score:0,conn:c});c.send({t:"welcome",name:nm});pushLobby();
+      const pl={id:c.peer,name:nm,score:0,conn:c};N.players.push(pl);c.send({t:"welcome",name:nm});if(N.started)lateJoin(c,pl);else pushLobby();
     } else if(d.t==="bye"){c._emit&&c._emit("close");
     } else if(d.t==="vote"){N.votes=N.votes||{};N.votes[c.peer]=1;voteCast();
     } else if(d.t==="sync"){if(N.lastKey)try{c.send(N.lastKey);c.send({t:"board",b:hostBoard()});}catch(e){}
@@ -5877,6 +5897,14 @@ function hostConn(c){
     if(N.players.length===had)return;if(N.started){pushBoard();checkDone();}else pushLobby();});
 }
 function pushLobby(){broadcast({t:"lobby",names:names()});lobby();}
+// someone joins while a game is going: bring them straight into it (every party mode), and tell everyone else
+function lateJoin(c,pl){const send=m=>{try{c.send(m);}catch(e){}};
+  send({t:"trmode",on:N.mode==="trap"});send({t:"bbmode",on:N.mode==="brain"});send({t:"start",names:names()});
+  broadcast({t:"joined",name:pl.name,names:names()});toast(esc(pl.name)+" joined the game");
+  if(N.mode==="trap"&&typeof TRG!=="undefined"&&TRG&&TRG.H){const st=TRG.H.st;if(st.scores[pl.name]==null)st.scores[pl.name]=0;trHostSend();return;}
+  if(N.mode==="puffer"&&N.pp&&N.pp.live){const s=N.pp;if(!s.players.some(p=>p.id===pl.id))s.players.push({id:pl.id,name:pl.name,hearts:N.ppHearts||2,meter:0,out:false});ppHSend();return;}
+  if(N.mode==="brain"&&N.bv){N.bv.pts[pl.id]=N.bv.pts[pl.id]||0;if(N.bbPhase==="class")bbPCls(pl.name,1,0);}
+  setTimeout(()=>{if(!N||!N.host)return;if(N.lastKey)send(N.lastKey);send({t:"board",b:hostBoard()});pushBoard();},300);}
 function lobby(){
   const nm=names(),host=N.host;renderSide(null);
   showPanel(`
@@ -5921,10 +5949,10 @@ function voteCast(){if(!N||!N.host)return;const n=Object.keys(N.votes||{}).filte
 setTimeout(()=>Object.assign(ACT,{voteAgain:()=>{if(!N||N.host)return;try{N.conn.send({t:"vote"});}catch(e){}const b=$("voteBtn");if(b){b.disabled=true;b.textContent="VOTED ✓";}}}),0);
 function hostAgain(){N.votes={};broadcast({t:"votes",n:0,of:N.players.length-1});clearInterval(N.ppTimer);if(N.pp)N.pp.live=false;if(PPN)PPN.live=false;N.started=false;N.i=-1;N.revealed=-1;jumpTo(0);pushLobby();}
 
-async function joinRoom(){
+async function joinRoom(codeArg){
   const name=getName();if(!name)return;
-  const code=($("pcode").value||"").toUpperCase().replace(/[^A-Z]/g,"");
-  if(code.length!==4){$("perr").textContent="Enter the 4-letter room code.";return;}
+  const code=String((typeof codeArg==="string"?codeArg:($("pcode")&&$("pcode").value))||"").toUpperCase().replace(/[^A-Z]/g,"");
+  if(code.length!==4){if($("perr"))$("perr").textContent="Enter the 4-letter room code.";return;}
   connecting("Joining room "+code+"…");
   let noPeer=false;try{await loadPeer();}catch(e){noPeer=true;}
   if(noPeer&&typeof EventSource==="undefined")return netError("Couldn't load the multiplayer engine. Check your internet connection.");
@@ -5961,6 +5989,7 @@ async function joinRoom(){
 function clientData(d){
   switch(d.t){
     case "welcome":N.me=d.name;break;
+    case "joined":if(d.name!==N.me)toast(esc(String(d.name||"Someone").slice(0,16))+" joined the game");if(Array.isArray(d.names))N.names=d.names;break;
     case "left":toast(esc(String(d.name||"Someone").slice(0,16))+" left the party");if(Array.isArray(d.names))N.names=d.names;break;
     case "lobby":N.names=d.names;N.over=false;N.phaseAt=0;N.voteN=null;N.lastRound=-1;N.lastRev=-1;N.pendAns=null;jumpTo(0);lobby();break;
     case "full":N.over=true;netError(d.reason);break;
@@ -6139,7 +6168,7 @@ function mgStart0(id){store.set("otc.lastArc",id==="rush"?"cup":id);
     <div class="mgfoot">${G.dom||""}<div class="hint">${G.controls}</div></div>`;
   document.body.appendChild(ov);
   const c=$("mgc"),x=c.getContext("2d");x.setTransform(2,0,0,2,0,0);x.imageSmoothingEnabled=false;
-  MG={id,G,c,x,W:G.w,H:G.h,score:0,t:0,over:false,keys:{},best:mBest(id),last:performance.now()};
+  MG={id,G,c,x,W:G.w,H:G.h,score:0,t:0,over:false,keys:{},best:mBest(id),best0:mBest(id),last:performance.now()};
   mgFit();G.init(MG);mgHud();MG.raf=requestAnimationFrame(mgLoop);
   // a saved game in progress? offer to pick it up where it was left
   const sv=G.persist===false?null:store.get(mgSaveKey(id),null);
@@ -6176,7 +6205,8 @@ function mgLoop(now){if(!MG)return;const dt=Math.min(50,now-MG.last);MG.last=now
   if(MG)MG.raf=requestAnimationFrame(mgLoop);}
 function mgHud(extra){if(!MG)return;const e=$("mgs");if(e)e.innerHTML=`SCORE <b style="color:#ff8fe0">${MG.score}</b> · BEST ${Math.max(MG.best,MG.score)}${extra?" · "+extra:""}`;}
 function mgEnd(title,sub){
-  if(!MG||MG.over)return;MG.over=true;store.set(mgSaveKey(MG.id),null);const isBest=MG.score>MG.best;if(isBest)store.set("otc.cg."+MG.id,MG.score);lbSubmit(MG.id,MG.score);
+  if(!MG||MG.over)return;MG.over=true;store.set(mgSaveKey(MG.id),null);const isBest=MG.score>MG.best;
+  if(MG.score>0&&MG.score>(MG.best0==null?MG.best:MG.best0))chipReward("new best in "+MG.G.name);if(isBest)store.set("otc.cg."+MG.id,MG.score);lbSubmit(MG.id,MG.score);
   isBest?sfx.ok(5):sfx.miss();const o=$("mgo");o.hidden=false;
   o.innerHTML=`<div class="glass card center"><div class="lbl">${title||"GAME OVER"}</div><div class="big" style="color:#ff8fe0">${MG.score}</div>
     <div class="hint">${isBest?"<b style='color:#fde047'>NEW BEST!</b>":"best "+MG.best}${sub?"<br>"+sub:""}</div>
@@ -6616,69 +6646,68 @@ MGAMES.stack={name:"CUPIDIUM STACKER",w:160,h:240,blurb:"A 3D tower of crystal f
     if(m.choose){x.globalAlpha=.75;mR(x,0,0,m.W,m.H,"#0a0820");x.globalAlpha=1;mT(x,"PICK A POWER-UP",m.W/2,58,"#5eead4",8);mT(x,"perfect drops don't use a charge",m.W/2,68,"#c4b5fd",4.5);
       m.choose.forEach((k,i)=>{const P=this.POW[k],y=76+i*36;mRR(x,14,y,132,32,4,"#241b40");mR(x,14,y,3,32,P.c);mT(x,`${i+1}  ${P.nm}`,22,y+10,P.c,7,"left");mT(x,this.pd(m,k),22,y+23,"#e9d5ff",5,"left");});}}};
 // ---------- 4. CUPIDIUM RHYTHM ----------
-MGAMES.rhythm={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"A Project Sekai style rhythm game: 6 lanes, holds, flicks and gold criticals on a 3D highway. Pick a song and a difficulty.",
-  controls:"Lanes: S D F J K L (or tap / hold the lanes). Tap notes: press. GREEN holds: keep holding until the end. PINK flicks: press the lane like any note (on a keyboard or mouse that's all you do; on touch you can also swipe up). Flicks score 1.5×. GOLD criticals score double. Song select: ← → song, ↑ ↓ difficulty, Enter to play. Esc during a song ends it.",
+MGAMES.rhythm={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"osu!mania meets DDR: 4 lanes of arrows fall onto the receptors. Hit them on the beat, hold the long ones. Pick a song and a difficulty.",
+  controls:"Lanes: D F J K or ← ↓ ↑ → (or tap the lanes). Tap arrows: press as they reach the receptors. Long notes: hold until the tail. Arrow colour shows the beat: red = on the beat, blue = half beat, yellow = quarter beat. Song select: ← → song, ↑ ↓ difficulty, Enter to play. Esc during a song ends it.",
   SONGS:[{nm:"PINK ATOM",art:"CUPIDIUM",bpm:128,root:220,sc:[0,2,4,7,9,12,14,16],c:"#ff5fd2"},{nm:"MOONSHOT",art:"OFF THE CHARTS",bpm:110,root:196,sc:[0,3,5,7,10,12,15,17],c:"#93c5fd"},
     {nm:"DEEP SEA DRIFT",art:"THE PUFFERS",bpm:140,root:247,sc:[0,2,3,7,8,12,14,15],c:"#2dd4bf"},{nm:"CUPID OVERDRIVE",art:"ONE IN A CUPIDIUM",bpm:170,root:262,sc:[0,4,7,11,12,16,19,23],c:"#fde047"}],
-  DIFFS:[{nm:"EASY",lv:5,c:"#4ade80",d:.45,hold:.10,flick:0,wide:0,chord:0,crit:.04},{nm:"NORMAL",lv:11,c:"#60a5fa",d:.75,hold:.14,flick:.04,wide:.05,chord:.03,crit:.05},
-    {nm:"HARD",lv:18,c:"#fbbf24",d:1.1,hold:.16,flick:.07,wide:.08,chord:.08,crit:.06},{nm:"EXPERT",lv:25,c:"#f87171",d:1.6,hold:.18,flick:.1,wide:.1,chord:.14,crit:.07},
-    {nm:"MASTER",lv:31,c:"#c084fc",d:2.2,hold:.2,flick:.13,wide:.12,chord:.2,crit:.08}],
-  LANES:6,KEYS:["s","d","f","j","k","l"],LEN:64000,TRAVEL:1300,HZ:34,JY:172,J:{P:45,G:85,O:125,B:160},
-  init(m){m.scr="select";m.song=store.get("otc.rh.song",0)%this.SONGS.length;m.diff=store.get("otc.rh.diff",1)%this.DIFFS.length;m.held=[0,0,0,0,0,0];m.fb=[];m.fx=[];mgHud("PICK A SONG");},
+  // p = chance of a note on the beat / half beat / quarter beat; tr = ms a note takes to fall (lower = faster)
+  DIFFS:[{nm:"EASY",lv:6,c:"#4ade80",p:[.8,.35,0],hold:.1,jump:.04,jack:0,tr:900},{nm:"NORMAL",lv:12,c:"#60a5fa",p:[.95,.6,0],hold:.12,jump:.08,jack:.05,tr:780},
+    {nm:"HARD",lv:19,c:"#fbbf24",p:[1,.75,.3],hold:.12,jump:.12,jack:.08,tr:660},{nm:"EXPERT",lv:26,c:"#f87171",p:[1,.88,.55],hold:.12,jump:.18,jack:.1,tr:560},
+    {nm:"MASTER",lv:33,c:"#c084fc",p:[1,.96,.8],hold:.1,jump:.25,jack:.12,tr:470}],
+  LANES:4,KEYS:[["d","arrowleft","s"],["f","arrowdown"],["j","arrowup"],["k","arrowright","l"]],LBL:["D ←","F ↓","J ↑","K →"],
+  LEN:64000,TOP:22,JY:168,LW:30,J:{P:40,G:80,O:120,B:150},
+  ANG:[-Math.PI/2,Math.PI,0,Math.PI/2],QC:{4:["#ff4d6d","#8a1030"],8:["#4d8bff","#1d3a8a"],16:["#fde047","#8a6a07"]},
+  init(m){m.scr="select";m.song=store.get("otc.rh.song",0)%this.SONGS.length;m.diff=store.get("otc.rh.diff",1)%this.DIFFS.length;m.held=[0,0,0,0];m.fb=[];m.fx=[];mgHud("PICK A SONG");},
+  x0(){return(this.w-this.LW*4)/2;},
   // ---- chart: made from the song + difficulty seed, so a chart is the same every time ----
-  chart(m){const S=this.SONGS[m.song],D=this.DIFFS[m.diff],r=rng("rh|"+S.nm+"|"+D.nm),beat=60000/S.bpm,notes=[],busy=Array(6).fill(-1);
-    const sub=D.d>1.5?4:D.d>.9?2:1,step=beat/sub;let lastL=2;
-    for(let t=2400;t<this.LEN-1500;t+=step){const onBeat=Math.abs((t-2400)%beat)<1,bar=Math.floor((t-2400)/(beat*4)),phrase=bar%8;
-      let p=D.d/sub*(onBeat?1.25:.8)*(phrase>=6?1.35:phrase<2?.7:1);if(r()>Math.min(.97,p))continue;
-      const w=r()<D.wide?(r()<.5?2:3):1;let l=Math.max(0,Math.min(6-w,Math.round(lastL+(r()-.5)*4)));
-      const free=x=>{for(let k=x;k<x+w;k++)if(busy[k]>t-30)return false;return true;};let tries=0;while(!free(l)&&tries++<8)l=Math.floor(r()*(7-w));if(!free(l))continue;lastL=l;
-      const n={l,w,at:t,ty:"tap"};const roll=r();
-      if(roll<D.hold&&t<this.LEN-4000){n.ty="hold";n.end=t+beat*(r()<.5?1:2)*(D.d>1.5&&r()<.4?2:1);}
-      else if(roll<D.hold+D.flick)n.ty="flick";else if(roll<D.hold+D.flick+D.crit)n.ty="crit";
-      notes.push(n);for(let k=l;k<l+w;k++)busy[k]=n.end||t;
-      if(D.chord&&onBeat&&r()<D.chord){const l2=l<3?l+w+1+Math.floor(r()*2):l-2-Math.floor(r()*2);if(l2>=0&&l2<6&&busy[l2]<t-30){notes.push({l:l2,w:1,at:t,ty:r()<.3?"crit":"tap"});busy[l2]=t;}}}
+  chart(m){const S=this.SONGS[m.song],D=this.DIFFS[m.diff],r=rng("rh4|"+S.nm+"|"+D.nm),beat=60000/S.bpm,step=beat/4,notes=[],busy=[-1e9,-1e9,-1e9,-1e9];let last=1,dir=1;
+    for(let t=2400;t<this.LEN-1500;t+=step){const k=Math.round((t-2400)/step)%4,q=k===0?4:k===2?8:16,bar=Math.floor((t-2400)/(beat*4)),phrase=bar%8;
+      const p=D.p[q===4?0:q===8?1:2]*(phrase>=6?1.15:phrase<2?.75:1);if(!p||r()>Math.min(.99,p))continue;
+      const free=l=>busy[l]<t-step*.9;
+      // streams roll across the lanes; now and then a repeat (jack) on harder songs
+      let l;if(r()<D.jack&&free(last))l=last;else{if(r()<.3)dir=-dir;l=(last+dir+4)%4;if(r()<.35)l=(last+2)%4;if(!free(l)){const opts=[0,1,2,3].filter(x=>x!==last&&free(x));if(!opts.length)continue;l=opts[Math.floor(r()*opts.length)];}}
+      const n={l,w:1,at:t,ty:"tap",q};if(r()<D.hold&&q!==16&&t<this.LEN-4000){n.ty="hold";n.end=t+beat*(r()<.5?1:r()<.7?1.5:2);}
+      notes.push(n);busy[l]=n.end||t;last=l;
+      if(q!==16&&r()<D.jump){const opts=[0,1,2,3].filter(x=>x!==l&&free(x));if(opts.length){const l2=opts[Math.floor(r()*opts.length)];notes.push({l:l2,w:1,at:t,ty:"tap",q});busy[l2]=t;}}}
     return notes;},
   start(m){const S=this.SONGS[m.song];store.set("otc.rh.song",m.song);store.set("otc.rh.diff",m.diff);m.notes=this.chart(m);m.total=m.notes.reduce((a,n)=>a+(n.ty==="hold"?2:1),0);
-    m.scr="play";m.t0=m.t;m.combo=0;m.maxc=0;m.life=1000;m.jc={P:0,G:0,O:0,B:0,M:0};m.score=0;m.pts=0;m.nb=0;m.fb=[];m.fx=[];m.held=[0,0,0,0,0,0];mgHud(`${S.nm} · ${this.DIFFS[m.diff].nm}`);},
+    m.scr="play";m.t0=m.t;m.combo=0;m.maxc=0;m.life=1000;m.jc={P:0,G:0,O:0,B:0,M:0};m.score=0;m.pts=0;m.nb=0;m.fb=[];m.fx=[];m.held=[0,0,0,0];mgHud(`${S.nm} · ${this.DIFFS[m.diff].nm}`);},
   st(m){return m.t-m.t0;},
-  // judge a press in a lane: the nearest unhit note whose span covers the lane
-  press(m,lane,flick){if(m.scr!=="play")return;const now=this.st(m);m.held[lane]=m.t;let best=null,bd=1e9;
-    for(const n of m.notes){if(n.hit||n.miss||lane<n.l||lane>=n.l+n.w)continue;const d=Math.abs(n.at-now);if(d<bd){bd=d;best=n;}}
+  press(m,lane){if(m.scr!=="play")return;const now=this.st(m);m.held[lane]=m.t;let best=null,bd=1e9;
+    for(const n of m.notes){if(n.hit||n.miss||n.l!==lane)continue;const d=Math.abs(n.at-now);if(d<bd){bd=d;best=n;}}
     if(!best||bd>this.J.B){tone(this.SONGS[m.song].root*2,.03,"triangle",.012);return;}
-    if(best.ty==="flick"&&flick===false){/* touch flick needs a swipe: wait for the swipe */best.armed=now;return;}
-    this.judge(m,best,bd);if(best.ty==="hold"){best.holding=lane;}},
+    this.judge(m,best,bd);if(best.ty==="hold")best.holding=lane;},
   judge(m,n,d,end){const J=this.J,k=d<=J.P?"P":d<=J.G?"G":d<=J.O?"O":d<=J.B?"B":"M";if(end)n.done=1;else n.hit=1;m.jc[k]++;
-    const crit=n.ty==="crit"?2:n.ty==="flick"?1.5:1,base={P:300,G:200,O:100,B:50,M:0}[k]*crit;m.pts+=base;
-    if(k==="M"||k==="B"){m.combo=0;m.life-=k==="M"?60:20;}else{m.combo++;m.maxc=Math.max(m.maxc,m.combo);m.life=Math.min(1000,m.life+3);}
-    m.score=Math.round(m.pts*(1+Math.min(m.combo,100)/400));
-    const L={P:"PERFECT",G:"GREAT",O:"GOOD",B:"BAD",M:"MISS"}[k],C={P:"#ff8fe0",G:"#fde047",O:"#67e8f9",B:"#93c5fd",M:"#94a3b8"}[k];m.fb=[{txt:L,c:C,t:m.t}];
-    if(k!=="M"){const S=this.SONGS[m.song];tone(S.root*Math.pow(2,S.sc[(n.l+m.combo)%8]/12)*2,.07,n.ty==="crit"?"sawtooth":"square",.028);m.fx.push({l:n.l,w:n.w,t:m.t,c:n.ty==="crit"?"#fde047":n.ty==="flick"?"#ff5fd2":n.ty==="hold"?"#4ade80":"#67e8f9"});}
+    m.pts+={P:300,G:200,O:100,B:50,M:0}[k];
+    if(k==="M"||k==="B"){m.combo=0;m.life-=k==="M"?40:12;}else{m.combo++;m.maxc=Math.max(m.maxc,m.combo);m.life=Math.min(1000,m.life+3);}
+    m.score=Math.round(m.pts*(1+Math.min(m.combo,200)/400));
+    const L={P:"PERFECT",G:"GREAT",O:"GOOD",B:"BAD",M:"MISS"}[k],C={P:"#7dd3fc",G:"#fde047",O:"#4ade80",B:"#c4b5fd",M:"#f87171"}[k];m.fb=[{txt:L,c:C,t:m.t}];
+    if(k!=="M"){const S=this.SONGS[m.song];tone(S.root*Math.pow(2,S.sc[(n.l*2+m.combo)%8]/12)*2,.06,"square",.024);m.fx.push({l:n.l,t:m.t,c:C});}
     else tone(120,.06,"triangle",.02);
     if(m.life<=0){m.life=0;this.finish(m,true);}},
   release(m,lane){m.held[lane]=0;if(m.scr!=="play")return;const now=this.st(m);
     for(const n of m.notes)if(n.ty==="hold"&&n.hit&&!n.done&&n.holding===lane){const d=n.end-now;if(d>this.J.B)this.judge(m,n,1e9,true);else this.judge(m,n,Math.abs(d)*.6,true);}},
   key(m,k,down,first,raw){
-    if(m.scr==="select"){if(!down||!first)return;if(k==="l"||raw==="arrowleft"){m.song=(m.song+this.SONGS.length-1)%this.SONGS.length;sfx.tick();}else if(k==="r"||raw==="arrowright"){m.song=(m.song+1)%this.SONGS.length;sfx.tick();}
-      else if(k==="u"||raw==="arrowup"){m.diff=Math.min(4,m.diff+1);sfx.tick();}else if(k==="dn"||raw==="arrowdown"){m.diff=Math.max(0,m.diff-1);sfx.tick();}else if(k==="ent"||k==="sp")this.start(m);return;}
+    if(m.scr==="select"){if(!down||!first)return;const N=this.SONGS.length;if(k==="l"||raw==="arrowleft"){m.song=(m.song+N-1)%N;sfx.tick();}else if(k==="r"||raw==="arrowright"){m.song=(m.song+1)%N;sfx.tick();}
+      else if(k==="u"||raw==="arrowup"){m.diff=Math.min(this.DIFFS.length-1,m.diff+1);sfx.tick();}else if(k==="dn"||raw==="arrowdown"){m.diff=Math.max(0,m.diff-1);sfx.tick();}else if(k==="ent"||k==="sp")this.start(m);return;}
     if(m.scr==="result"){if(down&&first&&(k==="ent"||k==="sp"))this.toSelect(m);return;}
     if(raw==="escape"&&down&&first)return this.finish(m,false,true);
-    const lane=this.KEYS.indexOf(raw);if(lane<0)return;if(down&&first)this.press(m,lane,true);else if(!down)this.release(m,lane);},
-  // touch: lanes along the judgment line; swipe up for flicks; drag between lanes keeps holds going
-  laneAt(m,x){const g=this.geo(1);return Math.max(0,Math.min(5,Math.floor((x-g.l)/(g.r-g.l)*6)));},
-  ptr(m,x,y,t){if(m.scr==="select"){if(t!=="pointerdown")return;
-      if(y>150&&y<180)return this.start(m);if(y>34&&y<70){if(x<40)m.song=(m.song+3)%4;else if(x>200)m.song=(m.song+1)%4;sfx.tick();return;}
-      if(y>=90&&y<=140){const i=Math.floor((x-10)/44);if(i>=0&&i<5){m.diff=i;sfx.tick();}}return;}
+    const lane=this.KEYS.findIndex(a=>a.includes(raw));if(lane<0)return;if(down&&first)this.press(m,lane);else if(!down)this.release(m,lane);},
+  // touch: the screen is split into 4 tall lanes, so you can tap anywhere above the receptors too
+  laneAt(m,x){return Math.max(0,Math.min(3,Math.floor(x/this.w*4)));},
+  ptr(m,x,y,t){if(m.scr==="select"){if(t!=="pointerdown")return;const N=this.SONGS.length;
+      if(y>150&&y<180)return this.start(m);if(y>34&&y<70){if(x<40)m.song=(m.song+N-1)%N;else if(x>200)m.song=(m.song+1)%N;sfx.tick();return;}
+      if(y>=90&&y<=140){const i=Math.floor((x-10)/44);if(i>=0&&i<this.DIFFS.length){m.diff=i;sfx.tick();}}return;}
     if(m.scr==="result"){if(t==="pointerdown")this.toSelect(m);return;}
     const lane=this.laneAt(m,x);
-    if(t==="pointerdown"){m.ptr={lane,y,x};this.press(m,lane,true);}
-    else if(t==="pointermove"&&m.ptr){if(m.ptr.y-y>8){const now=this.st(m);for(const n of m.notes)if(n.ty==="flick"&&!n.hit&&n.armed!=null&&lane>=n.l-1&&lane<=n.l+n.w)this.judge(m,n,Math.abs(n.at-now));m.ptr.y=y;}
-      if(lane!==m.ptr.lane){for(const n of m.notes)if(n.ty==="hold"&&n.hit&&!n.done&&n.holding===m.ptr.lane&&lane>=n.l-1&&lane<=n.l+n.w)n.holding=lane;m.held[m.ptr.lane]=0;m.held[lane]=m.t;m.ptr.lane=lane;}}
+    if(t==="pointerdown"){m.ptr={lane};this.press(m,lane);}
+    else if(t==="pointermove"&&m.ptr&&lane!==m.ptr.lane){for(const n of m.notes)if(n.ty==="hold"&&n.hit&&!n.done&&n.holding===m.ptr.lane&&Math.abs(lane-n.l)<=1)n.holding=lane;m.held[m.ptr.lane]=0;m.held[lane]=m.t;m.ptr.lane=lane;}
     else if(t==="pointerup"&&m.ptr){this.release(m,m.ptr.lane);m.ptr=null;}},
   toSelect(m){m.scr="select";m.score=0;mgHud("PICK A SONG");},
   finish(m,failed,quit){if(m.scr!=="play")return;m.scr="result";m.failed=failed;m.quit=quit;const J=m.jc,n=J.P+J.G+J.O+J.B+J.M;
     m.acc=n?(J.P*1+J.G*.8+J.O*.5+J.B*.2)/Math.max(1,m.total):0;m.fc=!failed&&!quit&&J.M===0&&J.B===0&&n>=m.total;m.ap=m.fc&&J.G===0&&J.O===0;
     m.rank=failed?"F":m.acc>=.97?"S":m.acc>=.9?"A":m.acc>=.8?"B":m.acc>=.65?"C":"D";
-    const key="otc.rh.best",b=store.get(key,{}),k=m.song+"-"+m.diff,o=b[k]||{};if(!quit&&!failed){b[k]={s:Math.max(o.s||0,m.score),fc:o.fc||m.fc,ap:o.ap||m.ap,r:o.r&&o.r<m.rank?o.r:m.rank};store.set(key,b);}
+    const key="otc.rh4.best",b=store.get(key,{}),k=m.song+"-"+m.diff,o=b[k]||{};if(!quit&&!failed){b[k]={s:Math.max(o.s||0,m.score),fc:o.fc||m.fc,ap:o.ap||m.ap,r:o.r&&o.r<m.rank?o.r:m.rank};store.set(key,b);}
     if(!failed&&!quit)burst(m.ap?140:m.fc?90:40);sfx.ok(failed?0:4);
     if(!quit&&!failed&&m.score>0){const sc=m.score;setTimeout(()=>{if(MG===m&&m.scr==="result"){m.score=sc;mgEnd(m.ap?"ALL PERFECT!":m.fc?"FULL COMBO!":"SONG CLEAR",`${this.SONGS[m.song].nm} · ${this.DIFFS[m.diff].nm} · rank ${m.rank} · max combo ${m.maxc}`);}},2600);}},
   update(m,dt){if(m.scr!=="play")return;const now=this.st(m),S=this.SONGS[m.song],beat=60000/S.bpm;
@@ -6686,62 +6715,56 @@ MGAMES.rhythm={persist:false,name:"CUPIDIUM RHYTHM",w:240,h:200,blurb:"A Project
     const b=Math.floor((now-2400)/beat*2);if(now>2400&&b!==m.nb){m.nb=b;if(b%2===0){tone(S.root/2*Math.pow(2,S.sc[[0,0,3,4][Math.floor(b/8)%4]]/12),.09,"triangle",.045);if(b%4===0)tone(70,.06,"sine",.06);}else tone(2400,.012,"square",.008);}
     for(const n of m.notes){if(!n.hit&&!n.miss&&now-n.at>this.J.B){n.miss=1;this.judge(m,n,1e9);if(n.ty==="hold"){n.done=1;this.judge(m,n,1e9,true);}if(m.scr!=="play")return;}
       if(n.ty==="hold"&&n.hit&&!n.done){if(n.holding==null||!m.held[n.holding]){if(n.end-now>this.J.B)this.judge(m,n,1e9,true);}else if(now>=n.end)this.judge(m,n,0,true);}}
-    m.notes=m.notes.filter(n=>now-(n.end||n.at)<600);m.fb=m.fb.filter(f=>m.t-f.t<600);m.fx=m.fx.filter(f=>m.t-f.t<300);
+    m.notes=m.notes.filter(n=>now-(n.end||n.at)<600);m.fb=m.fb.filter(f=>m.t-f.t<500);m.fx=m.fx.filter(f=>m.t-f.t<260);
     if(now>this.LEN&&!m.notes.some(n=>!n.miss&&!(n.ty==="hold"?n.done:n.hit)))this.finish(m,false);},
-  // ---- 3D highway: lanes meet at the horizon, notes grow as they come toward you ----
-  geo(f){const W=this.w,top=26,bot=W-12,half=top/2+(bot-top)/2*f;return{l:W/2-half,r:W/2+half,y:this.HZ+(this.JY-this.HZ)*f};},
-  fOf(dt){return Math.max(0,Math.min(1.08,1-dt/this.TRAVEL));},
+  // where a note is: it falls straight down at a steady speed (osu!mania), onto arrow receptors (DDR)
+  yOf(m,dtt){return this.JY-dtt/this.DIFFS[m.diff].tr*(this.JY-this.TOP);},
+  arrow(x,cx,cy,s,lane,fill,edge,lw){const P=[[0,-1],[1,0],[.42,0],[.42,1],[-.42,1],[-.42,0],[-1,0]];x.save();x.translate(cx,cy);x.rotate(this.ANG[lane]);x.beginPath();
+    P.forEach(([a,b],i)=>i?x.lineTo(a*s,b*s):x.moveTo(a*s,b*s));x.closePath();if(fill){x.fillStyle=fill;x.fill();}if(edge){x.strokeStyle=edge;x.lineWidth=lw||1;x.stroke();}x.restore();},
   draw(m,x,t){const W=this.w,H=this.h;
     if(m.scr==="select")return this.drawSelect(m,x,t);
-    const S=this.SONGS[m.song],now=this.st(m);mBg(x,W,H,t,"#160a2e","#05040f");
-    {const bt=60000/S.bpm,ph=now>2400?((now-2400)/bt)%1:1,pulse=1-ph,mt=m.t||0,cols=["#ff5fd2","#67e8f9","#fde047","#a78bfa"];
-      for(let i=0;i<4;i++){const a=Math.sin(mt/900+i*1.7)*.45;x.save();x.globalAlpha=.08+.06*pulse;x.fillStyle=cols[i];x.translate(W*(.12+i*.25),-6);x.rotate(a);x.beginPath();x.moveTo(-2,0);x.lineTo(2,0);x.lineTo(26,H);x.lineTo(-26,H);x.fill();x.restore();}
-      if(now>2400){x.strokeStyle=`rgba(255,143,224,${.45*pulse})`;x.lineWidth=1;for(const k of [0,.5]){const q=(ph+k)%1;x.beginPath();x.ellipse(W/2,this.HZ,14+70*q,4+18*q,0,0,7);x.stroke();}}
-      for(let i=0;i<34;i++){const sx=((i*53+mt*.012*(1+i%3))%W+W)%W,sy=((i*37-mt*.02*(1+i%4))%H+H)%H,tw=.3+.7*Math.abs(Math.sin(mt/400+i));x.fillStyle=`rgba(255,255,255,${.35*tw})`;x.fillRect(sx,sy,i%5?1:2,i%5?1:2);}
-      for(const side of [0,1]){const bx=side?W-5:2;for(let k=0;k<8;k++){const on=(Math.floor(mt/120)+k+side*3)%8<3;x.fillStyle=on?cols[(k+side)%4]:"rgba(255,255,255,.06)";x.globalAlpha=on?.55+.3*pulse:1;x.fillRect(bx,28+k*20,3,14);x.globalAlpha=1;}}}
-    // highway
-    const g0=this.geo(0),g1=this.geo(1.06);x.fillStyle="rgba(20,14,48,.92)";x.beginPath();x.moveTo(g0.l,g0.y);x.lineTo(g0.r,g0.y);x.lineTo(g1.r,g1.y);x.lineTo(g1.l,g1.y);x.closePath();x.fill();
-    for(let i=0;i<6;i++){const lit=m.held[i]&&m.t-m.held[i]<5000;if(!lit)continue;const a=this.geo(0),b=this.geo(1.06),la=a.l+(a.r-a.l)*i/6,lb=b.l+(b.r-b.l)*i/6,ra=a.l+(a.r-a.l)*(i+1)/6,rb=b.l+(b.r-b.l)*(i+1)/6;
-      const gr=x.createLinearGradient(0,a.y,0,b.y);gr.addColorStop(0,"rgba(255,143,224,0)");gr.addColorStop(1,"rgba(255,143,224,.28)");x.fillStyle=gr;x.beginPath();x.moveTo(la,a.y);x.lineTo(ra,a.y);x.lineTo(rb,b.y);x.lineTo(lb,b.y);x.fill();}
-    x.strokeStyle="rgba(196,181,253,.35)";x.lineWidth=.5;for(let i=0;i<=6;i++){const a=this.geo(0),b=this.geo(1.06);x.beginPath();x.moveTo(a.l+(a.r-a.l)*i/6,a.y);x.lineTo(b.l+(b.r-b.l)*i/6,b.y);x.stroke();}
-    // beat lines sliding down
-    const beat=60000/S.bpm;for(let k=0;k<8;k++){const bt=Math.ceil((now-2400)/beat)*beat+2400+k*beat,dtt=bt-now;if(dtt>this.TRAVEL)break;const g=this.geo(this.fOf(dtt));x.fillStyle="rgba(196,181,253,.12)";x.fillRect(g.l,g.y,g.r-g.l,.5);}
-    // judgment line
-    const gj=this.geo(1);{const bt=60000/S.bpm,pu=now>2400?1-((now-2400)/bt)%1:0;mGlow(x,W/2,gj.y,(gj.r-gj.l)/2+6*pu,"#ff8fe0",.25+.25*pu);}mR(x,gj.l-2,gj.y-1,gj.r-gj.l+4,2,"#ff8fe0");mR(x,gj.l-2,gj.y-1,gj.r-gj.l+4,1,"#ffffff");for(let i=0;i<6;i++)mT(x,this.KEYS[i].toUpperCase(),gj.l+(gj.r-gj.l)*(i+.5)/6,gj.y+12,m.held[i]?"#ff8fe0":"#a78bfa",6);
-    // holds first (bodies), then heads
-    const span=(n,f)=>{const g=this.geo(f);return{x0:g.l+(g.r-g.l)*n.l/6+.6,x1:g.l+(g.r-g.l)*(n.l+n.w)/6-.6,y:g.y,s:f};};
-    for(const n of m.notes){if(n.ty!=="hold"||n.done)continue;const fa=this.fOf(n.hit?0:n.at-now),fb=this.fOf(n.end-now);if(fb<=0&&fa<=0)continue;const A=span(n,Math.min(1,fa)),B=span(n,Math.max(0,fb));
-      x.fillStyle=n.hit&&m.held[n.holding]?"rgba(74,222,128,.55)":"rgba(74,222,128,.32)";x.beginPath();x.moveTo(B.x0,B.y);x.lineTo(B.x1,B.y);x.lineTo(A.x1,A.y);x.lineTo(A.x0,A.y);x.fill();
-      if(fb>0){const E=span(n,fb),h=1+3*fb;x.fillStyle="#86efac";x.fillRect(E.x0,E.y-h/2,E.x1-E.x0,h);}}
-    for(const n of m.notes){if(n.hit||n.miss)continue;const dtt=n.at-now;if(dtt>this.TRAVEL)continue;const f=this.fOf(dtt),P=span(n,f),h=1.4+4.2*f;
-      const col=n.ty==="crit"?["#fde047","#a16207"]:n.ty==="flick"?["#ff5fd2","#9d174d"]:n.ty==="hold"?["#4ade80","#166534"]:["#67e8f9","#0e7490"];
-      if(n.ty==="crit"||n.ty==="flick")mGlow(x,(P.x0+P.x1)/2,P.y,(P.x1-P.x0)*.6,col[0],.35*f);
-      x.fillStyle=col[1];x.fillRect(P.x0,P.y-h/2,P.x1-P.x0,h);x.fillStyle=col[0];x.fillRect(P.x0+.5,P.y-h/2,P.x1-P.x0-1,h-1);x.fillStyle="rgba(255,255,255,.7)";x.fillRect(P.x0+1,P.y-h/2+.5,P.x1-P.x0-2,Math.max(.5,h*.25));
-      if(n.ty==="flick"){const cx=(P.x0+P.x1)/2,ah=3+6*f;x.fillStyle="#ff8fe0";x.beginPath();x.moveTo(cx,P.y-h/2-ah);x.lineTo(cx-ah*.8,P.y-h/2-1);x.lineTo(cx+ah*.8,P.y-h/2-1);x.fill();}}
-    // hit sparks
-    for(const f of m.fx){const a=1-(m.t-f.t)/300,P=span(f,1),Q=span(f,.55);x.globalAlpha=a*.35;x.fillStyle=f.c;x.beginPath();x.moveTo(P.x0,P.y);x.lineTo(P.x1,P.y);x.lineTo(Q.x1,Q.y);x.lineTo(Q.x0,Q.y);x.fill();x.globalAlpha=1;}
-    for(const f of m.fx){const a=1-(m.t-f.t)/300,P=span(f,1);x.globalAlpha=a;x.fillStyle=f.c;x.fillRect(P.x0,P.y-10*(1-a)-4,P.x1-P.x0,3);mGlow(x,(P.x0+P.x1)/2,P.y,8+10*(1-a),f.c,.6);x.globalAlpha=1;}
-    // combo + judgment, big in the middle like the real game
-    if(m.combo>=2){mT(x,String(m.combo),W/2,78,"#ffffff",18);mT(x,"COMBO",W/2,94,"#c4b5fd",6);}
-    for(const f of m.fb){const a=1-(m.t-f.t)/600;x.globalAlpha=Math.max(0,a);mT(x,f.txt,W/2,118-(1-a)*6,f.c,10);x.globalAlpha=1;}
+    const S=this.SONGS[m.song],now=this.st(m),X0=this.x0(),LW=this.LW,beat=60000/S.bpm,pulse=now>2400?1-((now-2400)/beat)%1:0;mBg(x,W,H,t,"#120a26","#05040f");
+    // side lights pulse with the beat
+    for(const side of [0,1]){const bx=side?X0+LW*4+10:X0-14;for(let k=0;k<8;k++){const on=(Math.floor((m.t||0)/110)+k+side*3)%8<3;x.fillStyle=on?["#ff5fd2","#67e8f9","#fde047","#a78bfa"][(k+side)%4]:"rgba(255,255,255,.05)";x.globalAlpha=on?.45+.35*pulse:1;x.fillRect(bx,28+k*18,4,12);x.globalAlpha=1;}}
+    // playfield
+    x.fillStyle="rgba(8,6,22,.9)";x.fillRect(X0,20,LW*4,H-20);
+    for(let i=0;i<4;i++){if(m.held[i]){const gr=x.createLinearGradient(0,this.TOP,0,this.JY);gr.addColorStop(0,"rgba(255,255,255,0)");gr.addColorStop(1,"rgba(255,143,224,.22)");x.fillStyle=gr;x.fillRect(X0+i*LW,this.TOP,LW,this.JY-this.TOP);}
+      x.fillStyle="rgba(196,181,253,.18)";x.fillRect(X0+i*LW,20,1,H-20);}x.fillRect(X0+LW*4-1,20,1,H-20);
+    // beat lines
+    for(let k=0;k<12;k++){const bt=Math.ceil((now-2400)/beat)*beat+2400+k*beat,y=this.yOf(m,bt-now);if(y<this.TOP)break;x.fillStyle=Math.round((bt-2400)/beat)%4===0?"rgba(196,181,253,.28)":"rgba(196,181,253,.1)";x.fillRect(X0,Math.round(y),LW*4,1);}
+    // receptors
+    for(let i=0;i<4;i++){const cx=X0+i*LW+LW/2,on=m.held[i];this.arrow(x,cx,this.JY,on?10:11,i,on?"rgba(255,255,255,.35)":"rgba(255,255,255,.06)",on?"#ffffff":"rgba(196,181,253,.7)",1.2);
+      mT(x,this.LBL[i],cx,H-8,on?"#ff8fe0":"#7c6fb0",5);}
+    // long-note bodies first, then the arrow heads
+    for(const n of m.notes){if(n.ty!=="hold"||n.done)continue;const ya=n.hit?this.JY:this.yOf(m,n.at-now),yb=this.yOf(m,n.end-now);if(yb>this.JY||ya<this.TOP-12)continue;
+      const top=Math.max(this.TOP,yb),bot=Math.min(this.JY,ya),cx=X0+n.l*LW+LW/2,live=n.hit&&m.held[n.holding];
+      x.fillStyle=live?"rgba(134,239,172,.75)":"rgba(74,222,128,.45)";x.fillRect(cx-7,top,14,bot-top);x.fillStyle=live?"#d9f99d":"#86efac";x.fillRect(cx-7,top,14,2);x.fillRect(cx-7,top,1,bot-top);x.fillRect(cx+6,top,1,bot-top);}
+    for(const n of m.notes){if(n.miss&&n.ty!=="hold")continue;if(n.hit)continue;const dtt=n.at-now,y=this.yOf(m,dtt);if(y<this.TOP-12||y>H+12)continue;
+      const cx=X0+n.l*LW+LW/2,[c,d]=this.QC[n.q]||this.QC[16];x.globalAlpha=n.miss?.35:1;this.arrow(x,cx,y,11,n.l,d);this.arrow(x,cx,y,9.5,n.l,c,"#ffffff",.8);
+      if(n.ty==="hold"){x.fillStyle="#86efac";x.fillRect(cx-2,y-2,4,4);}x.globalAlpha=1;}
+    // hit bursts on the receptors
+    for(const f of m.fx){const a=1-(m.t-f.t)/260,cx=X0+f.l*LW+LW/2;x.globalAlpha=a;this.arrow(x,cx,this.JY,11+6*(1-a),f.l,null,f.c,2);mGlow(x,cx,this.JY,10+10*(1-a),f.c,.5);x.globalAlpha=1;}
+    // combo + judgment in the middle of the field
+    if(m.combo>=2){mT(x,String(m.combo),W/2,82,"#ffffff",16);mT(x,"COMBO",W/2,96,"#c4b5fd",5);}
+    for(const f of m.fb){const a=1-(m.t-f.t)/500;x.globalAlpha=Math.max(0,a);mT(x,f.txt,W/2,120-(1-a)*5,f.c,10);x.globalAlpha=1;}
     // top bar: song, life, score
-    mR(x,0,0,W,20,"rgba(5,4,15,.75)");mT(x,S.nm,6,6,S.c,6,"left");mT(x,`${this.DIFFS[m.diff].nm} ${this.DIFFS[m.diff].lv}`,6,14,this.DIFFS[m.diff].c,5,"left");
+    mR(x,0,0,W,20,"rgba(5,4,15,.8)");mT(x,S.nm,6,6,S.c,6,"left");mT(x,`${this.DIFFS[m.diff].nm} ${this.DIFFS[m.diff].lv}`,6,14,this.DIFFS[m.diff].c,5,"left");
     mR(x,90,4,70,5,"#1f1b3a");mR(x,90,4,70*m.life/1000,5,m.life<300?"#f87171":"#4ade80");mT(x,"LIFE",125,14,"#a78bfa",5);
     mT(x,String(m.score).padStart(7,"0"),W-6,8,"#fde047",8,"right");mR(x,W-80,15,74,2,"#1f1b3a");mR(x,W-80,15,74*Math.min(1,now/this.LEN),2,"#ff5fd2");
     if(now<2400)mT(x,now<1600?"READY?":"GO!",W/2,110,"#ff8fe0",14);
     if(m.scr==="result")this.drawResult(m,x,t);},
-  drawSelect(m,x,t){const W=this.w,S=this.SONGS[m.song],D=this.DIFFS[m.diff],b=store.get("otc.rh.best",{});mBg(x,W,this.h,t,"#1a0b2e","#07061a");
+  drawSelect(m,x,t){const W=this.w,S=this.SONGS[m.song],D=this.DIFFS[m.diff],b=store.get("otc.rh4.best",{});mBg(x,W,this.h,t,"#1a0b2e","#07061a");
     mT(x,"SONG SELECT",W/2,12,"#c4b5fd",7);mT(x,"◀",16,52,"#a78bfa",12);mT(x,"▶",W-16,52,"#a78bfa",12);
     mRR(x,40,30,160,46,4,"rgba(255,255,255,.06)");mT(x,S.nm,W/2,44,S.c,10);mT(x,S.art+" · "+S.bpm+" BPM",W/2,58,"#e9d5ff",5);mT(x,`${m.song+1} / ${this.SONGS.length}`,W/2,69,"#a78bfa",5);
     this.DIFFS.forEach((d,i)=>{const bx=10+i*44,on=i===m.diff,r=b[m.song+"-"+i];mRR(x,bx,90,40,44,3,on?d.c:"rgba(255,255,255,.08)");mT(x,d.nm,bx+20,100,on?"#0b1020":d.c,5);mT(x,String(d.lv),bx+20,114,on?"#0b1020":"#fff",11);
       if(r)mT(x,r.ap?"AP":r.fc?"FC":r.r,bx+20,128,on?"#0b1020":r.ap?"#ff8fe0":r.fc?"#fde047":"#c4b5fd",6);});
     const r=b[m.song+"-"+m.diff];mT(x,r?`BEST ${r.s.toLocaleString()}${r.ap?" · ALL PERFECT":r.fc?" · FULL COMBO":""}`:"NOT PLAYED YET",W/2,144,"#e9d5ff",5);
     mRR(x,70,152,100,22,4,CUPC);mT(x,"▶ PLAY",W/2,163,"#0b1020",8);mT(x,"← → SONG · ↑ ↓ DIFFICULTY · ENTER",W/2,186,"#a78bfa",5);},
-  drawResult(m,x,t){const W=this.w,J=m.jc;x.fillStyle="rgba(5,4,15,.82)";x.fillRect(0,20,W,this.h-20);
+  drawResult(m,x,t){const W=this.w,J=m.jc;x.fillStyle="rgba(5,4,15,.85)";x.fillRect(0,20,W,this.h-20);
     mT(x,m.failed?"FAILED":m.quit?"ENDED":m.ap?"ALL PERFECT":m.fc?"FULL COMBO":"CLEAR",W/2,36,m.failed?"#f87171":m.ap?"#ff8fe0":m.fc?"#fde047":"#4ade80",11);
     mT(x,m.rank,48,80,{S:"#fde047",A:"#ff8fe0",B:"#93c5fd",C:"#86efac",D:"#c4b5fd",F:"#f87171"}[m.rank]||"#fff",34);
     mT(x,m.score.toLocaleString(),W/2+30,58,"#fde047",12);mT(x,`MAX COMBO ${m.maxc} · ${Math.round(m.acc*1000)/10}%`,W/2+30,72,"#e9d5ff",5);
-    [["PERFECT",J.P,"#ff8fe0"],["GREAT",J.G,"#fde047"],["GOOD",J.O,"#67e8f9"],["BAD",J.B,"#93c5fd"],["MISS",J.M,"#94a3b8"]].forEach(([n,v,c],i)=>{mT(x,n,100,90+i*12,c,6,"left");mT(x,String(v),200,90+i*12,"#fff",6,"right");});
+    [["PERFECT",J.P,"#7dd3fc"],["GREAT",J.G,"#fde047"],["GOOD",J.O,"#4ade80"],["BAD",J.B,"#c4b5fd"],["MISS",J.M,"#f87171"]].forEach(([n,v,c],i)=>{mT(x,n,100,90+i*12,c,6,"left");mT(x,String(v),200,90+i*12,"#fff",6,"right");});
     mT(x,"TAP OR PRESS ENTER FOR SONG SELECT",W/2,this.h-10,"#a78bfa",5);}};
 
 // ---------- 5. IS IT CUPIDIUM? ----------
@@ -7830,7 +7853,7 @@ MGAMES.fight={persist:false,name:"CUPIDIUM BRAWL",w:320,h:180,blurb:"Platform fi
 // ---------- hub ----------
 const ARCADE_CATS=[
   ["action","ACTION",[["blaster","Shoot waves of thieves and beat the boss."],["dash","Endless runner. Jump, slide, don't fall."],["rush","Fly and grab cupidium, dodge hazards."],["defense","Build turrets to guard the core."]]],
-  ["arcade","ARCADE",[["breaker","Brick breaker with power-ups."],["golf","9 holes of wacky mini golf."],["stack","Stack the tallest crystal tower."],["rhythm","Project Sekai style: holds, flicks, 5 difficulties."]]],
+  ["arcade","ARCADE",[["breaker","Brick breaker with power-ups."],["golf","9 holes of wacky mini golf."],["stack","Stack the tallest crystal tower."],["rhythm","osu!mania + DDR: 4 lanes of falling arrows, long notes, fast charts."]]],
   ["puzzle","PUZZLE",[["lab","Fuse elements up to cupidium."],["merge","Drop and merge atoms in a jar."],["isit","Real element or made up?"],["heist","Sneak the vial past the guards."]]],
   ["versus","VERSUS",[["fight","1v1, 2v2 or free-for-all brawls."],["catch","Grab the most atoms, bump rivals."],["badminton","BETA · Racket Rivals style badminton: power swings, set + smash, skills."]]],
   ["more","MORE",[["miner","Drill deep for rare ore."],["xc","Cross country career: train and race 5Ks."]]]];
@@ -8657,6 +8680,12 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
+ {v:"4.9",t:"Join mid-game and Aces Parties",d:"Nov 24, 2026",s:{"Party":["Join any party while a game is already going (Chicken Horse, Academy, Puffer Party and the trivia modes)","ACES PARTIES on the home screen, weekdays 2:20 to 2:40 pm: see every open party, what's being played and who's in it, and JOIN with one tap","When the game gets an update, the page tells you and reloads (it waits until your game is over)"],
+   "Ultimate Chicken Horse":["The Trap Kill badge shows up again when your trap gets someone","A tiny death animation","New Fixed Turret: shoots straight in one direction. The aiming Turret is now rare","Spectating: when the player you're watching is out, you jump to the next one still racing","CUSTOMIZE button during the game","The course fills the screen, with no theme background behind it"],
+   "Chips":["+1 chip for a new best on any arcade game, or for winning Chicken Horse, a Cuepon puzzle or an Academy party"],
+   "Cupidium Rhythm":["Now osu!mania + DDR style: 4 lanes of arrows falling onto receptors, long notes, arrows coloured by beat","More notes and faster scrolling"],
+   "Answers":["Daily Tower prompts are a touch more specific (no more 'something fluffy')","The AI no longer accepts genetic or viral diseases (like Huntington's) for 'a disease caused by bacteria'"],
+   "Look":["The theme background only shows in Off the Charts; menus and other games have a plain background"]}},
  {v:"4.8",t:"Frame makeover",d:"Nov 20, 2026",s:{"Chip shop":["New Custom Gradient card frame: pick 3 colours, the angle, and whether it flows","Rose Vine redrawn: a thorny green vine with leaves and real roses, big roses in the corners","Royal Velvet redrawn: crimson velvet with gold piping, gold studs and jewelled gold corners","Glitch now actually shows its red and blue split","Mochi background removed (if you bought it, your 🪙 3,500 is refunded)"],"Ultimate Chicken Horse":["Frozen Peaks: the top of the ice mountain slants in on both sides now"]}},
  {v:"4.7",t:"Better maps",d:"Nov 20, 2026",s:{"Ultimate Chicken Horse":["Sunset Woods: climb through a winding cave inside a giant red rock instead of the baobab","Cloud Kingdom: cloud steps, a short rainbow, a hot-air balloon, a cloud bank and a castle to climb","Coral Reef: a coral arch, a sunken ship you run through, a trench on coral pillars and a reef cave down to the treasure","Frozen Peaks: the top of the ice mountain curves in, so you can climb its shoulder (try a portal up there)"],"Daniel Simons mode":["More geography prompts explain their tricky words"]}},
  {v:"4.6",t:"Daniel Simons geography",d:"Nov 20, 2026",s:{"Daniel Simons mode":["150+ niche geography prompts (straits, glaciers, atolls, Swiss cantons, Silk Road cities…), each with a short explanation of any tricky word","The mode button is now an on/off switch"],"Ultimate Chicken Horse":["Frozen Peaks: the ice mountain reaches the sky, so the cave and chimney is the only way","The preview button no longer looks like a map"],"Look":["Home buttons and themes on separate lines","New card background: Mochi"]}},
@@ -9841,16 +9870,20 @@ let BBCT="body",BBCBACK="brainLab";
 // Customize is shared by Cupidium Academy and Ultimate Chicken Horse; the back button returns to whichever opened it.
 // Switching tabs or picking an item redraws the same screen, so skip the page fade (it flashed white).
 function bbCustom(tab,same){if(tab)BBCT=tab;const av=bbAvGet(),chips=casChips(),names={body:"BUDDY",col:"COLOR",eyes:"EYES",hat:"HATS",acc:"EXTRAS"},sy=$("panel").scrollTop;
-  showPanel(bbWrap(`<div class="bvtop"><button class="bvback" data-act="${BBCBACK}">◀</button><h2>CUSTOMIZE</h2><span class="bvchips">${bbIco("i_chip",16)} ${chips.toLocaleString()}</span></div>
+  // opened from inside an Ultimate Chicken Horse game: show it over the game instead of leaving it
+  const inGame=typeof TRG!=="undefined"&&TRG&&!TRG.dead&&$("trCv");if(inGame)BBCBACK="trCustClose";
+  const html=(bbWrap(`<div class="bvtop"><button class="bvback" data-act="${BBCBACK}">◀</button><h2>CUSTOMIZE</h2><span class="bvchips">${bbIco("i_chip",16)} ${chips.toLocaleString()}</span></div>
    <div class="bvpreview">${bbAvatar(av,144)}</div>
    <div class="glass atabs">${Object.keys(names).map(k=>`<button class="${BBCT===k?"on":""}" data-act="bbCT" data-t="${k}">${names[k]}</button>`).join("")}</div>
    <div class="bvitems">${BB_AVI[BBCT].map(it=>{const un=bbUnlocked(BBCT,it),on=av[BBCT]===it[0],prev={...av,[BBCT]:it[0]};
-     return `<button class="bvitem${on?" on":""}${un?"":" lock"}" data-act="bbPickAv" data-c="${BBCT}" data-id="${it[0]}">${bbAvatar(prev,60)}<b>${it[1]}</b><small>${on?"EQUIPPED":un?"TAP TO WEAR":it[2]>0?`${bbIco("i_chip",12)} ${it[2].toLocaleString()}`:"LOCKED: "+esc(it[3]||"")}</small></button>`;}).join("")}</div>`),{cls:"menu"});
+     return `<button class="bvitem${on?" on":""}${un?"":" lock"}" data-act="bbPickAv" data-c="${BBCT}" data-id="${it[0]}">${bbAvatar(prev,60)}<b>${it[1]}</b><small>${on?"EQUIPPED":un?"TAP TO WEAR":it[2]>0?`${bbIco("i_chip",12)} ${it[2].toLocaleString()}`:"LOCKED: "+esc(it[3]||"")}</small></button>`;}).join("")}</div>`));
+  if(inGame){let ov=$("trCust");const y0=ov?ov.scrollTop:0;if(!ov){ov=document.createElement("div");ov.id="trCust";ov.className="trcust";$("panel").appendChild(ov);}ov.innerHTML=`<div class="inner menu">${html}</div>`;ov.scrollTop=same?y0:0;return;}
+  showPanel(html,{cls:"menu"});
   if(same){document.querySelectorAll("#panel>*,#panel>.inner>*").forEach(e=>e.style.animation="none");$("panel").scrollTop=sy;}}
 function bbPickAv(b){const c=b.dataset.c,id=b.dataset.id,it=BB_AVI[c].find(x=>x[0]===id);if(!it)return;
   if(!bbUnlocked(c,it)){if(!(it[2]>0))return toast("Locked: "+esc(it[3]||""));
     if(casChips()<it[2])return toast(`You need ${it[2].toLocaleString()} chips`);casSet(casChips()-it[2]);const own=bbOwn();own[c+":"+id]=1;store.set("otc.bb.own",own);toast(`Bought ${it[1]}!`);sfx.ok(3);}
-  const av=bbAvGet();av[c]=id;store.set("otc.bb.av",av);bbCustom(null,true);}
+  const av=bbAvGet();av[c]=id;store.set("otc.bb.av",av);if(typeof TRG!=="undefined"&&TRG)TRG.avSent=0;bbCustom(null,true);}
 function bbStart(mode,list){bbRng=Math.random;BB={mode,list,ix:0,res:[],lvPick:null};bbIntro();}
 function bbIntro(){const id=BB.list[BB.ix],g=BBG[id],[cn,em,col]=BB_CATS[g.cat];
   showPanel(bbWrap(`<div class="bvtop"><button class="bvback" data-act="brainLab">✕</button><h2>${BB.mode==="test"?`Test · ${BB.ix+1} of ${BB.list.length}`:"Practice"}</h2><span></span></div>
@@ -10042,7 +10075,7 @@ function bbVPick(v,b){const q=BB&&BB.cur;if(!q||!q.ready||BB.done)return;const r
 function bbVRes(m){if(!BB||BB.mode!=="vs"||BB.i!==m.i)return;N.phaseAt=Date.now();N.phaseLimit=20000;bbVBoard(m.sc);const me=m.res.find(r=>r.n===N.me),st=$("bvStage");
   const first=m.res.filter(r=>r.rank===1)[0];if(st&&!BB.done){st.classList.add("no");}BB.done=true;
   $("bvMsg").innerHTML=(me&&me.pts?`<b>+${me.pts}</b>${me.rank===1?" · FIRST!":""}${me.cb?" · COMEBACK ×2":""}`:me&&me.ok===false?"Wrong answer · +0":"Too slow · +0")+(first&&first.n!==N.me?` · ${esc(first.n)} answered first`:"")+(m.win?` · ${esc(m.sc[0].n)} reached ${BBV_WIN}!`:"");}
-function bbPShow(m){if(!N)return;bbSpecClose();if(m.over&&m.board[0]&&m.board[0].name===N.me)store.set("otc.bb.pwin",1);N.phaseAt=Date.now();N.phaseLimit=20000;renderSide(m.board.map(r=>({...r,me:r.name===N.me})));
+function bbPShow(m){if(!N)return;bbSpecClose();if(m.over&&m.board[0]&&m.board[0].name===N.me){store.set("otc.bb.pwin",1);const k=N.code+":"+m.i;if(N.bbWinK!==k){N.bbWinK=k;chipReward("won the Academy party");}}N.phaseAt=Date.now();N.phaseLimit=20000;renderSide(m.board.map(r=>({...r,me:r.name===N.me})));
   showPanel(bbWrap(`<div class="bvtop"><span></span><h2>Match ${m.i+1} results</h2><span></span></div>
    <div class="bvres"><div class="bvptab">${m.rows.map((r,i)=>`<div class="bvprow${r.name===N.me?" me":""}"><b>${i+1}</b><span>${bbAvatar(r.av||(r.name===N.me?bbAvGet():{}),34)} ${esc(r.name)}</span><small>this match</small><em>+${r.pts}</em><strong>${r.total}</strong></div>`).join("")}</div>
    <p class="bvsub">${bbIco("i_trophy",18)} ${esc(m.winner||"")} wins this match!${m.bump?` ${esc(m.bump)} won big, so they move up a class.`:""}</p>
@@ -10207,7 +10240,7 @@ const TR_ITEMS={
  trapdoor:{n:"Trapdoor",w:2,h:1},mbox:{n:"Movable Box",w:1,h:1},portal:{n:"Portal",w:1,h:1},peel:{n:"Banana Peel",w:1,h:1},
  spikes:{n:"Spikes",w:1,h:1,kill:1},saw:{n:"Saw",w:1,h:1,kill:1},spinner:{n:"Saw Spinner",w:1,h:1,kill:1},cane:{n:"Spinning Candy Cane",w:1,h:1},
  axe:{n:"Axe",w:1,h:1,kill:1},swing:{n:"Swingstone",w:1,h:1,kill:1},angry:{n:"Angry Cube",w:2,h:2,kill:1},
- cannon:{n:"Cannon",w:1,h:1,rot:1,kill:1},turret:{n:"Turret",w:1,h:1,kill:1},xbow:{n:"Crossbow",w:1,h:1,rot:1,kill:1},freeze:{n:"Freeze Ray",w:1,h:1,rot:1},
+ cannon:{n:"Cannon",w:1,h:1,rot:1,kill:1},turret:{n:"Turret",w:1,h:1,kill:1},sentry:{n:"Fixed Turret",w:1,h:1,rot:1,kill:1},xbow:{n:"Crossbow",w:1,h:1,rot:1,kill:1},freeze:{n:"Freeze Ray",w:1,h:1,rot:1},
  flame:{n:"Flamethrower",w:1,h:1,rot:1,kill:1},hole:{n:"Black Hole",w:1,h:1,kill:1},wire:{n:"Barbed Wire",w:2,h:1,kill:1},honey:{n:"Honey",w:2,h:1},
  boost:{n:"Boost Pad",w:1,h:1,rot:1},coin:{n:"Coin",w:1,h:1},
  bomb:{n:"Bomb",w:1,h:1,blast:1},dynamite:{n:"Dynamite",w:1,h:1,blast:2},nuke:{n:"Nuke",w:1,h:1,blast:4},cnuke:{n:"Cupidium Nuke",w:1,h:1,blast:5,corrode:1}};
@@ -10215,16 +10248,16 @@ const TR_BLASTS=["bomb","dynamite","nuke"];
 // these have to sit on something solid: spikes on the side their base faces, honey and ice on top of a block
 const TR_NEEDS_BASE={spikes:1,honey:1,ice:1};
 // rot: 4 = turns 4 ways (right, down, left, up), 2 = flips left/right
-const TR_ROT={plank:4,stairs:4,cannon:4,xbow:4,flame:4,freeze:4,fan:4,rfan:4,spikes:4,turret:0,conveyor:4,boost:4,truss:4,mplat:4,trapdoor:4,saw:0};
+const TR_ROT={plank:4,stairs:4,cannon:4,xbow:4,flame:4,freeze:4,fan:4,rfan:4,spikes:4,turret:0,sentry:4,conveyor:4,boost:4,truss:4,mplat:4,trapdoor:4,saw:0};
 const trDir=r=>[[1,0],[0,1],[-1,0],[0,-1]][((r||0)%4+4)%4];
 const TR_BOX_W={block:4,plank:4,stairs:3,truss:2,slime:3,ice:2,spring:3,conveyor:2,fan:2,rfan:2,mplat:3,fplat:3,trapdoor:2,mbox:2,portal:2,peel:2,
- spikes:3,saw:3,spinner:2,cane:2,axe:2,swing:2,angry:2,cannon:2,turret:2,xbow:1,freeze:2,flame:1,hole:1,wire:1,honey:1,boost:1,coin:2,bomb:2,dynamite:1,nuke:1};
-const TR_SOLID={block:2,plank:2,stairs:2,xbow:2,cannon:2,flame:2,turret:2,freeze:2,ice:3,spring:4,honey:7,fan:8,rfan:8,slime:11,truss:20};
+ spikes:3,saw:3,spinner:2,cane:2,axe:2,swing:2,angry:2,cannon:2,turret:1,sentry:2,xbow:1,freeze:2,flame:1,hole:1,wire:1,honey:1,boost:1,coin:2,bomb:2,dynamite:1,nuke:1};
+const TR_SOLID={block:2,plank:2,stairs:2,xbow:2,cannon:2,flame:2,turret:2,sentry:2,freeze:2,ice:3,spring:4,honey:7,fan:8,rfan:8,slime:11,truss:20};
 const TR_HINT={block:"something to stand on",plank:"a long platform",stairs:"three steps up",truss:"solid; hold jump against it to climb",slime:"super bouncy",ice:"slippery! goes on top of a block",
  spring:"bounces you up high",conveyor:"carries you along",fan:"blows you upward",rfan:"blows you downward",mplat:"slides back and forth",fplat:"floats up and down",
  trapdoor:"opens every few seconds",mbox:"push it around",portal:"one end of a portal. Your next portal (from a later box) links to it",peel:"slip and slide",
  spikes:"touch it and you're out. Must sit against a block",saw:"don't touch",spinner:"a saw on a spinning arm",cane:"a spinning bar that carries you around",axe:"swings back and forth",
- swing:"a heavy stone on a chain",angry:"wakes up and slams down when you go under it",cannon:"fires cannonballs",turret:"aims at you and shoots",xbow:"fires arrows",
+ swing:"a heavy stone on a chain",angry:"wakes up and slams down when you go under it",cannon:"fires cannonballs",turret:"RARE! Aims at you and shoots",sentry:"shoots straight ahead. R turns it",xbow:"fires arrows",
  freeze:"freezes you in place for a moment",flame:"spits fire on and off",hole:"pulls you in",wire:"sharp, don't touch",honey:"sticky, slow and short jumps. Goes on top of a block",
  boost:"launches you forward",coin:"first to grab it and finish gets +3 (only one per round)",bomb:"blows up placed items in a small area",dynamite:"blows up placed items in a bigger area",nuke:"blows up placed items in a huge area",
  cnuke:"RARE! Blows up items AND scorches the map itself"};
@@ -10292,6 +10325,7 @@ function trBuild(st){if(st.map)trSetMap(st.map);const g=trBaseGrid(st.holes),kin
     if(it.ty==="cane")C.canes.push({x:cx,y:cy,len:46,sp:1.7,off:(it.x*3+it.y)%6,o:it.o});
     if(it.ty==="peel")C.peels.push({x:px+2,y:py+10,w:12,h:6});
     if(it.ty==="turret")C.turrets.push({x:cx,y:cy+2,o:it.o,off:((it.x*13+it.y*7)%10)/10*2});
+    if(it.ty==="sentry")C.turrets.push({x:cx,y:cy+1,o:it.o,off:((it.x*13+it.y*7)%10)/10*1.5,dir:trDir(it.rot)});
     if(it.ty==="mplat"){const v=(it.rot||0)%2===1;C.dyn.push({ty:v?"fplat":"mplat",x:px,y:v?py+16:py,w:v?16:48,h:8,range:48,off:(it.x+it.y)%6,o:it.o,vert:v});}
     if(it.ty==="fplat")C.dyn.push({ty:"fplat",x:px,y:py,w:48,h:8,range:56,off:(it.x*2+it.y)%6,o:it.o});
     if(it.ty==="trapdoor"){const v=(it.rot||0)%2===1;C.dyn.push({ty:"trapdoor",x:px,y:py,w:v?6:32,h:v?32:6,off:(it.x+it.y*3)%3,o:it.o});}
@@ -10428,7 +10462,10 @@ function trCoinGrab(k){if(!TRG||!TRG.st)return;trSend({t:"tcoin",r:TRG.st.r,k});
 function trDie(P,owner){P.st="dead";P.kill=owner||null;P.ms=Math.round(P.t*1000);sfx.bad();trSendRes();}
 // turrets aim at you (each device shoots at its own racer)
 function trTurrets(G,t,dt){const C=G.C,P=G.meP;if(!P)return;G.bullets=G.bullets||[];
-  for(const tr of C.turrets){tr.next=tr.next==null?1+tr.off:tr.next;const dx=P.x+P.w/2-tr.x,dy=P.y+P.h/2-tr.y,d=Math.hypot(dx,dy)||1;tr.see=P.st==="run"&&d<320;tr.warn=tr.see?Math.max(0,Math.min(1,1-(tr.next-t)/.7)):0;
+  for(const tr of C.turrets){tr.next=tr.next==null?1+tr.off:tr.next;
+    // the Fixed Turret never aims: it fires straight ahead on a steady beat
+    if(tr.dir){tr.see=false;if(t>=tr.next&&P.st==="run"){tr.next+=1.5;const d=Math.hypot(P.x+P.w/2-tr.x,P.y+P.h/2-tr.y);if(d<380)G.bullets.push({x:tr.x+tr.dir[0]*10,y:tr.y+tr.dir[1]*10,vx:tr.dir[0]*190,vy:tr.dir[1]*190,o:tr.o,life:3});}continue;}
+    const dx=P.x+P.w/2-tr.x,dy=P.y+P.h/2-tr.y,d=Math.hypot(dx,dy)||1;tr.see=P.st==="run"&&d<320;tr.warn=tr.see?Math.max(0,Math.min(1,1-(tr.next-t)/.7)):0;
     if(t>=tr.next&&P.st==="run"){tr.next+=2.2;if(d<320)G.bullets.push({x:tr.x+dx/d*10,y:tr.y+dy/d*10,vx:dx/d*170,vy:dy/d*170,o:tr.o,life:3});}}
   G.bullets=G.bullets.filter(b=>{b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;return b.life>0&&!trSolid(C,Math.floor(b.x/TR_TS),Math.floor(b.y/TR_TS));});}
 // ---------- drawing (all pixel art, no emoji) ----------
@@ -10530,6 +10567,7 @@ function trDrawItem(x,it,alpha,C,t){const d=TR_ITEMS[it.ty];if(!d)return;x.globa
   else if(ty==="rfan")trRotDraw(x,trS("fan"),px,py,2+(it.rot||0));
   else if(ty==="fan"||ty==="spikes")trRotDraw(x,trS(ty),px,py,it.rot);
   else if((ty==="cannon"||ty==="xbow"||ty==="flame"||ty==="freeze")&&it.rot){const r=((it.rot)%4+4)%4;if(r===2)trFlip(x,trS(ty),px,py,16,16,true,false);else trRotDraw(x,trS(ty),px,py,r);}
+  else if(ty==="sentry"){x.fillStyle="rgba(103,232,249,.25)";x.beginPath();x.arc(px+8,py+9,10,0,7);x.fill();trSentryDraw(x,px,py,it.rot);}
   else if(ty==="turret"){const pu=.5+.5*Math.sin(trNow()/170);x.fillStyle=`rgba(255,40,70,${.22+.25*pu})`;x.beginPath();x.arc(px+8,py+9,11+pu*2,0,7);x.fill();
     x.strokeStyle="#ff2d55";x.lineWidth=1;x.beginPath();x.arc(px+8,py+9,10,0,7);x.stroke();x.drawImage(trS("turret"),px,py);x.fillStyle=pu>.5?"#ff2d55":"#ffd1d9";x.fillRect(px+7,py+12,2,2);const P=TRG&&TRG.meP;const a=P?Math.atan2(P.y+6-(py+8),P.x+5-(px+8)):-Math.PI/2;x.save();x.translate(px+8,py+10);x.rotate(a+Math.PI/2);x.drawImage(trS("tbarrel"),-8,-14);x.restore();}
   else if(d.rot&&it.rot&&TR_ART[ty])trFlip(x,trS(ty),px,py,16,16,true,false);
@@ -10543,7 +10581,7 @@ function trDrawPath(x,it,a){if(it.ty!=="mplat"&&it.ty!=="fplat")return;const px=
   x.fillStyle="#ffe14d";for(const P of [A,B]){x.beginPath();x.arc(P.x+w/2,P.y+h/2,1.6,0,7);x.fill();}x.restore();}
 // where a fan's wind (or a flamethrower, freeze ray, crossbow or cannon shot) will reach from this spot, shown while you place it
 function trReach(C,it){const ty=it.ty;let dd,max,th;if(ty==="fan"||ty==="rfan"){dd=trDir((ty==="fan"?3:1)+(it.rot||0));max=7;th=16;}else if(ty==="flame"){dd=trDir(it.rot);max=3;th=10;}
-  else if(ty==="freeze"){dd=trDir(it.rot);max=12;th=6;}else if(ty==="xbow"||ty==="cannon"){dd=trDir(it.rot);max=60;th=4;}else return null;
+  else if(ty==="freeze"){dd=trDir(it.rot);max=12;th=6;}else if(ty==="xbow"||ty==="cannon"||ty==="sentry"){dd=trDir(it.rot);max=60;th=4;}else return null;
   let x=it.x+dd[0],y=it.y+dd[1],n=0;while(x>=0&&x<TR_W&&y>=0&&y<TR_H&&!C.kind[y*TR_W+x]&&n<max){x+=dd[0];y+=dd[1];n++;}
   const cx=it.x*TR_TS+8,cy=it.y*TR_TS+8,L=n*TR_TS;return dd[0]?{x:dd[0]>0?(it.x+1)*TR_TS:(it.x-n)*TR_TS,y:cy-th/2,w:L,h:th,dx:dd[0],dy:0,n}:{x:cx-th/2,y:dd[1]>0?(it.y+1)*TR_TS:(it.y-n)*TR_TS,w:th,h:L,dx:0,dy:dd[1],n};}
 function trDrawReach(x,C,it,tt){const r=trReach(C,it);if(!r||!r.n)return;const wind=it.ty==="fan"||it.ty==="rfan",col=wind?"214,250,255":it.ty==="freeze"?"103,232,249":"255,138,31";
@@ -10570,8 +10608,13 @@ function trDrawHazards(x,C,t,tt){
   for(const b of (TRG&&TRG.bullets)||[]){const sp=Math.hypot(b.vx,b.vy)||1;x.strokeStyle="rgba(255,138,31,.55)";x.lineWidth=3;x.beginPath();x.moveTo(b.x,b.y);x.lineTo(b.x-b.vx/sp*10,b.y-b.vy/sp*10);x.stroke();x.lineWidth=1;
     x.fillStyle="rgba(255,45,85,.35)";x.beginPath();x.arc(b.x,b.y,7,0,7);x.fill();x.fillStyle="#1a0f2e";x.fillRect(b.x-4,b.y-4,8,8);x.fillStyle="#ff2d55";x.fillRect(b.x-3,b.y-3,6,6);x.fillStyle="#ffe14d";x.fillRect(b.x-1,b.y-2,3,3);}}
 function trDrawPlayer(x,p,av,isMe){if(!p)return;const k="av|"+JSON.stringify(av||{});let s=_trSpr[k];if(!s){const [g,pal]=bbAvGrid(av||{});s=trSprite(k,g,pal,BB_HAND);}
-  const px=Math.round(p.x+p.w/2-8),py=Math.round(p.y+p.h-15);x.globalAlpha=p.st==="dead"?.35:1;
-  if(p.f<0)trFlip(x,s,px,py,16,16,true,false);else x.drawImage(s,px,py);x.globalAlpha=1;
+  let px=Math.round(p.x+p.w/2-8),py=Math.round(p.y+p.h-15),al=p.st==="dead"?.35:1,puff=-1;
+  // tiny death animation: a hop up, a spin and a little burst, then the faded body stays where it fell
+  if(p.st==="dead"&&p.name!=="GHOST"&&TRG&&TRG.st){const D=TRG.dz=TRG.dz||{},key=isMe?"#me":p.name,r=TRG.st.r;let d=D[key];if(!d||d.r!==r)d=D[key]={r,t0:trNow()};
+    const k=(trNow()-d.t0)/650;if(k<1){puff=k;py+=Math.round(-Math.sin(Math.min(1,k*1.5)*Math.PI)*9+k*k*4);al=1-.65*k;}}
+  x.globalAlpha=al;if(puff>=0){x.save();x.translate(px+8,py+8);x.rotate(puff*Math.PI*1.5*(p.f<0?-1:1));if(p.f<0)x.scale(-1,1);x.drawImage(s,-8,-8);x.restore();}
+  else if(p.f<0)trFlip(x,s,px,py,16,16,true,false);else x.drawImage(s,px,py);x.globalAlpha=1;
+  if(puff>=0){const cx=px+8,cy=py+8,R=3+puff*16;for(let i=0;i<8;i++){const a=i*Math.PI/4+.3;x.globalAlpha=1-puff;x.fillStyle=i%2?"#ffffff":"#ff4d6d";x.fillRect(Math.round(cx+Math.cos(a)*R)-1,Math.round(cy+Math.sin(a)*R)-1,i%2?2:3,i%2?2:3);}x.globalAlpha=1;}
   if(isMe&&p.frz>0){x.fillStyle="rgba(159,220,255,.55)";x.fillRect(px,py,16,16);}
   if(p.name&&!isMe){x.font="7px monospace";x.fillStyle="rgba(0,0,0,.55)";const w=x.measureText(p.name).width+4;x.fillRect(px+8-w/2,py-9,w,8);x.fillStyle="#fff";x.textAlign="center";x.fillText(p.name,px+8,py-2.5);x.textAlign="left";}}
 // minimap while placing (tap it to jump there)
@@ -10699,17 +10742,22 @@ function trKillNote(name){const box=$("trKills");if(!box||!TRG)return;const pp=T
   const el=document.createElement("div");el.className="trkill";el.innerHTML=`<div class="ring">${src?`<img src="${src}" alt="">`:""}</div><b>${esc(name)}</b><small>Trap Kill</small>`;
   box.appendChild(el);try{sfx.ok&&sfx.ok(3);}catch(e){}setTimeout(()=>el.classList.add("out"),4600);setTimeout(()=>el.remove(),5000);}
 function trApply(m){const G=TRG;if(!G)return;const prev=G.st;
-  if(prev&&m&&prev.r===m.r&&m.ph==="run"&&m.res){for(const n in m.res){const r=m.res[n];if(!(prev.res&&prev.res[n])&&r&&r.st==="dead"&&r.kill===G.me&&n!==G.me)trKillNote(n);}}G.st=m;G.endAt=Date.now()+(m.ends||0);const oldC=G.C;G.C=trBuild(m);
+  // Trap Kill badge: remember who we've already shown this round. (Comparing with the previous state missed it on the host,
+  // whose old and new states share one results object, and when the kill was the last death, which jumps straight to "score".)
+  if(m&&m.res&&(m.ph==="run"||m.ph==="score")){if(!G.kseen||G.kseen.r!==m.r)G.kseen={r:m.r,n:{}};
+    for(const n in m.res){const r=m.res[n];if(r&&r.st==="dead"&&r.kill===G.me&&n!==G.me&&!G.kseen.n[n]){G.kseen.n[n]=1;trKillNote(n);}}}G.st=m;G.endAt=Date.now()+(m.ends||0);const oldC=G.C;G.C=trBuild(m);
   // keep pushed boxes where they are while a run is going
   if(prev&&prev.r===m.r&&prev.ph===m.ph&&m.ph==="run"&&oldC){G.C.dyn.forEach((d,i)=>{const o=oldC.dyn[i];if(o&&o.ty===d.ty&&d.ty==="mbox"){d.bx=o.bx;d.by=o.by;d.vy=o.vy;}if(o&&o.ty===d.ty&&d.ty==="angry"){d.trig=o.trig;d.cool=o.cool;}});G.C.turrets.forEach((t,i)=>{if(oldC.turrets[i])t.next=oldC.turrets[i].next;});}
   if(!$("trCv"))trShell();
   if(!prev||prev.r!==m.r||prev.ph!==m.ph){G.my={ty:null,placed:false,rot:0,hx:null,hy:null};G.cur={};G.ghost=null;G.spec=undefined;G.coinTaken={};if(G.whole&&m.ph==="run"){G.whole=false;G.zoom=G.zoom0||1;}
     if(m.ph==="pick"||m.ph==="place"&&(!prev||prev.ph!=="pick"))trCamOn(G,TR_START.x*TR_TS,TR_START.y*TR_TS);
-    if(m.ph==="run"){G.meP={coins:{},x:TR_START.x*TR_TS+((Object.keys(m.scores).indexOf(G.me)%4)*4)-4,y:TR_START.y*TR_TS+16-TRP.h-1,vx:0,vy:0,w:TRP.w,h:TRP.h,f:1,st:"wait",t:0,coy:0,buf:0};G.goAt=Date.now()+Math.min(3000,Math.max(0,(m.ends||0)-(TR_RUN+1)*1000));G.cd=(G.goAt-Date.now())/1000;G.runT0=null;G.peers={};G.bullets=[];G.inp={};trCamOn(G,G.meP.x,G.meP.y);}
+    if(m.ph==="run"){G.meP={coins:{},x:TR_START.x*TR_TS+((Object.keys(m.scores).indexOf(G.me)%4)*4)-4,y:TR_START.y*TR_TS+16-TRP.h-1,vx:0,vy:0,w:TRP.w,h:TRP.h,f:1,st:"wait",t:0,coy:0,buf:0};G.goAt=Date.now()+Math.min(3000,Math.max(0,(m.ends||0)-(TR_RUN+1)*1000));G.cd=(G.goAt-Date.now())/1000;G.runT0=null;G.peers={};G.avSent=0;G.bullets=[];G.inp={};trCamOn(G,G.meP.x,G.meP.y);}
     if(m.ph==="score"&&G.meP&&G.meP.st==="run"){G.meP.st="dead";}}
   if(m.ph==="place"&&m.picks[G.me]!=null){G.my.ty=m.box[m.picks[G.me]];G.my.placed=!!m.placed[G.me];}
+  if(!G.solo&&(m.ph==="score"||m.ph==="over")&&!G.wonChip){const sc=m.scores||{},top=Object.keys(sc).sort((a,b)=>(sc[b]||0)-(sc[a]||0));
+    if(top[0]===G.me&&(sc[G.me]||0)>=(m.win||100)&&(top.length<2||sc[top[0]]>sc[top[1]])){G.wonChip=1;chipReward("won Ultimate Chicken Horse");}}
   trPanel();}
-function trShell(){showPanel(`<div class="trwrap"><div class="trtop"><b>ULTIMATE CHICKEN HORSE</b><span id="trInfo"></span><button class="pbtn sm" data-act="trQuit">QUIT</button></div>
+function trShell(){showPanel(`<div class="trwrap"><div class="trtop"><b>ULTIMATE CHICKEN HORSE</b><span id="trInfo"></span><button class="pbtn sm" data-act="trCust" title="Change your buddy without leaving the game">🎨 CUSTOMIZE</button><button class="pbtn sm" data-act="trQuit">QUIT</button></div>
    <div class="trstage"><canvas id="trCv" width="${TR_VW*TR_TS}" height="${TR_VH*TR_TS}"></canvas><div id="trTools" class="trtools"></div><div id="trKills" class="trkills"></div><div id="trOver" class="trover"></div></div>
    <div id="trBar" class="trbar"></div>
    <div class="trpad" id="trPad"><button data-k="l">◀</button><button data-k="r">▶</button><span></span><button data-k="j" class="j">JUMP</button></div></div>`,{cls:"menu trmenu"});
@@ -10763,7 +10811,10 @@ function trPanel(){const G=TRG,st=G.st,o=$("trOver"),bar=$("trBar"),info=$("trIn
   else{o.hidden=true;o.innerHTML="";}
   const pad=$("trPad");if(pad)pad.style.visibility=st.ph==="run"?"visible":"hidden";
   if(st.ph==="place")bar.insertAdjacentHTML("afterbegin",`<div class="trplace">${G.my.ty?(G.my.placed?"Placed! Waiting for the others…":`Place your ${trIcon(G.my.ty,18)} <b>${TR_ITEMS[G.my.ty].n}</b> · ${G.my.ty==="portal"?(trLonePortal(st,G.me)?"links to your waiting portal (stay inside the dashed box)":"your next portal from a later box links to this one"):TR_HINT[G.my.ty]||""}${TR_ROT[G.my.ty]?` <button class="pbtn sm" data-act="trRot">ROTATE (R)</button>`:""} <button class="pbtn sm c m-mint" data-act="trPlace">PLACE HERE</button>`):"Waiting…"}<small class="trpan">Drag, use the arrow keys / WASD, or tap the map in the corner to look around.</small></div>`);}
-const trIcon=(ty,sz)=>{const art=ty==="rfan"?"fan":TR_ART[ty]?ty:"block";let c=trS(art);if(ty==="rfan"){const f=document.createElement("canvas");f.width=f.height=16;const g=f.getContext("2d");g.translate(0,16);g.scale(1,-1);g.drawImage(c,0,0);c=f;}
+// the Fixed Turret: the turret's base with its barrel locked in one direction (0 right, 1 down, 2 left, 3 up)
+function trSentryDraw(x,px,py,rot){x.drawImage(trS("turret"),px,py);x.fillStyle="#67e8f9";x.fillRect(px+7,py+12,2,2);const d=trDir(rot);
+  x.save();x.translate(px+8,py+10);x.rotate(Math.atan2(d[1],d[0])+Math.PI/2);x.drawImage(trS("tbarrel"),-8,-14);x.restore();}
+const trIcon=(ty,sz)=>{const art=ty==="rfan"?"fan":TR_ART[ty]?ty:"block";let c=trS(art);if(ty==="sentry"){const f=document.createElement("canvas");f.width=f.height=24;trSentryDraw(f.getContext("2d"),4,4,0);c=f;}if(ty==="rfan"){const f=document.createElement("canvas");f.width=f.height=16;const g=f.getContext("2d");g.translate(0,16);g.scale(1,-1);g.drawImage(c,0,0);c=f;}
   return `<img class="trico" src="${c.toDataURL()}" width="${sz||32}" height="${sz||32}" alt="">`;};
 // ---------- camera, spectating and ghost runs ----------
 function trNewRacer(st){return{ghost:1,coins:{},x:TR_START.x*TR_TS+2,y:TR_START.y*TR_TS+16-TRP.h-1,vx:0,vy:0,w:TRP.w,h:TRP.h,f:1,st:st||"run",t:0,coy:0,buf:0};}
@@ -10772,7 +10823,10 @@ const trFree=G=>!!(G&&G.st&&!G.ghost&&(G.st.ph==="score"||G.st.ph==="run"&&G.meP
 function trSpecList(G){return Object.keys(G.peers||{}).filter(n=>{const p=G.peers[n];return p&&p.r===G.st.r&&p.b;});}
 function trFollow(G,dt){let P=null;const z=trZ();
   if(G.ghost)P=G.ghost;else if(G.meP&&(G.meP.st==="run"||G.meP.st==="wait"))P=G.meP;
-  else if(G.st.ph==="run"){const L=trSpecList(G);if(G.spec===undefined){const live=L.find(n=>G.peers[n].b.st==="run");G.spec=live||null;}if(G.spec&&G.peers[G.spec]&&G.peers[G.spec].b)P={...G.peers[G.spec].b,vx:0,w:TRP.w};}
+  else if(G.st.ph==="run"){const L=trSpecList(G);if(G.spec===undefined){const live=L.find(n=>G.peers[n].b.st==="run");G.spec=live||null;}
+    // the player you're watching died or finished: after a moment, switch to the next one still racing
+    if(G.spec&&G.peers[G.spec]&&G.peers[G.spec].b&&G.peers[G.spec].b.st!=="run"&&G.peers[G.spec].b.st!=="wait"){const now=Date.now();if(!G.specOut)G.specOut=now;
+      if(now-G.specOut>900){const i=L.indexOf(G.spec),R=L.slice(i+1).concat(L.slice(0,i)),nx=R.find(n=>G.peers[n].b.st==="run");G.specOut=0;if(nx){G.spec=nx;trTools();}}}else G.specOut=0;if(G.spec&&G.peers[G.spec]&&G.peers[G.spec].b)P={...G.peers[G.spec].b,vx:0,w:TRP.w};}
   if(!P||G.whole)return trCamClamp(G);
   const tx=P.x+(P.w||10)/2-trVW()/2+((P.vx||0)*.25)/z,ty=P.y-trVH()/2+20/z;G.cam.x+=(tx-G.cam.x)*Math.min(1,dt*6);G.cam.y+=(ty-G.cam.y)*Math.min(1,dt*6);trCamClamp(G);}
 // a ghost run: play the current course for fun once your own run is over (or while you wait for the others to place). It never scores.
@@ -10790,6 +10844,8 @@ function trTools(){const G=TRG,el=$("trTools");if(!G||!el||!G.st)return;const L=
     ${G.ghost?`<button class="pbtn sm c m-fire" data-act="trGhost">✕ STOP GHOST</button>`:trGhostOk(G)?`<button class="pbtn sm c m-nova" data-act="trGhost" title="Play this course for fun. It doesn't count for points.">👻 PLAY AS GHOST</button>`:""}`;
   if(el._h!==h){el._h=h;el.innerHTML=h;}}
 setTimeout(()=>Object.assign(ACT,{
+  trCust:()=>{if(!TRG)return;BBCBACK="trCustClose";bbCustom();},
+  trCustClose:()=>{const ov=$("trCust");if(ov)ov.remove();},
   trZoom:b=>{if(!TRG)return;TRG.whole=false;trZoomTo(trZ()*(+b.dataset.z>0?1.25:.8));},
   trWhole:()=>{const G=TRG;if(!G)return;if(G.whole){G.whole=false;trZoomTo(G.zoom0||1);const P=G.ghost||G.meP;if(P)trCamOn(G,P.x,P.y);}else{G.zoom0=trZ()>trZmin()+1e-3?trZ():1;G.zoom=trZmin();G.whole=true;trCamClamp(G);trTools();}},
   trSpec:b=>{const G=TRG;if(!G)return;const L=[null].concat(trSpecList(G));let i=L.indexOf(G.spec||null);i=(i+(+b.dataset.d)+L.length)%L.length;G.spec=L[i];trTools();},
@@ -11043,9 +11099,14 @@ FL_ITEMS.bg.push(["candy","Candy Stripes",2500],["forest","Firefly Forest",3500]
 // ---------- DAILY TOWER: one prompt for the whole day. Every new answer you find adds a block; rarer answers are taller.
 // Everyone's towers stand side by side. No time limit, no power-ups, no sabotage. ----------
 const TW_H=[1,2,4,7,12];
+const TW_VAGUE=/^Name something (that|with|round|red|blue|green|yellow|soft|hard|hot|cold|sticky|fluffy|shiny|small|big|loud|you can|people)/i;
 LB_NAMES.tower="🏗 Daily Tower (today)";
 function twPrompt(d){d=d||today();if(twPrompt.c&&twPrompt.c[0]===d)return twPrompt.c[1];
-  const pool=PROMPTS.map((p,i)=>i).filter(i=>!PROMPTS[i].ds&&broadP(PROMPTS[i]));if(!pool.length)return -1;
+  // from Nov 25: a touch harder. The vaguest prompts ("something that's fluffy / round / has a tail") and the giant open ones
+  // (any movie, any video game, any job) are left out, so the day's prompt is a bit more specific
+  const tight=d>"2026-11-24",cnt=p=>p.t.reduce((a,s)=>a+(s?s.split("|").filter(Boolean).length:0),0);
+  const pool=PROMPTS.map((p,i)=>i).filter(i=>{const p=PROMPTS[i];if(p.ds||!broadP(p))return false;if(!tight)return true;
+    return !TW_VAGUE.test(p.q)&&cnt(p)<=2000;});if(!pool.length)return -1;
   let best=-1,bh=Infinity;for(const i of pool){const h=hash32("tower|"+d+"|"+PROMPTS[i].q)>>>0;if(h<bh){bh=h;best=i;}}twPrompt.c=[d,best];return best;}
 const twKey=d=>"otc.tower."+(d||today());
 function twMine(){const t=store.get(twKey(),null);return t&&Array.isArray(t.list)?t:{list:[],h:0};}
@@ -11157,6 +11218,56 @@ function rpHTML(){const vs=Object.values(RPOLL.votes),tot=vs.length,cnt={};for(c
 function rpRender(){const box=$("rpBox");if(box)box.outerHTML=rpHTML();}
 Object.assign(ACT,{rpVote:b=>rpVote(b.dataset.o)});
 {const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{const inner=$("panel").querySelector(".inner");if(inner&&!$("rpBox")){inner.insertAdjacentHTML("afterbegin",rpHTML());rpStart();}}catch(e){}return r;};}
+// ===== Nov 24: update notice. Some players never close the tab, so the page checks (now and then, and when the tab comes back)
+// whether index.html changed on the site. If it did: a banner while you're mid-game, then a reload screen once you're on a menu.
+const UPD={sig:null,shown:false,busyT:null};
+async function updSig(){if(!/^https?:$/.test(location.protocol))return null;
+  try{const r=await fetch(location.href.split("#")[0].split("?")[0]+"?u="+Date.now(),{method:"HEAD",cache:"no-store"});if(!r.ok)return null;
+    return r.headers.get("etag")||r.headers.get("last-modified")||null;}catch(e){return null;}}
+async function updCheck(){if(UPD.shown||document.hidden)return;const s=await updSig();if(!s)return;if(!UPD.sig){UPD.sig=s;return;}if(s===UPD.sig)return;
+  // check once more a bit later so a one-off odd answer from the server doesn't bother anyone
+  setTimeout(async()=>{const s2=await updSig();if(s2&&s2!==UPD.sig)updFound();},15000);}
+setTimeout(updCheck,15000);setInterval(updCheck,5*60e3);document.addEventListener("visibilitychange",()=>{if(!document.hidden)updCheck();});
+const updBusy=()=>!!((typeof N!=="undefined"&&N)||(typeof MG!=="undefined"&&MG&&!MG.over)||(typeof TRG!=="undefined"&&TRG)||!MENU);
+function updFound(){if(UPD.shown)return;UPD.shown=true;updNag();}
+function updNag(){clearTimeout(UPD.busyT);
+  if(updBusy()){if(!$("updBar"))document.body.insertAdjacentHTML("beforeend",`<div id="updBar" class="updbar glass">🔄 <b>New update!</b> The page reloads when this game ends.<button class="pbtn sm c m-nova" data-act="updNow">RELOAD NOW</button></div>`);
+    UPD.busyT=setTimeout(updNag,4000);return;}
+  const bar=$("updBar");if(bar)bar.remove();let n=10;
+  document.body.insertAdjacentHTML("beforeend",`<div id="updOv" class="updov"><div class="glass card center"><h3 style="font-size:16px">🔄 NEW UPDATE!</h3><p>One in a Cupidium just got updated.</p>
+    <p class="hint">Reloading in <b id="updN">${n}</b>…</p><button class="pbtn c m-nova big" data-act="updNow">RELOAD NOW</button></div></div>`);
+  const tm=setInterval(()=>{n--;const e=$("updN");if(e)e.textContent=Math.max(0,n);if(n<=0){clearInterval(tm);location.reload();}},1000);}
+ACT.updNow=()=>location.reload();
+
+// ===== Nov 24: ACES PARTIES. On weekdays from 2:20 to 2:40 pm (Eastern) the home screen lists every open party room, what's being
+// played and who's in it, with a JOIN button (you can join mid-game). Hosts post a small note to the relay once a minute, only in that window.
+const ACES_TOPIC="oic-aces-parties-v1",ACES_MODE={classic:"One in a Cupidium",rapid:"Rapid Fire",puffer:"Puffer Party",trap:"Ultimate Chicken Horse",brain:"Cupidium Academy"};
+function acesNow(){if(store.get("otc.acesTest",0))return true;
+  try{const f=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(new Date()),g=k=>(f.find(p=>p.type===k)||{}).value;
+    const mins=(+g("hour")%24)*60+ +g("minute");return !["Sat","Sun"].includes(g("weekday"))&&mins>=14*60+20&&mins<14*60+40;}catch(e){return false;}}
+const ACES={last:"",at:0,list:{},t:0};
+function acesMsg(){return{c:N.code,g:N.mode||"classic",h:N.me,p:names().slice(0,12),s:N.started?1:0};}
+function acesPost(m,keep){try{fetch(SOC_RELAY+ACES_TOPIC,{method:"POST",body:JSON.stringify(m),keepalive:!!keep}).catch(()=>{});}catch(e){}}
+// hosts: post when something changes, or once a minute (checked locally every 10s; nothing is sent outside the window)
+setInterval(()=>{if(typeof N==="undefined"||!N||!N.host||!N.code||!acesNow())return;const m=acesMsg(),k=JSON.stringify(m);
+  if(k!==ACES.last||Date.now()-ACES.at>60e3){ACES.last=k;ACES.at=Date.now();acesPost(m);}},10e3);
+{const _ln=leaveNet;leaveNet=function(){try{if(N&&N.host&&N.code&&ACES.at&&acesNow())acesPost({c:N.code,x:1},true);}catch(e){}ACES.last="";ACES.at=0;return _ln.apply(this,arguments);};}
+function acesHTML(){return `<div class="glass card aces" id="acesBox"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="font-size:14px;margin:0">🎉 ACES PARTIES</h3><span class="hint">open till 2:40</span></div><div id="acesList"></div></div>`;}
+function acesDraw(){const el=$("acesList");if(!el)return;const now=Date.now()/1000,mine=typeof N!=="undefined"&&N?N.code:"";
+  const rows=Object.values(ACES.list).filter(r=>!r.x&&now-r.time<150&&r.c!==mine).sort((a,b)=>b.p.length-a.p.length);
+  el.innerHTML=rows.length?rows.map(r=>`<div class="acerow"><b>${esc(ACES_MODE[r.g]||"Party")}</b><span>${r.p.map(esc).join(", ")}</span><em>${r.s?"IN GAME":"IN LOBBY"}</em><button class="pbtn sm c m-nova" data-act="acesJoin" data-c="${esc(r.c)}">JOIN</button></div>`).join("")
+    :`<p class="hint" style="margin:6px 0 0">No parties right now. Start one from PARTY and it shows up here.</p>`;}
+async function acesFetch(){if(!$("acesBox")||document.hidden||!acesNow())return;
+  try{const r=await fetch(`${SOC_RELAY}${ACES_TOPIC}/json?poll=1&since=3m`);if(!r.ok)return;const txt=await r.text();
+    txt.split("\n").filter(Boolean).forEach(l=>{try{const j=JSON.parse(l);if(j.event&&j.event!=="message")return;const m=JSON.parse(j.message);if(!m||typeof m.c!=="string"||!/^[A-Z]{4}$/.test(m.c))return;
+      const old=ACES.list[m.c];if(old&&old.time>j.time)return;ACES.list[m.c]={c:m.c,g:String(m.g||""),p:Array.isArray(m.p)?m.p.slice(0,12).map(x=>String(x).slice(0,16)):[],s:m.s?1:0,x:m.x?1:0,time:+j.time||0};}catch(e){}});}catch(e){}
+  acesDraw();}
+// the box appears (and refreshes every 45s) only on the home screen, only in the window
+function acesShow(){const pn=$("panel"),inner=pn&&pn.querySelector(".inner .landing")?pn.querySelector(".inner"):null,on=acesNow(),box=$("acesBox");
+  if(!inner||!on){if(box)box.remove();return;}if(!box){inner.insertAdjacentHTML("afterbegin",acesHTML());acesDraw();ACES.t=Date.now();acesFetch();}}
+setInterval(()=>{acesShow();if($("acesBox")&&Date.now()-ACES.t>45e3){ACES.t=Date.now();acesFetch();}},5e3);
+{const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{acesShow();}catch(e){}return r;};}
+ACT.acesJoin=b=>joinRoom(b.dataset.c);
 </script>
 
 </body>
