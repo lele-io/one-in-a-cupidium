@@ -36,6 +36,13 @@ html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:400;font-size:18px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased}
 body.noscene #scene,body.noscene #veh{display:none}
 body.hubscene #veh{display:none}
+.shardv{display:block;font-size:11px;color:#a5f3fc;margin-top:2px}.shardv em{font-style:normal;color:#fde047;display:inline-block}.shardv.pop em{animation:shPop .9s ease-out}@keyframes shPop{from{transform:scale(1.8)}}
+.shbal{font-family:var(--head);font-size:14px;color:#a5f3fc}
+.shgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.shitem{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);color:var(--ink);cursor:pointer;font:inherit}
+.shitem b{font-size:13px}.shitem small{font-size:11px;opacity:.8}.shitem.on{border-color:#4ade80}.shitem:disabled{opacity:.45;cursor:default}
+.shitem em{position:absolute;top:4px;right:4px;font-style:normal;font-size:10px;background:#4ade80;color:#052e16;padding:1px 4px}
+.shsw{width:80%;height:10px;border-radius:5px}
 .updbar{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:14px;max-width:calc(100vw - 32px)}
 .updov{position:fixed;inset:0;z-index:95;display:grid;place-items:center;background:rgba(5,4,20,.75);padding:16px}.updov .card{max-width:360px}
 .aces{width:100%;box-sizing:border-box}.acerow{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-top:6px;background:rgba(255,255,255,.06);font-size:14px}
@@ -1195,7 +1202,7 @@ button.lbn .flb{flex:0 0 auto;margin-right:2px}button.lbn .flt{flex:0 1 auto;ove
 
 <canvas id="scene"></canvas>
 <div id="hud" hidden>
-  <div class="glass altbox"><b id="altv">0 km</b><span id="zonev"></span></div>
+  <div class="glass altbox"><b id="altv">0 km</b><span id="zonev"></span><span id="shardv" class="shardv"></span></div>
   <div class="glass prog" id="prog"></div>
   <div class="hud-r"><button class="pbtn" data-act="sound" id="sndBtn" aria-label="Toggle sound"></button><button class="pbtn" data-act="abort" id="abortBtn">QUIT</button></div>
 </div>
@@ -4222,8 +4229,8 @@ function speedLines(t){if(Math.abs(speed)<.8)return;if(!HQ&&Math.abs(speed)<3)re
 const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
 function flyTo(alt,tier){FL.from=SC.alt;FL.to=Math.max(0,alt);FL.t0=performance.now();const d=Math.abs(FL.to-FL.from);
   FL.dur=d<1?0:Math.min(5600,650+d*2.2+(tier===0?1500:tier===1?1000:tier>=0?tier*420:0));/* common answers drift up slowly */FL.tier=tier;if(tier>=3)SC.shake=FL.dur*.5;}
-const setScore=(s,tier=-1)=>flyTo(s*K,tier);
-const jumpTo=a=>{SC.alt=FL.to=Math.max(0,a);FL.dur=0;VY=Math.round(H*(MENU?.8:.27));cam=camTarget();};
+const setScore=(s,tier=-1)=>{try{shardEarn(s);}catch(e){}return flyTo(s*K,tier);};
+const jumpTo=a=>{try{shardSync(Math.max(0,a)/K);}catch(e){}SC.alt=FL.to=Math.max(0,a);FL.dur=0;VY=Math.round(H*(MENU?.8:.27));cam=camTarget();};
 let lastZone="";
 function hudTick(){
   const z=zoneAt(SC.alt);
@@ -4258,7 +4265,9 @@ function frame(t){
   speedLines(t);vignette();
   if(CUP&&TH.up)speed=Math.max(speed,1);
   const vx=CUP?Math.round(CUP.x):W/2,vy=Math.round(ys(SC.alt));VX=vx;
-  if(THEME==="marius"){if(moving&&speed>0){spawn(3,["#d9f99d","#bef264","#ecfccb","#a3e635","#e7e5a8"],1,62,3);if(Math.random()<.035)toot(.6);}else if(SC.alt<1&&Math.random()<.05)spawn(1,["#ecfccb"],.8,50,2);}
+  const trc=typeof trailCols==="function"?trailCols():null;
+  if(trc){if(moving&&Math.abs(speed)>.3)spawn(3,trc,1.1,60,2);}
+  else if(THEME==="marius"){if(moving&&speed>0){spawn(3,["#d9f99d","#bef264","#ecfccb","#a3e635","#e7e5a8"],1,62,3);if(Math.random()<.035)toot(.6);}else if(SC.alt<1&&Math.random()<.05)spawn(1,["#ecfccb"],.8,50,2);}
   else if(TH.up){if(moving&&speed>0)spawn(3,["#e5e7eb","#cbd5e1","#f8fafc"],.7,46,1);else if(SC.alt<1&&Math.random()<.08)spawn(1,["#f1f5f9"],.9,55,1);}
   else{if((moving&&speed>0)||Math.random()<.1)spawn(1,["#e0f2fe","#bae6fd"],.5,80,1,-12);}
   drawParts();if(CUP)cupDraw(t);
@@ -5389,7 +5398,7 @@ function fuelHTML(delta){const f=Math.max(0,S.fuel),c=f<25?"#f87171":f<50?"#fbbf
 // the deeper the run, the faster fuel burns and the less rare answers refill it; the tank never holds more than FUEL_MAX
 // tops out at burn ×2 and refill ×0.7 (by prompt 200) so rare answers can always keep you going
 const fuelRamp=()=>{const i=Math.min(200,(S&&S.i)||0);return{loss:1+i/200,gain:1-i*.3/200};};
-function fuelAdd(d){if(S&&(S.mode==="endless"||S.mode==="rendless")){const D=dD(),Rp=fuelRamp();d=d<0?d*D.loss*Rp.loss:d*D.gain*Rp.gain;}d=Math.round(d);const f0=S.fuel==null?FUEL_MAX:S.fuel;S.fuel=Math.max(0,Math.min(FUEL_MAX,f0+d));
+function fuelAdd(d){if(S&&(S.mode==="endless"||S.mode==="rendless")){const D=dD(),Rp=fuelRamp();d=d<0?d*D.loss*Rp.loss:d*D.gain*Rp.gain;}d=Math.round(d);const f0=S.fuel==null?FUEL_MAX:S.fuel;S.fuel=Math.max(0,Math.min(FUEL_MAX,f0+d));try{shardCan();}catch(e){}
   if(S&&(S.mode==="endless"||S.mode==="rendless")){S.fh=S.fh||[f0];S.fh.push(S.fuel);if(S.fh.length>400)S.fh.splice(1,S.fh.length-400);}return d;}
 // fuel over the run: one point per prompt, line turns red where it ran low
 function fuelGraph(){const h=(S&&S.fh)||[];if(h.length<2)return "";const w=300,ht=56,n=h.length,step=w/Math.max(1,n-1),y=v=>(ht-3)-(Math.max(0,Math.min(FUEL_MAX,v))/FUEL_MAX)*(ht-6);
@@ -8697,6 +8706,7 @@ Object.assign(ACT,{abMore:()=>{const box=$("ablist"),st=box?box.scrollTop:0;AB.n
 
 // ===== update log =====
 function updList(){return [
+ {v:"5.2",t:"Shards",d:"Nov 24, 2026",s:{"Off the Charts":["New currency: SHARDS 💎. Earn 1 for every 10 points you climb or dive, in every mode, so rarer answers pay more","SHARD SHOP (on the Off the Charts menu): 8 vehicle trails that replace your exhaust (Love Hearts to ONE IN A CUPIDIUM)","Fuel cans: when an endless run's tank hits empty, a can refills it to 40 (one per run, hold up to 5)","Exchange shards for casino chips: 50 → 100, and bigger bundles get up to 30% extra"]}},
  {v:"5.1",t:"Real full screen",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course covers the entire screen on any device, big monitor or phone (portrait or landscape), with the buttons and scores floating on top"],
    "Look":["Main page: your theme's own pixel scene again, parked at its prettiest spot (deep space, the deep sea, floating islands), instead of the synthwave grid","Off the Charts menu: the background now scrolls the same way as the menu","The rarity-names poll is gone from the main page"]}},
  {v:"5.0",t:"Full-screen Chicken Horse, new backgrounds",d:"Nov 24, 2026",s:{"Ultimate Chicken Horse":["The course now fills the whole screen at any window size (even in browser full screen)","FRIENDS and UPDATE LOG buttons hide while you play"],
@@ -11297,6 +11307,51 @@ ACT.acesJoin=b=>joinRoom(b.dataset.c);
 // ===== main page background: your theme's own pixel scene, parked at its prettiest spot (no vehicle) =====
 const HUB_ALT={space:4000,sky:1500,ocean:4000,marius:1500};
 {const _l=landing;landing=function(){const r=_l.apply(this,arguments);try{SCENE_MENU="hub";jumpTo(HUB_ALT[THEME]||1500);}catch(e){}return r;};}
+// ===== Nov 24: SHARDS 💎, Off the Charts' own currency (like Krillion's). You earn them as you climb or dive: 1 shard for every
+// 10 points of height/depth, so rarer answers pay more. Spend them in the Shard Shop (Off the Charts only): vehicle trails and
+// fuel cans for endless runs, or exchange them for casino chips (bigger bundles get a better rate, like gold → gems in TDX).
+const SHD={last:null,acc:0};
+const shards=()=>Math.max(0,Math.floor(store.get("otc.shards",0)));
+function shardSet(v){store.set("otc.shards",Math.max(0,Math.floor(v)));shardHud();}
+function shardSync(score){SHD.last=score;}
+function shardEarn(score){if(SHD.last==null||score<SHD.last){SHD.last=score;return;}const g=score-SHD.last;SHD.last=score;
+  if(g<=0||g>600)return;// a big jump is a resumed run or a reset, not new height
+  SHD.acc+=g;const n=Math.floor(SHD.acc/10);if(!n)return;SHD.acc-=n*10;shardSet(shards()+n);shardHud(n);}
+function shardHud(n){const el=$("shardv");if(!el)return;el.innerHTML=`💎 ${shards().toLocaleString()}${n?` <em>+${n}</em>`:""}`;if(n){el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");}}
+setTimeout(()=>shardHud(),0);
+// ---- trails: replace your vehicle's exhaust in every theme
+const TRAILS=[["none","Standard",0,null],["hearts","Love Hearts",150,["#ff5fd2","#ff8fe0","#ffd1f0","#ffffff"]],["ice","Frostbite",250,["#e0f2fe","#7dd3fc","#38bdf8","#ffffff"]],
+  ["fire","Afterburner",250,["#fde047","#fb923c","#ef4444","#fff7ad"]],["toxic","Toxic",300,["#a3e635","#4ade80","#d9f99d","#166534"]],["gold","Gold Rush",400,["#fde047","#facc15","#fef9c3","#ca8a04"]],
+  ["rainbow","Rainbow",600,["#ef4444","#f97316","#facc15","#4ade80","#38bdf8","#a78bfa"]],["galaxy","Galaxy",800,["#a78bfa","#6366f1","#22d3ee","#f0abfc","#ffffff"]],
+  ["cupidium","ONE IN A CUPIDIUM",1500,["#ff5fd2","#fde047","#67e8f9","#ffffff","#c4b5fd"]]];
+const trailOwn=()=>store.get("otc.trails",{none:1});
+function trailCols(){const id=store.get("otc.trail","none"),t=TRAILS.find(x=>x[0]===id);return t&&t[3]&&trailOwn()[id]?t[3]:null;}
+// ---- fuel cans: when an endless run's tank hits empty, one can refills it (one per run)
+const CAN_PRICE=200,CAN_MAX=5,CAN_FUEL=40;
+function shardCan(){if(!S||!(S.mode==="endless"||S.mode==="rendless")||S.fuel>0||S.canUsed)return;const n=store.get("otc.cans",0);if(n<=0)return;
+  store.set("otc.cans",n-1);S.canUsed=1;S.fuel=CAN_FUEL;if(S.fh)S.fh[S.fh.length-1]=S.fuel;setTimeout(()=>toast(`⛽ <b>FUEL CAN!</b> Your tank was empty, so a can refilled it to ${CAN_FUEL} (${n-1} left)`),400);}
+// ---- exchange: Shards → casino chips
+const SHX=[[50,100],[250,550],[1000,2400],[5000,13000]];
+function shardShop(msg){const n=shards(),own=trailOwn(),cur=store.get("otc.trail","none"),cans=store.get("otc.cans",0);
+  showPanel(`<div class="row" style="justify-content:space-between"><button class="pbtn sm" data-act="home">◀ BACK</button><h2 style="font-size:16px">💎 SHARD SHOP</h2><span class="shbal">💎 ${n.toLocaleString()}</span></div>
+    <div class="glass card"><p style="margin:0">Earn shards in Off the Charts: <b>1 💎 for every 10 points</b> you climb or dive, in every mode. Rarer answers fly further, so they pay more.</p>${msg?`<p class="hint" style="margin:6px 0 0">${msg}</p>`:""}</div>
+    <div class="glass card"><h3 style="font-size:13px;margin:0 0 8px">TRAILS <span class="hint">· replace your vehicle's exhaust</span></h3><div class="shgrid">${TRAILS.map(([id,nm,pr,cols])=>{const has=own[id],on=cur===id;
+      return `<button class="shitem${on?" on":""}" data-act="shTrail" data-id="${id}"><i class="shsw" style="background:${cols?`linear-gradient(90deg,${cols.join(",")})`:"#64748b"}"></i><b>${nm}</b><small>${on?"EQUIPPED":has?"TAP TO USE":`💎 ${pr.toLocaleString()}`}</small></button>`;}).join("")}</div></div>
+    <div class="glass card"><h3 style="font-size:13px;margin:0 0 8px">FUEL CANS <span class="hint">· endless runs</span></h3><div class="row" style="align-items:center;justify-content:space-between;gap:10px">
+      <p class="hint" style="margin:0;flex:1;min-width:200px">When your tank runs empty in an endless run, a can refills it to ${CAN_FUEL} so the run keeps going (one can per run). You have <b>${cans}</b> of ${CAN_MAX}.</p>
+      <button class="pbtn c m-sun" data-act="shCan" ${cans>=CAN_MAX?"disabled":""}>⛽ BUY · 💎 ${CAN_PRICE}</button></div></div>
+    <div class="glass card"><h3 style="font-size:13px;margin:0 0 8px">EXCHANGE <span class="hint">· shards → casino chips, bigger bundles get a better rate</span></h3><div class="shgrid">${SHX.map(([a,b],i)=>
+      `<button class="shitem" data-act="shEx" data-i="${i}" ${n<a?"disabled":""}><b>💎 ${a.toLocaleString()}</b><small>→ 🪙 ${b.toLocaleString()} CHIPS</small>${i?`<em>+${Math.round((b/a/2-1)*100)}%</em>`:""}</button>`).join("")}</div>
+      <p class="hint" style="margin:8px 0 0">You have 🪙 ${casChips().toLocaleString()} chips.</p></div>`,{cls:"menu"});
+  SCENE_MENU=true;}
+Object.assign(ACT,{shardShop:()=>shardShop(),
+  shTrail:b=>{const t=TRAILS.find(x=>x[0]===b.dataset.id);if(!t)return;const own=trailOwn();
+    if(!own[t[0]]){if(shards()<t[2])return toast(`You need 💎 ${t[2].toLocaleString()} shards`);shardSet(shards()-t[2]);own[t[0]]=1;store.set("otc.trails",own);sfx.ok(3);}
+    store.set("otc.trail",t[0]);shardShop(t[0]==="none"?"Standard exhaust is back.":`<b>${esc(t[1])}</b> trail equipped. It shows whenever your vehicle flies.`);},
+  shCan:()=>{const c=store.get("otc.cans",0);if(c>=CAN_MAX)return;if(shards()<CAN_PRICE)return toast(`You need 💎 ${CAN_PRICE} shards`);shardSet(shards()-CAN_PRICE);store.set("otc.cans",c+1);sfx.ok(2);shardShop(`Bought a fuel can (${c+1} of ${CAN_MAX}).`);},
+  shEx:b=>{const x=SHX[+b.dataset.i];if(!x)return;if(shards()<x[0])return toast("Not enough shards");shardSet(shards()-x[0]);casSet(casChips()+x[1]);sfx.ok(4);shardShop(`Exchanged 💎 ${x[0].toLocaleString()} for 🪙 ${x[1].toLocaleString()} chips.`);}});
+{const _h=home;home=function(){_h();try{const mb=document.querySelector("#panel .menubar");if(mb&&!mb.querySelector('[data-act="shardShop"]'))mb.insertAdjacentHTML("afterbegin",`<button class="pbtn" data-act="shardShop">💎 ${shards().toLocaleString()} · SHOP</button>`);}catch(e){}};}
+
 </script>
 
 </body>
