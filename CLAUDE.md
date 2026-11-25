@@ -27,9 +27,22 @@ Relay: separate repo `lele-io/cupidium-relay` (Cloudflare Worker `index.js` + Du
 Host runs `trHost*` and broadcasts state; every device rebuilds with `trBuild` and runs `trStep`/`trCheck`.
 Maps: edit `tools/trmaps.js` only, then `node tools/trmaps.js` and `node tools/trsolve.js` (`START=x,y GOAL=x,y` for one stretch).
 New solid tile letters go in BOTH `TR_TILE`/`TR_TCOL` (index.html) and `SOLID` (trmaps.js).
+Full screen: canvas size comes from the window (`trFit`, view = `trCvW/H()`), never assume 40x22 tiles.
 
 ## Arcade
 `MGAMES.<id>` objects (`init/update/draw/key/ptr`), listed in `ARCADE_CATS`, icon in `AICON`. Cupidium's symbol is **Ci**.
+`update(m,dt)` gets ms. Don't use framework field names on `m` (`last`, `t`, `best`, `score`, `over`, `x`, `c`… see `MG_SKIP`).
+Games are full screen via `mgFit` (fixed logical w/h, scaled to fit). Rhythm = `RH_DDR` / `RH_PJSK` behind one `MGAMES.rhythm` switch.
+
+## Systems worth knowing
+- Theme scene: hidden on menus (`body.noscene`) except Off the Charts menu (`SCENE_MENU=true`) and the main screen
+  (`SCENE_MENU="hub"`: calm, slow, no vehicle, `HUB_ALT`). `showPanel` resets `SCENE_MENU`.
+- Wrappers: many functions (`landing`, `home`, `hostConn`, `clientData`…) are re-wrapped later in the file; code at boot runs before
+  the wrappers, and new wrappers go at the end of script 2. Back buttons (◀) use the page history `NAV`.
+- Party: host relays everything (`broadcast`); late joiners get `lateJoin`; chat = `PCH`; Aces Parties list only 2:20-2:40pm ET weekdays.
+- Off the Charts currency = Shards (`shards()`, earned in `shardEarn` via `setScore`); chips = `casChips()/casSet()`, `chipReward()`.
+- Dailies deal from fixed decks (`deckK`): from Nov 26 2026 the deck moves on weekdays only, weekends draw separately.
+  Changing a past day's prompts breaks players' saved results.
 
 ## Layout (owner is strict)
 Pages 640px (wide 980, arcade 700). No empty bands; boxes hug content. Card/button rows centred (add new grids to the
